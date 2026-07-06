@@ -30,3 +30,14 @@ If you are developing a production application, we recommend enabling type-aware
 ```
 
 See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+
+
+
+starts backend
+
+# 1. Navigate to the backend directory
+cd backend
+
+# 2. Run the server without the --reload flag
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+
