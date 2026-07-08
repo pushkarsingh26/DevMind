@@ -9,8 +9,9 @@ from app.db.base import Base
 
 config = context.config
 
-# Use DATABASE_URL from .env
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+# Use DATABASE_URL from .env (escaping percent signs for configparser)
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL.replace("%", "%%"))
+
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

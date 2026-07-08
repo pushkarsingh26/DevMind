@@ -8,6 +8,27 @@ from app.services.repository_service import RepositoryService
 from app.core.logger import logger
 import os
 
+from sqlalchemy.orm import Session
+from app.db.session import get_db
+from pydantic import BaseModel, Field
+from typing import List
+
+class RetrieveRequest(BaseModel):
+    repository_id: str = Field(..., description="The repository ID to search in")
+    query: str = Field(..., description="The semantic search query")
+    top_k: int = Field(5, description="Number of top relevant chunks to return")
+
+class RetrieveResult(BaseModel):
+    path: str
+    score: float
+    start_line: int
+    end_line: int
+    content: str
+
+class RetrieveResponse(BaseModel):
+    results: List[RetrieveResult]
+
+
 router = APIRouter()
 
 @router.post(
@@ -136,3 +157,87 @@ async def get_job_result(
             detail=f"Job identifier {job_id} not found."
         )
     return result_report
+
+@router.get(
+    "/repositories",
+    summary="List all indexed repositories"
+)
+async def list_repositories(db: Session = Depends(get_db)):
+    from app.models.repository import Repository
+    repos = db.query(Repository).all()
+    return [
+        {
+            "id": r.id,
+            "name": r.name,
+            "owner": r.owner,
+            "source": r.source,
+            "framework": r.framework,
+            "language": r.language,
+            "repository_hash": r.repository_hash,
+            "status": r.status,
+            "created_at": r.created_at
+        } for r in repos
+    ]
+
+@router.get(
+    "/repositories/{id}",
+    summary="Get repository metadata by ID"
+)
+async def get_repository(id: str, db: Session = Depends(get_db)):
+    from app.models.repository import Repository
+    repo = db.query(Repository).filter(Repository.id == id).first()
+    if not repo:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Repository not found")
+    return {
+        "id": repo.id,
+        "name": repo.name,
+        "owner": repo.owner,
+        "source": repo.source,
+        "framework": repo.framework,
+        "language": repo.language,
+        "repository_hash": repo.repository_hash,
+        "status": repo.status,
+        "created_at": repo.created_at
+    }
+
+@router.delete(
+    "/repositories/{id}",
+    summary="Delete a repository and its indices"
+)
+async def delete_repository(id: str, db: Session = Depends(get_db)):
+    from app.models.repository import Repository
+    from app.services.vector_store_service import vector_store_service
+    repo = db.query(Repository).filter(Repository.id == id).first()
+    if not repo:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Repository not found")
+    
+    # Delete FAISS files
+    vector_store_service.delete_vector_store(id)
+
+    # Delete database record (Cascade deletes Chunks and Embeddings)
+    db.delete(repo)
+    db.commit()
+    return {"status": "success", "detail": f"Repository {id} deleted successfully."}
+
+@router.post(
+    "/retrieve",
+    response_model=RetrieveResponse,
+    summary="Semantic retrieval of code chunks"
+)
+async def retrieve(
+    payload: RetrieveRequest,
+    db: Session = Depends(get_db)
+):
+    from app.services.retrieval_service import retrieval_service
+    from app.services.context_builder import context_builder
+    
+    retrieved = retrieval_service.retrieve_chunks(
+        db=db,
+        repository_id=payload.repository_id,
+        query=payload.query,
+        top_k=payload.top_k
+    )
+    
+    context_results = context_builder.build_context(retrieved)
+    return {"results": context_results}
+

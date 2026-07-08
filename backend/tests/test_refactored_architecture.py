@@ -42,11 +42,19 @@ def test_pipeline_service_returns_structured_json():
         assert len(chunk.content) > 0
         
     # Set up temp folder to match what is_zip expects
+    # Set up temp folder to match what is_zip expects
     from app.core.config import settings
     test_temp_dir = os.path.abspath(os.path.join(str(settings.WORKSPACE_ROOT), job_id))
     os.makedirs(test_temp_dir, exist_ok=True)
     with open(os.path.join(test_temp_dir, "hello.py"), "w") as f:
         f.write("def hello():\n    print('Hello World')\n")
+
+    # Clean up any leftover repository from DB to prevent hitting RAG reuse logic in this test
+    from app.db.session import SessionLocal
+    from app.models.repository import Repository
+    with SessionLocal() as db:
+        db.query(Repository).filter(Repository.source == "hello.zip").delete()
+        db.commit()
 
     # Run the full pipeline directly (using is_zip=True to use local path bypass)
     result = pipeline_service.run_pipeline(
@@ -54,6 +62,7 @@ def test_pipeline_service_returns_structured_json():
         source_path_or_url="hello.zip",
         is_zip=True
     )
+
     
     # Assert JSON structure keys
     assert "repository" in result

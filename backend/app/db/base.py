@@ -20,16 +20,9 @@ from app.db.database import Base
 # ============================================================
 # MODEL IMPORTS
 # ============================================================
-#
-# Register every SQLAlchemy model below.
-#
-# Example:
-#
-# from app.models.repository import Repository
-# from app.models.analysis_job import AnalysisJob
-# from app.models.report import Report
-# from app.models.agent_log import AgentLog
-#
-# ============================================================
+from app.models.repository import Repository
+from app.models.job import AnalysisJobORM
+from app.models.chunk import Chunk
+from app.models.embedding import Embedding
 
-__all__ = ["Base"]
+__all__ = ["Base", "Repository", "AnalysisJobORM", "Chunk", "Embedding"]

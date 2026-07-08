@@ -22,3 +22,33 @@ class AnalysisJob(BaseModel):
     created_at: float = Field(..., description="Unix timestamp of when the job was created")
     updated_at: float = Field(..., description="Unix timestamp of when the job was last updated")
     error: Optional[str] = Field(None, description="Details of analysis error if status is failed")
+
+
+# SQLAlchemy persistent database model
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Text
+from sqlalchemy.orm import relationship
+from datetime import datetime
+from app.db.database import Base as DBBase
+
+class AnalysisJobORM(DBBase):
+    __tablename__ = "analysis_jobs"
+
+    id = Column(String, primary_key=True)
+    repository_id = Column(String, ForeignKey("repositories.id", ondelete="CASCADE"), nullable=True, index=True)
+    task_type = Column(String, nullable=False)
+    status = Column(String, nullable=False)
+    progress = Column(Integer, nullable=False, default=0)
+    current_stage = Column(String, nullable=True)
+    result = Column(Text, nullable=True)  # Stored as serialized JSON string
+    error = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    # Relationships
+    repository = relationship("Repository", back_populates="jobs")
+    chunks = relationship("Chunk", back_populates="job", cascade="all, delete-orphan")
+
+# Import related models at bottom to avoid circular import issues in SQLAlchemy registry
+from app.models.repository import Repository
+from app.models.chunk import Chunk
+
+
