@@ -1,0 +1,27 @@
+{
+  "is_fallback": false,
+  "traceability_refs": [],
+  "ai_metadata": {
+    "provider": "google",
+    "provider_used_after_failover": null,
+    "model": "gemini-2.5-flash",
+    "latency": 1.2095460891723633,
+    "prompt_tokens": 358,
+    "completion_tokens": 12,
+    "total_tokens": 0,
+    "retry_count": 1,
+    "cache_hit": false,
+    "fallback_flag": false,
+    "request_id": "ai_req_351ad81265d6",
+    "started_timestamp": 1783583652.2087371,
+    "completed_timestamp": 1783583653.4182832,
+    "estimated_cost": 0.0
+  },
+  "executive_summary": "Retried successfully",
+  "strengths": [],
+  "improvements": [],
+  "security_observations": [],
+  "performance_observations": [],
+  "maintainability_observations": [],
+  "recommendations": []
+}

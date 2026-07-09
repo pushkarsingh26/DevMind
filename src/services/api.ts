@@ -45,6 +45,9 @@ export const getStatus = async (taskId: string): Promise<{
   status: MultiAgentStatus;
   resultText: string | null;
   isDone: boolean;
+  rawResult?: any;
+  progress?: number;
+  stage?: string;
 }> => {
   try {
     const response = await client.get(`/status/${taskId}`);
@@ -101,9 +104,11 @@ export const getStatus = async (taskId: string): Promise<{
     }
 
     let resultText: string | null = null;
+    let rawResult: any = null;
     if (isDone) {
       const resultResponse = await client.get(`/result/${taskId}`);
       resultText = resultResponse.data.result || null;
+      rawResult = resultResponse.data;
     } else if (isFailed) {
       resultText = `### Pipeline Failed\n\n**Error Details**: ${stage}\n`;
     }
@@ -112,6 +117,9 @@ export const getStatus = async (taskId: string): Promise<{
       status,
       resultText,
       isDone: isDone || isFailed,
+      rawResult,
+      progress,
+      stage
     };
   } catch (error) {
     console.error('API connection error in getStatus:', error);

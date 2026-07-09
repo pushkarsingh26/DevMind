@@ -165,8 +165,17 @@ class JobService:
             builder = builders.get(task_key, builders["review"])
 
             # Call report builder on the JSON payload
-            markdown_report = builder.build_report(job.result or {})
-            return ResultResponse(status="completed", result=markdown_report)
+            payload = job.result or {}
+            markdown_report = builder.build_report(payload)
+            return ResultResponse(
+                status="completed",
+                result=markdown_report,
+                ai_output=payload.get("ai_output"),
+                repository=payload.get("repository"),
+                metadata=payload.get("metadata"),
+                statistics=payload.get("statistics"),
+                chunks=payload.get("chunks")
+            )
         elif job.status == "failed":
             return ResultResponse(status="failed", result=f"Analysis failed: {job.error or job.current_stage}")
         else:
@@ -192,6 +201,36 @@ class JobService:
             # Map dictionaries back to Pydantic models for storage
             metadata = RepositoryMetadata(**result_json["metadata"])
             chunks = [CodeChunk(**c) for c in result_json["chunks"]]
+            
+            # ------------------------------------------------------------------
+            # Phase 4: Execute AI Code Intelligence Orchestration
+            # ------------------------------------------------------------------
+            from app.db.session import SessionLocal
+            from app.models.job import AnalysisJobORM
+            
+            repository_id = None
+            with SessionLocal() as db:
+                db_job = db.query(AnalysisJobORM).filter(AnalysisJobORM.id == job_id).first()
+                if db_job:
+                    repository_id = db_job.repository_id
+            
+            if repository_id:
+                from app.ai.ai_service import ai_service
+                import asyncio
+                
+                logger.info(f"JobService: Launching AI Reasoning Engine for repository ID: {repository_id}")
+                self.update_progress(job_id, 90, "Critic: Performing AI code reasoning analysis")
+                
+                with SessionLocal() as db:
+                    loop = asyncio.new_event_loop()
+                    try:
+                        ai_output = loop.run_until_complete(
+                            ai_service.analyze_repository(db, repository_id, task_type, metadata)
+                        )
+                    finally:
+                        loop.close()
+                        
+                result_json["ai_output"] = ai_output.model_dump()
             
             # Record success state
             self.complete_job(job_id, result_json, metadata, chunks)
