@@ -1,47 +1,6 @@
 <div align="center">
   <a href="https://github.com/pushkarsingh26/DevMind">
-    <svg width="800" height="220" viewBox="0 0 800 220" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto; background: #0b111e; border-radius: 12px; border: 1px solid #1f2937; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">
-      <!-- Background Grid -->
-      <path d="M 0,40 H 800 M 0,80 H 800 M 0,120 H 800 M 0,160 H 800 M 0,200 H 800" stroke="#111827" stroke-width="1"/>
-      <path d="M 100,0 V 220 M 200,0 V 220 M 300,0 V 220 M 400,0 V 220 M 500,0 V 220 M 600,0 V 220 M 700,0 V 220" stroke="#111827" stroke-width="1"/>
-      
-      <!-- Nodes / Connections (Neural Net Representation) -->
-      <g stroke="#1f2937" stroke-width="1.5">
-        <line x1="80" y1="50" x2="160" y2="70" />
-        <line x1="80" y1="50" x2="120" y2="130" />
-        <line x1="160" y1="70" x2="220" y2="50" />
-        <line x1="120" y1="130" x2="220" y2="160" />
-        <line x1="220" y1="50" x2="300" y2="110" />
-        <line x1="220" y1="160" x2="300" y2="110" />
-        <line x1="300" y1="110" x2="420" y2="110" stroke="#0ea5e9" stroke-width="2.5"/>
-        <line x1="420" y1="110" x2="500" y2="60" />
-        <line x1="420" y1="110" x2="480" y2="150" />
-        <line x1="500" y1="60" x2="620" y2="80" />
-        <line x1="480" y1="150" x2="580" y2="170" />
-        <line x1="620" y1="80" x2="720" y2="130" />
-        <line x1="580" y1="170" x2="720" y2="130" />
-      </g>
-      
-      <!-- Glowing Connector Nodes -->
-      <circle cx="80" cy="50" r="4" fill="#6b7280" />
-      <circle cx="160" cy="70" r="5" fill="#0ea5e9" opacity="0.8"/>
-      <circle cx="120" cy="130" r="4" fill="#3b82f6" />
-      <circle cx="220" cy="50" r="6" fill="#a855f7" />
-      <circle cx="220" cy="160" r="5" fill="#312e81" />
-      <circle cx="300" cy="110" r="8" fill="#0ea5e9" style="filter: drop-shadow(0px 0px 8px #0ea5e9);"/>
-      <circle cx="420" cy="110" r="8" fill="#22d3ee" style="filter: drop-shadow(0px 0px 8px #22d3ee);"/>
-      <circle cx="500" cy="60" r="4" fill="#6b7280" />
-      <circle cx="480" cy="150" r="5" fill="#ec4899" />
-      <circle cx="620" cy="80" r="6" fill="#10b981" />
-      <circle cx="580" cy="170" r="4" fill="#f59e0b" />
-      <circle cx="720" cy="130" r="5" fill="#22d3ee" />
-      
-      <!-- Logo Typography -->
-      <text x="400" y="85" font-family="system-ui, -apple-system, sans-serif" font-size="40" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="4px">DEVMIND</text>
-      <text x="400" y="120" font-family="monospace" font-size="12" font-weight="600" fill="#0ea5e9" text-anchor="middle" letter-spacing="6px">AI CODE INTELLIGENCE ENGINE</text>
-      <text x="400" y="150" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="400" fill="#8892b0" text-anchor="middle" letter-spacing="1px">RAG GROUNDED SEMANTIC PIPELINE • MULTI-AGENT ARCHITECTURE</text>
-      <text x="400" y="175" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="500" fill="#6b7280" text-anchor="middle" letter-spacing="2px">PHASE 5 ENGINE COMPLETE</text>
-    </svg>
+    <img src="./docs/banner.svg" alt="DevMind — AI Code Intelligence Engine" width="800"/>
   </a>
 
   <h1>🧠 DevMind — AI Code Intelligence Engine</h1>
@@ -423,7 +382,7 @@ We welcome contributions! Please open an issue or submit a pull request for any 
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENCE](file:///c:/Users/aishw/Desktop/Projects/DevMind/LICENCE) file for details.
+This project is licensed under the **DEVMIND COMMUNITY LICENSE v1.0** — see the [LICENCE](https://github.com/pushkarsingh26/DevMind/blob/main/LICENSE) file for details.
 
 ---
 
