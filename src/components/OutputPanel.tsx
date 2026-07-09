@@ -226,7 +226,7 @@ export const OutputPanel: React.FC = () => {
                   </ul>
                 )}
                 {items && items.length === 0 && !content && (
-                  <p className="text-xs font-mono text-dark-500 italic">No observations recorded.</p>
+                  <p className="text-xs font-mono text-dark-400 italic">No significant issues detected.</p>
                 )}
               </div>
             </motion.div>
@@ -324,7 +324,7 @@ export const OutputPanel: React.FC = () => {
             {renderItemSection('Executive Summary', 'summary', undefined, aiOutput?.executive_summary)}
 
             {/* 2. Architecture & Modules */}
-            {(aiOutput?.high_level_architecture || aiOutput?.entry_points || aiOutput?.important_modules || aiOutput?.data_flow) && (
+            {(parsedReport?.task_type === 'explain' || aiOutput?.high_level_architecture || aiOutput?.entry_points || aiOutput?.important_modules || aiOutput?.data_flow) && (
               <div className="border border-dark-850 rounded-lg overflow-hidden bg-dark-950/20">
                 <button
                   onClick={() => toggleSection('architecture')}
@@ -342,35 +342,38 @@ export const OutputPanel: React.FC = () => {
                       transition={{ duration: 0.2 }}
                     >
                       <div className="p-4 border-t border-dark-850 bg-dark-950/40 space-y-4">
-                        {aiOutput.high_level_architecture && aiOutput.high_level_architecture.length > 0 && (
+                        {aiOutput?.high_level_architecture && aiOutput.high_level_architecture.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">High-Level Layers:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.high_level_architecture.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
-                        )}
-                        {aiOutput.entry_points && aiOutput.entry_points.length > 0 && (
+                        ) : null}
+                        {aiOutput?.entry_points && aiOutput.entry_points.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Entry Points:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.entry_points.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
-                        )}
-                        {aiOutput.important_modules && aiOutput.important_modules.length > 0 && (
+                        ) : null}
+                        {aiOutput?.important_modules && aiOutput.important_modules.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Primary Modules:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.important_modules.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
-                        )}
-                        {aiOutput.data_flow && (
+                        ) : null}
+                        {aiOutput?.data_flow ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Data Flow Description:</h4>
                             <p className="text-dark-300 leading-relaxed">{aiOutput.data_flow}</p>
                           </div>
+                        ) : null}
+                        {!(aiOutput?.high_level_architecture?.length || aiOutput?.entry_points?.length || aiOutput?.important_modules?.length || aiOutput?.data_flow) && (
+                          <p className="text-xs font-mono text-dark-400 italic">No significant issues detected.</p>
                         )}
                       </div>
                     </motion.div>
@@ -378,24 +381,24 @@ export const OutputPanel: React.FC = () => {
                 </AnimatePresence>
               </div>
             )}
-
+ 
             {/* 3. Strengths */}
             {renderItemSection('Key Strengths', 'strengths', aiOutput?.strengths)}
-
+ 
             {/* 4. Improvements */}
             {renderItemSection('Improvements & Weaknesses', 'improvements', aiOutput?.improvements || aiOutput?.risk_areas)}
-
+ 
             {/* 5. Recommendations */}
             {renderItemSection('Actionable Recommendations', 'recommendations', aiOutput?.recommendations)}
-
+ 
             {/* 6. Security Observations */}
             {renderItemSection('Security Observations', 'security', aiOutput?.security_observations)}
-
+ 
             {/* 7. Performance Observations */}
             {renderItemSection('Performance Observations', 'performance', aiOutput?.performance_observations || aiOutput?.performance_concerns)}
-
+ 
             {/* 8. Testing Recommendations */}
-            {(aiOutput?.unit_test_suggestions || aiOutput?.integration_test_suggestions || aiOutput?.coverage_status || aiOutput?.mock_opportunities) && (
+            {(parsedReport?.task_type === 'tests' || aiOutput?.unit_test_suggestions || aiOutput?.integration_test_suggestions || aiOutput?.coverage_status || aiOutput?.mock_opportunities) && (
               <div className="border border-dark-850 rounded-lg overflow-hidden bg-dark-950/20">
                 <button
                   onClick={() => toggleSection('testing')}
@@ -413,37 +416,40 @@ export const OutputPanel: React.FC = () => {
                       transition={{ duration: 0.2 }}
                     >
                       <div className="p-4 border-t border-dark-850 bg-dark-950/40 space-y-4">
-                        {aiOutput.unit_test_suggestions && aiOutput.unit_test_suggestions.length > 0 && (
+                        {aiOutput?.unit_test_suggestions && aiOutput.unit_test_suggestions.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Unit Tests:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.unit_test_suggestions.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
-                        )}
-                        {aiOutput.integration_test_suggestions && aiOutput.integration_test_suggestions.length > 0 && (
+                        ) : null}
+                        {aiOutput?.integration_test_suggestions && aiOutput.integration_test_suggestions.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Integration Tests:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.integration_test_suggestions.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
-                        )}
-                        {aiOutput.mock_opportunities && aiOutput.mock_opportunities.length > 0 && (
+                        ) : null}
+                        {aiOutput?.mock_opportunities && aiOutput.mock_opportunities.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Mock Targets:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.mock_opportunities.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
-                        )}
-                        {aiOutput.coverage_status && aiOutput.coverage_status.length > 0 && (
+                        ) : null}
+                        {aiOutput?.coverage_status && aiOutput.coverage_status.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Coverage Gap Areas:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.coverage_status.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
+                        ) : null}
+                        {!(aiOutput?.unit_test_suggestions?.length || aiOutput?.integration_test_suggestions?.length || aiOutput?.mock_opportunities?.length || aiOutput?.coverage_status?.length) && (
+                          <p className="text-xs font-mono text-dark-400 italic">No significant issues detected.</p>
                         )}
                       </div>
                     </motion.div>
@@ -451,9 +457,9 @@ export const OutputPanel: React.FC = () => {
                 </AnimatePresence>
               </div>
             )}
-
+ 
             {/* 9. Bug Finder Observations */}
-            {(aiOutput?.logical_issues || aiOutput?.error_prone_patterns || aiOutput?.null_handling_concerns || aiOutput?.async_concerns || aiOutput?.resource_management_observations) && (
+            {(parsedReport?.task_type === 'bugs' || aiOutput?.logical_issues || aiOutput?.error_prone_patterns || aiOutput?.null_handling_concerns || aiOutput?.async_concerns || aiOutput?.resource_management_observations) && (
               <div className="border border-dark-850 rounded-lg overflow-hidden bg-dark-950/20">
                 <button
                   onClick={() => toggleSection('bugs')}
@@ -471,45 +477,48 @@ export const OutputPanel: React.FC = () => {
                       transition={{ duration: 0.2 }}
                     >
                       <div className="p-4 border-t border-dark-850 bg-dark-950/40 space-y-4">
-                        {aiOutput.logical_issues && aiOutput.logical_issues.length > 0 && (
+                        {aiOutput?.logical_issues && aiOutput.logical_issues.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Logical Flaws:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.logical_issues.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
-                        )}
-                        {aiOutput.error_prone_patterns && aiOutput.error_prone_patterns.length > 0 && (
+                        ) : null}
+                        {aiOutput?.error_prone_patterns && aiOutput.error_prone_patterns.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Error Prone Code Patterns:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.error_prone_patterns.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
-                        )}
-                        {aiOutput.null_handling_concerns && aiOutput.null_handling_concerns.length > 0 && (
+                        ) : null}
+                        {aiOutput?.null_handling_concerns && aiOutput.null_handling_concerns.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Null Handling Flaws:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.null_handling_concerns.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
-                        )}
-                        {aiOutput.async_concerns && aiOutput.async_concerns.length > 0 && (
+                        ) : null}
+                        {aiOutput?.async_concerns && aiOutput.async_concerns.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Async / Connection Issues:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.async_concerns.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
-                        )}
-                        {aiOutput.resource_management_observations && aiOutput.resource_management_observations.length > 0 && (
+                        ) : null}
+                        {aiOutput?.resource_management_observations && aiOutput.resource_management_observations.length > 0 ? (
                           <div>
                             <h4 className="text-dark-400 font-bold uppercase mb-2 text-[10px]">Resource Management / Leaks:</h4>
                             <ul className="list-disc pl-5 space-y-1.5 text-dark-300">
                               {aiOutput.resource_management_observations.map((item, i) => <li key={i}>{parseInlineStyles(item)}</li>)}
                             </ul>
                           </div>
+                        ) : null}
+                        {!(aiOutput?.logical_issues?.length || aiOutput?.error_prone_patterns?.length || aiOutput?.null_handling_concerns?.length || aiOutput?.async_concerns?.length || aiOutput?.resource_management_observations?.length) && (
+                          <p className="text-xs font-mono text-dark-400 italic">No significant issues detected.</p>
                         )}
                       </div>
                     </motion.div>

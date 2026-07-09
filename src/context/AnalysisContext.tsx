@@ -169,6 +169,7 @@ export const AnalysisProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 markdownReport: scan.resultText || '',
                 aiOutput: raw.ai_output,
                 repository: raw.repository,
+                task_type: raw.task_type,
                 metadata: raw.metadata,
                 statistics: raw.statistics,
                 chunks: raw.chunks,

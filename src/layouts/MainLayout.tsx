@@ -28,7 +28,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
       {/* Developer Footer */}
       <footer className="border-t border-dark-900 bg-dark-950 px-6 py-4 text-center text-[10px] text-dark-600 font-mono print:hidden">
-        DevMind © {new Date().getFullYear()} — Phase 4 AI Code Intelligence Engine. Built for Pushkar Chhokar.
+        DevMind © {new Date().getFullYear()} — Phase 5 AI Code Intelligence Engine. Built By Pushkar Chhokar.
       </footer>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { Cpu, History } from 'lucide-react';
+import { Cpu, History, MessageSquare, LayoutDashboard } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 import { AnalysisContext } from '../context/AnalysisContext';
 
 interface NavbarProps {
@@ -8,11 +9,14 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenHistory }) => {
   const context = useContext(AnalysisContext);
+  const location = useLocation();
   
   // Safe fallback if context is not loaded yet
   const historyCount = context ? context.history.length : 0;
   const isAnalyzing = context ? context.isAnalyzing : false;
   const parsedReport = context ? context.parsedReport : null;
+
+  const isChatRoute = location.pathname === '/chat';
 
   const renderStatusBadge = () => {
     if (isAnalyzing) {
@@ -58,21 +62,52 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenHistory }) => {
   return (
     <header className="border-b border-dark-800 bg-dark-900/50 backdrop-blur-md px-6 py-4 z-30 relative">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="bg-brand-600/10 p-2 rounded-lg border border-brand-500/20 text-brand-400">
-            <Cpu className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-dark-50 tracking-tight flex items-center gap-2 m-0 p-0 leading-none">
-              DevMind
-              <span className="text-xs font-normal text-brand-400 px-2 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/25">
-                Phase 4
-              </span>
-            </h1>
-            <p className="text-xs text-dark-400 mt-1 font-mono">AI Code Intelligence Engine</p>
-          </div>
+        {/* Left Side: Brand Logo */}
+        <div className="flex items-center gap-6">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+            <div className="bg-brand-600/10 p-2 rounded-lg border border-brand-500/20 text-brand-400">
+              <Cpu className="w-6 h-6" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-dark-50 tracking-tight flex items-center gap-2 m-0 p-0 leading-none">
+                DevMind
+                <span className="text-xs font-normal text-brand-400 px-2 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/25">
+                  Phase 5
+                </span>
+              </h1>
+              <p className="text-xs text-dark-400 mt-1 font-mono">AI Code Intelligence Engine</p>
+            </div>
+          </Link>
+
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center gap-1 border-l border-dark-800 pl-6 h-8">
+            <Link
+              to="/"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded font-mono text-xs transition-all ${
+                !isChatRoute
+                  ? 'bg-dark-850 text-cyan-400 border border-dark-750'
+                  : 'text-dark-400 hover:text-dark-100 hover:bg-dark-900/50 border border-transparent'
+              }`}
+            >
+              <LayoutDashboard className="w-3.5 h-3.5" />
+              <span>DASHBOARD</span>
+            </Link>
+
+            <Link
+              to="/chat"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded font-mono text-xs transition-all ${
+                isChatRoute
+                  ? 'bg-dark-850 text-cyan-400 border border-dark-750'
+                  : 'text-dark-400 hover:text-dark-100 hover:bg-dark-900/50 border border-transparent'
+              }`}
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>GROUNDED CHAT</span>
+            </Link>
+          </nav>
         </div>
         
+        {/* Right Side: System Telemetry & Utilities */}
         <div className="flex items-center gap-5">
           {/* Dynamic AI status badge */}
           <div className="hidden sm:flex items-center gap-2">

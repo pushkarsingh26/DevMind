@@ -86,6 +86,7 @@ export interface ParsedReport {
     language?: string;
     repository_hash?: string;
   };
+  task_type?: TaskType;
   metadata?: {
     primary_language?: string;
     framework?: string;
