@@ -164,7 +164,14 @@ async def get_job_result(
 )
 async def list_repositories(db: Session = Depends(get_db)):
     from app.models.repository import Repository
+    from datetime import datetime
     repos = db.query(Repository).all()
+    
+    # Deduplicate: return only the latest record for each unique (owner, name) combo
+    unique_repos = {}
+    for r in sorted(repos, key=lambda x: x.created_at or datetime.min):
+        unique_repos[(r.owner.lower(), r.name.lower())] = r
+        
     return [
         {
             "id": r.id,
@@ -176,7 +183,7 @@ async def list_repositories(db: Session = Depends(get_db)):
             "repository_hash": r.repository_hash,
             "status": r.status,
             "created_at": r.created_at
-        } for r in repos
+        } for r in unique_repos.values()
     ]
 
 @router.get(
@@ -207,17 +214,60 @@ async def get_repository(id: str, db: Session = Depends(get_db)):
 async def delete_repository(id: str, db: Session = Depends(get_db)):
     from app.models.repository import Repository
     from app.services.vector_store_service import vector_store_service
+    from app.ai.cache import ai_cache
+    
     repo = db.query(Repository).filter(Repository.id == id).first()
     if not repo:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Repository not found")
     
     # Delete FAISS files
-    vector_store_service.delete_vector_store(id)
+    try:
+        vector_store_service.delete_vector_store(id)
+    except Exception as e:
+        logger.warning(f"Failed to delete vector store for {id}: {e}")
 
-    # Delete database record (Cascade deletes Chunks and Embeddings)
+    # Delete AI Cache entries
+    if repo.repository_hash:
+        try:
+            ai_cache.delete_cache_for_repo(repo.repository_hash)
+        except Exception as e:
+            logger.warning(f"Failed to delete cache for hash {repo.repository_hash}: {e}")
+    try:
+        ai_cache.delete_cache_for_repo(repo.id)
+    except Exception as e:
+        logger.warning(f"Failed to delete cache for id {repo.id}: {e}")
+
+    # Delete database record (Cascade deletes Chunks, Embeddings, Conversations, Messages, Jobs)
     db.delete(repo)
     db.commit()
     return {"status": "success", "detail": f"Repository {id} deleted successfully."}
+
+@router.delete(
+    "/repositories",
+    summary="Delete all repositories and reset the system"
+)
+async def delete_all_repositories(db: Session = Depends(get_db)):
+    from app.models.repository import Repository
+    from app.services.vector_store_service import vector_store_service
+    from app.ai.cache import ai_cache
+    
+    repos = db.query(Repository).all()
+    for repo in repos:
+        try:
+            vector_store_service.delete_vector_store(repo.id)
+        except Exception as e:
+            logger.warning(f"Failed to delete vector store for {repo.id}: {e}")
+            
+    for repo in repos:
+        db.delete(repo)
+    db.commit()
+    
+    try:
+        ai_cache.clear()
+    except Exception as e:
+        logger.warning(f"Failed to clear AI cache: {e}")
+        
+    return {"status": "success", "detail": "All repositories and associated data deleted successfully."}
 
 @router.post(
     "/retrieve",

@@ -75,11 +75,15 @@ class ResponseParser:
         try:
             parsed_data = json.loads(cleaned_text)
         except Exception as err:
-            logger.error(
-                f"ResponseParser: Failed to parse clean string as JSON. "
-                f"Error: {err}. Raw snippet: '{cleaned_text[:200]}'"
-            )
-            raise AIResponseParsingError(f"Raw output is not valid JSON: {err}")
+            try:
+                from app.utils.json_repair import parse_repaired_json
+                parsed_data = parse_repaired_json(cleaned_text)
+            except Exception as repair_err:
+                logger.error(
+                    f"ResponseParser: Failed to parse clean string as JSON. "
+                    f"Error: {err}. Repair error: {repair_err}. Raw snippet: '{cleaned_text[:200]}'"
+                )
+                raise AIResponseParsingError(f"Raw output is not valid JSON: {err}")
 
         # 3. Repair missing optional structures
         if isinstance(parsed_data, dict):

@@ -105,4 +105,43 @@ class AICache:
         except Exception as err:
             logger.error(f"AICache: Failed to cache response in '{cache_file.name}': {err}")
 
+    def delete_cache_for_repo(self, repository_hash: str) -> None:
+        """
+        Scans all files in cache_dir and deletes any that refer to the specified repository_hash or id.
+        """
+        if not os.path.exists(self.cache_dir):
+            return
+        for file in os.listdir(self.cache_dir):
+            if not file.endswith(".json"):
+                continue
+            path = os.path.join(self.cache_dir, file)
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                
+                # Check for repository hash or id matches
+                repo_data = data.get("repository", {}) or {}
+                if (repo_data.get("repository_hash") == repository_hash or 
+                    repo_data.get("id") == repository_hash or 
+                    data.get("repository_hash") == repository_hash or
+                    data.get("repository_id") == repository_hash):
+                    os.remove(path)
+                    logger.info(f"AICache: Deleted repository cache file {file}")
+            except Exception as e:
+                logger.warning(f"AICache: Error scanning cache file {file}: {e}")
+
+    def clear(self) -> None:
+        """
+        Deletes all cached files in the cache directory.
+        """
+        if not os.path.exists(self.cache_dir):
+            return
+        for file in os.listdir(self.cache_dir):
+            if file.endswith(".json"):
+                try:
+                    os.remove(os.path.join(self.cache_dir, file))
+                except Exception as e:
+                    logger.warning(f"AICache: Error deleting cache file {file}: {e}")
+        logger.info("AICache: Entire AI cache cleared successfully.")
+
 ai_cache = AICache()

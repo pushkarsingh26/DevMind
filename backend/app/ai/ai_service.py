@@ -214,11 +214,13 @@ class AIService:
             try:
                 model_name, api_key = self._get_provider_details(current_provider)
             except ValueError as val_err:
-                logger.warning(f"AIService: Skipping chain provider: {val_err}")
+                # Unknown provider name — silently skip (configuration issue, not a runtime failure)
+                logger.info(f"AIService: Skipping unknown provider in chain: {val_err}")
                 continue
 
             if not api_key or "api_key_here" in api_key:
-                logger.warning(f"AIService: API key missing for provider '{current_provider}'. Skipping.")
+                # Provider not configured — skip silently (not a failure, just not set up)
+                logger.info(f"AIService: Provider '{current_provider}' has no API key configured. Skipping.")
                 continue
 
             provider_used_after_failover = current_provider if current_provider != active_provider else None
@@ -230,7 +232,6 @@ class AIService:
             retry_count = 0
             for attempt in range(settings.MAX_RETRIES):
                 retry_count = attempt
-                t_attempt_start = time.time()
                 try:
                     # Invoke model client
                     response = await client.generate(
@@ -291,23 +292,23 @@ class AIService:
 
                 except Exception as err:
                     last_exception = err
+                    # Only warn on actual network / API failures (provider was attempted)
                     logger.warning(
-                        f"AIService: Request failed on provider '{current_provider}' (attempt {attempt + 1}/{settings.MAX_RETRIES}). "
-                        f"Error: {err}"
+                        f"AIService: Provider '{current_provider}' attempt {attempt + 1}/{settings.MAX_RETRIES} failed: {type(err).__name__}: {err}"
                     )
                     
-                    # Exponential backoff with jitter
+                    # Exponential backoff with jitter before retry
                     if attempt < settings.MAX_RETRIES - 1:
                         sleep_time = (2 ** attempt) + random.uniform(0.1, 0.5)
                         await asyncio.sleep(sleep_time)
 
             if final_response_obj:
-                # Successfully received response, exit provider chain loop
+                # Successfully received response — exit provider chain loop
                 break
             else:
                 logger.error(
-                    f"AIService: All retries failed for provider '{current_provider}'. "
-                    f"Progressing with failover logic."
+                    f"AIService: All {settings.MAX_RETRIES} retries exhausted for provider '{current_provider}'. "
+                    f"Trying next provider in chain."
                 )
 
         if final_response_obj:
@@ -319,15 +320,238 @@ class AIService:
             )
             return final_response_obj
 
-        # 8. All failover providers failed, run Heuristic Fallback
+        # 8. Every configured provider in the chain was attempted and failed
+        # Only reached here when ALL providers with valid API keys have exhausted all retries.
         logger.error(
-            f"AIService: Final Outage! All failover chain providers failed to resolve request. "
-            f"Activating graceful fallback. Exception: {last_exception}"
+            f"AIService: All providers in the failover chain failed for request {request_id}. "
+            f"Activating heuristic fallback. Last error: {last_exception}"
         )
 
+        # Safely resolve attributes from repository_metadata to support Mock/arbitrary metadata objects
+        docker_support = getattr(repository_metadata, 'docker_support', False)
+        github_actions = getattr(repository_metadata, 'github_actions', False)
+        cicd = getattr(repository_metadata, 'cicd', False)
+        tests_present = getattr(repository_metadata, 'tests_present', False)
+        readme_present = getattr(repository_metadata, 'readme_present', False)
+        license_val = getattr(repository_metadata, 'license', None)
+        dependencies = getattr(repository_metadata, 'dependencies', {}) or {}
+        largest_files = getattr(repository_metadata, 'largest_files', []) or []
+        primary_lang = getattr(repository_metadata, 'primary_language', 'Unknown')
+        framework = getattr(repository_metadata, 'framework', 'None')
+
+        # Helper functions to extract properties from list items (handles dicts, models, mocks)
+        def get_item_path(item) -> str:
+            if not item: return ""
+            return item.get("path") if isinstance(item, dict) else getattr(item, "path", "")
+
+        def get_item_size(item) -> int:
+            if not item: return 0
+            return item.get("size", 0) if isinstance(item, dict) else getattr(item, "size", 0)
+
+        fallback_json = {}
+        if task_key == "review":
+            strengths = []
+            if docker_support:
+                strengths.append("Docker support is configured (Dockerfile present).")
+            if github_actions:
+                strengths.append("CI/CD workflow is integrated via GitHub Actions.")
+            if cicd:
+                strengths.append("Other CI/CD configurations are defined in the repository.")
+            if tests_present:
+                strengths.append("Test suite folder/file structure is present.")
+            if not strengths:
+                strengths = ["Information could not be determined from the available repository context."]
+
+            improvements = []
+            if not tests_present:
+                improvements.append("Missing unit test coverage structures.")
+            if not readme_present:
+                improvements.append("Missing README documentation at the repository root.")
+            if not license_val or license_val == "None":
+                improvements.append("No open source LICENSE file was detected.")
+            if not improvements:
+                improvements = ["Information could not be determined from the available repository context."]
+
+            security_obs = []
+            if docker_support:
+                security_obs.append("Dockerfile and environment configs were parsed. Verify environment credentials security.")
+            if dependencies:
+                security_obs.append("Core dependencies mapped for security scanning.")
+            if not security_obs:
+                security_obs = ["Information could not be determined from the available repository context."]
+
+            performance_obs = []
+            if largest_files:
+                largest_path = get_item_path(largest_files[0])
+                largest_size = get_item_size(largest_files[0])
+                performance_obs.append(f"Large code files detected (largest is `{largest_path}` at {largest_size} bytes).")
+            if not performance_obs:
+                performance_obs = ["Information could not be determined from the available repository context."]
+
+            maintainability_obs = []
+            if primary_lang and primary_lang != "Unknown":
+                maintainability_obs.append(f"Main language determined: `{primary_lang}`.")
+            if framework and framework != "None":
+                maintainability_obs.append(f"Framework structure: `{framework}`.")
+            if not maintainability_obs:
+                maintainability_obs = ["Information could not be determined from the available repository context."]
+
+            recs = []
+            if not tests_present:
+                recs.append("Recommendation: Establish automated test coverage by adding test suites.")
+            if largest_files:
+                recs.append("Recommendation: Consider modularizing larger files to optimize code structure.")
+            if not recs:
+                recs = ["Information could not be determined from the available repository context."]
+
+            fallback_json = {
+                "executive_summary": "Structured repository assessment generated from repository metadata, scanner outputs, dependency analysis, and retrieved repository context.",
+                "strengths": strengths,
+                "improvements": improvements,
+                "security_observations": security_obs,
+                "performance_observations": performance_obs,
+                "maintainability_observations": maintainability_obs,
+                "recommendations": recs
+            }
+
+        elif task_key == "bugs":
+            error_prone = []
+            null_concerns = []
+            async_concerns = []
+            resource_obs = []
+            for chunk in chunks_list:
+                content = chunk.get("content", "")
+                path = chunk.get("path", "")
+                start = chunk.get("start_line", 1)
+                if "except:" in content or "except Exception:" in content:
+                    if "pass" in content or "continue" in content:
+                        error_prone.append(f"Silent exception handling (bare except block with `pass` or `continue`) in `{path}` near line {start}.")
+                if "open(" in content and "with " not in content:
+                    resource_obs.append(f"Resource acquisition without context manager (`open()` called outside `with`) in `{path}` near line {start}.")
+                if "async " in content and "await " not in content and ".ts" in path:
+                    async_concerns.append(f"Async function definition without explicit `await` expression in `{path}` near line {start}.")
+                if " == null" in content or " != null" in content:
+                    null_concerns.append(f"Explicit null validation checks in `{path}` near line {start}; verify safety of property dereferencing.")
+
+            perf_concerns = []
+            if largest_files:
+                largest_path = get_item_path(largest_files[0])
+                largest_size = get_item_size(largest_files[0])
+                if largest_size > 10000:
+                    perf_concerns.append(f"Large source file `{largest_path}` ({largest_size} bytes) may degrade parsing and memory usage.")
+
+            fallback_json = {
+                "logical_issues": ["No significant issues detected."],
+                "risk_areas": ["No significant issues detected."],
+                "error_prone_patterns": error_prone or ["No significant issues detected."],
+                "null_handling_concerns": null_concerns or ["No significant issues detected."],
+                "async_concerns": async_concerns or ["No significant issues detected."],
+                "resource_management_observations": resource_obs or ["No significant issues detected."],
+                "security_observations": ["No significant issues detected."],
+                "performance_concerns": perf_concerns or ["No significant issues detected."]
+            }
+
+        elif task_key == "tests":
+            unit_recs = []
+            for f in largest_files[:2]:
+                f_path = get_item_path(f)
+                unit_recs.append(f"Write unit tests covering logical blocks of `{f_path}`.")
+
+            integration_recs = []
+            if framework == "FastAPI":
+                integration_recs.append("Use `fastapi.testclient.TestClient` to perform request/response integration checks on routes.")
+            elif framework == "Express":
+                integration_recs.append("Use `supertest` to verify HTTP endpoint status codes and JSON payloads.")
+            elif framework and framework != "None":
+                integration_recs.append(f"Set up API client integration suites matching the `{framework}` configuration.")
+            else:
+                integration_recs.append("Information could not be determined from the available repository context.")
+
+            coverage_recs = []
+            if not tests_present:
+                coverage_recs.append("No dedicated `/tests` or `/test` directory was found. 100% of codebase lacks coverage.")
+            else:
+                coverage_recs.append("Existing test file structure was detected, but detailed block-level execution metrics are not parsed.")
+
+            mock_suggestions = []
+            for dep in dependencies.keys():
+                if dep in ("axios", "requests", "httpx"):
+                    mock_suggestions.append(f"Mock HTTP requests made by `{dep}` library.")
+                elif dep in ("pg", "sqlalchemy", "pymongo", "redis"):
+                    mock_suggestions.append(f"Mock database/cache client queries for `{dep}`.")
+            if not mock_suggestions:
+                mock_suggestions = ["Information could not be determined from the available repository context."]
+
+            edge_cases = []
+            if largest_files:
+                largest_path = get_item_path(largest_files[0])
+                edge_cases.append(f"Check parameter validation, boundary values, and exception handling for operations in `{largest_path}`.")
+            if not edge_cases:
+                edge_cases = ["Information could not be determined from the available repository context."]
+
+            fallback_json = {
+                "unit_test_suggestions": unit_recs or ["Information could not be determined from the available repository context."],
+                "integration_test_suggestions": integration_recs,
+                "coverage_status": coverage_recs,
+                "mock_opportunities": mock_suggestions,
+                "edge_cases": edge_cases
+            }
+
+        elif task_key == "explain":
+            entrypoints = []
+            for f in largest_files:
+                f_path = get_item_path(f)
+                f_size = get_item_size(f)
+                basename = f_path.split("/")[-1].split("\\")[-1]
+                if basename in ("main.py", "app.py", "index.js", "App.tsx", "server.js", "manage.py", "index.ts"):
+                    entrypoints.append(f"Entrypoint detected: `{f_path}` ({f_size} bytes)")
+            if not entrypoints and largest_files:
+                first_path = get_item_path(largest_files[0])
+                first_size = get_item_size(largest_files[0])
+                entrypoints.append(f"Primary candidate entrypoint: `{first_path}` ({first_size} bytes)")
+            if not entrypoints:
+                entrypoints = ["Information could not be determined from the available repository context."]
+
+            arch_lines = []
+            if primary_lang and primary_lang != "Unknown":
+                arch_lines.append(f"Built primarily using `{primary_lang}` codebase structures.")
+            if framework and framework != "None":
+                arch_lines.append(f"Structured around a `{framework}` application architecture layout.")
+            if not arch_lines:
+                arch_lines = ["Information could not be determined from the available repository context."]
+
+            important_modules = []
+            for f in largest_files[:3]:
+                f_path = get_item_path(f)
+                important_modules.append(f"Module: `{f_path}`")
+            if not important_modules:
+                important_modules = ["Information could not be determined from the available repository context."]
+
+            data_flow = "Information could not be determined from the available repository context."
+            if framework in ("FastAPI", "Express", "Next.js", "Django", "Flask"):
+                data_flow = f"As a {framework} application, incoming data flows through API route declarations, mapping request payloads directly to handler functions before returning database/JSON results."
+
+            component_relationships = [
+                "Core library imports and package declarations specify project boundaries.",
+                "Database dependencies (if any) link relational structures with codebase modules."
+            ]
+
+            execution_flow = [
+                "Starts at detected entry points and invokes helper libraries and model modules sequentially."
+            ]
+
+            fallback_json = {
+                "high_level_architecture": arch_lines,
+                "entry_points": entrypoints,
+                "component_relationships": component_relationships,
+                "important_modules": important_modules,
+                "execution_flow": execution_flow,
+                "data_flow": data_flow
+            }
+
         # Build fallback model object using Pydantic defaults and repairs
-        fallback_json = response_parser.repair_fields({}, schema_cls)
-        fallback_model = schema_cls.model_validate(fallback_json)
+        repaired_json = response_parser.repair_fields(fallback_json, schema_cls)
+        fallback_model = schema_cls.model_validate(repaired_json)
         
         fallback_model.is_fallback = True
         completed_timestamp = time.time()

@@ -68,6 +68,21 @@ class Settings(BaseSettings):
     AI_CACHE_ENABLED: bool = True
     LOG_LEVEL: str = "INFO"
 
+    # --------------------------------------------------------------------------
+    # Phase 5 — Chat Engine
+    # --------------------------------------------------------------------------
+    CHAT_HISTORY_WINDOW: int = 20          # Past turns to include in context
+    CHAT_RESPONSE_TOKENS: int = 800        # Reserved tokens for assistant reply
+    CHAT_RETRIEVAL_LIMIT: int = 10         # Top-K chunks per chat turn
+    CHAT_MAX_MESSAGE_LENGTH: int = 4000    # Max user message character count
+    CHAT_PROMPT_VERSION: str = "1.0.0"    # Reserved for future cache keying
+
+    # --------------------------------------------------------------------------
+    # Phase 5 — Ollama (optional local provider)
+    # --------------------------------------------------------------------------
+    OLLAMA_BASE_URL: Optional[str] = None  # e.g. http://localhost:11434
+    OLLAMA_MODEL_NAME: str = "llama3.2"   # Default model to pull in Ollama
+
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
     def parse_origins(cls, value):

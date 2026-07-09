@@ -162,6 +162,7 @@ class PipelineService:
 
                             result_json = {
                                 "repository": {
+                                    "id": existing_repo.id,
                                     "name": existing_repo.name,
                                     "owner": existing_repo.owner,
                                     "default_branch": existing_repo.default_branch or "Unknown"
@@ -272,6 +273,7 @@ class PipelineService:
 
                     result_json = {
                         "repository": {
+                            "id": existing_repo.id,
                             "name": existing_repo.name,
                             "owner": existing_repo.owner,
                             "default_branch": existing_repo.default_branch or "Unknown"
@@ -322,33 +324,66 @@ class PipelineService:
             # 4. Persistence (Reviewer stage)
             notify_progress(60)
             import uuid
-            repo_id = f"repo_{uuid.uuid4().hex[:12]}"
             with SessionLocal() as db:
-                repo = Repository(
-                    id=repo_id,
-                    name=metadata.repository_name,
-                    owner=metadata.repository_owner,
-                    source=source_path_or_url,
-                    framework=metadata.framework,
-                    language=metadata.primary_language,
-                    repository_hash=repo_hash,
-                    status="INDEXING",
-                    default_branch=metadata.default_branch,
-                    readme_present=metadata.readme_present,
-                    license=metadata.license,
-                    docker_support=metadata.docker_support,
-                    github_actions=metadata.github_actions,
-                    cicd=metadata.cicd,
-                    tests_present=metadata.tests_present,
-                    total_files=metadata.total_files,
-                    directories=metadata.directories,
-                    extensions=metadata.extensions,
-                    largest_files=[f.model_dump() for f in metadata.largest_files],
-                    dependencies=metadata.dependencies,
-                    package_managers=metadata.package_managers
-                )
-                db.add(repo)
-                db.commit()
+                if is_zip:
+                    existing_repo = db.query(Repository).filter(
+                        Repository.name == metadata.repository_name,
+                        Repository.owner == metadata.repository_owner
+                    ).first()
+                else:
+                    existing_repo = db.query(Repository).filter(
+                        Repository.source == source_path_or_url
+                    ).first()
+
+                if existing_repo:
+                    repo_id = existing_repo.id
+                    existing_repo.name = metadata.repository_name
+                    existing_repo.owner = metadata.repository_owner
+                    existing_repo.framework = metadata.framework
+                    existing_repo.language = metadata.primary_language
+                    existing_repo.repository_hash = repo_hash
+                    existing_repo.status = "INDEXING"
+                    existing_repo.default_branch = metadata.default_branch
+                    existing_repo.readme_present = metadata.readme_present
+                    existing_repo.license = metadata.license
+                    existing_repo.docker_support = metadata.docker_support
+                    existing_repo.github_actions = metadata.github_actions
+                    existing_repo.cicd = metadata.cicd
+                    existing_repo.tests_present = metadata.tests_present
+                    existing_repo.total_files = metadata.total_files
+                    existing_repo.directories = metadata.directories
+                    existing_repo.extensions = metadata.extensions
+                    existing_repo.largest_files = [f.model_dump() for f in metadata.largest_files]
+                    existing_repo.dependencies = metadata.dependencies
+                    existing_repo.package_managers = metadata.package_managers
+                    db.commit()
+                else:
+                    repo_id = f"repo_{uuid.uuid4().hex[:12]}"
+                    repo = Repository(
+                        id=repo_id,
+                        name=metadata.repository_name,
+                        owner=metadata.repository_owner,
+                        source=source_path_or_url,
+                        framework=metadata.framework,
+                        language=metadata.primary_language,
+                        repository_hash=repo_hash,
+                        status="INDEXING",
+                        default_branch=metadata.default_branch,
+                        readme_present=metadata.readme_present,
+                        license=metadata.license,
+                        docker_support=metadata.docker_support,
+                        github_actions=metadata.github_actions,
+                        cicd=metadata.cicd,
+                        tests_present=metadata.tests_present,
+                        total_files=metadata.total_files,
+                        directories=metadata.directories,
+                        extensions=metadata.extensions,
+                        largest_files=[f.model_dump() for f in metadata.largest_files],
+                        dependencies=metadata.dependencies,
+                        package_managers=metadata.package_managers
+                    )
+                    db.add(repo)
+                    db.commit()
 
                 db_job = db.query(AnalysisJobORM).filter(AnalysisJobORM.id == job_id).first()
                 if not db_job:
@@ -376,6 +411,7 @@ class PipelineService:
 
             result_json = {
                 "repository": {
+                    "id": repo_id,
                     "name": metadata.repository_name,
                     "owner": metadata.repository_owner,
                     "default_branch": metadata.default_branch

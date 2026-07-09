@@ -38,6 +38,7 @@ class Repository(Base):
     jobs = relationship("AnalysisJobORM", back_populates="repository", cascade="all, delete-orphan")
     chunks = relationship("Chunk", back_populates="repository", cascade="all, delete-orphan")
     embeddings = relationship("Embedding", back_populates="repository", cascade="all, delete-orphan")
+    chat_conversations = relationship("ChatConversation", back_populates="repository", cascade="all, delete-orphan")  # Phase 5
 
 # Import related models at bottom to avoid circular import issues in SQLAlchemy registry
 from app.models.job import AnalysisJobORM

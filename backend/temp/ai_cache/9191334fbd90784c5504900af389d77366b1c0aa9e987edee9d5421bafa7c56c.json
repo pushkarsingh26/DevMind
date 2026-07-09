@@ -1,0 +1,95 @@
+{
+  "is_fallback": false,
+  "traceability_refs": [
+    {
+      "path": "docs\\architecture.md",
+      "start_line": 1,
+      "end_line": 18,
+      "chunk_id": "repo_f3f75e25eeab:docs\\architecture.md-chunk-0",
+      "score": 0.9002963423728942
+    },
+    {
+      "path": "docs\\architecture.md",
+      "start_line": 37,
+      "end_line": 61,
+      "chunk_id": "repo_f3f75e25eeab:docs\\architecture.md-chunk-2",
+      "score": 0.8590365171432495
+    },
+    {
+      "path": "docs\\architecture.md",
+      "start_line": 85,
+      "end_line": 108,
+      "chunk_id": "repo_f3f75e25eeab:docs\\architecture.md-chunk-5",
+      "score": 0.8630342602729797
+    },
+    {
+      "path": "docs\\architecture.md",
+      "start_line": 129,
+      "end_line": 148,
+      "chunk_id": "repo_f3f75e25eeab:docs\\architecture.md-chunk-7",
+      "score": 0.885532808303833
+    },
+    {
+      "path": "backend\\app\\ai\\ai_service.py",
+      "start_line": 35,
+      "end_line": 57,
+      "chunk_id": "repo_f3f75e25eeab:backend\\app\\ai\\ai_service.py-chunk-1",
+      "score": 0.7998260259628296
+    },
+    {
+      "path": "backend\\app\\ai\\prompt_templates.py",
+      "start_line": 1,
+      "end_line": 61,
+      "chunk_id": "repo_f3f75e25eeab:backend\\app\\ai\\prompt_templates.py-chunk-0",
+      "score": 0.7381327152252197
+    },
+    {
+      "path": "backend\\app\\report_builders\\explain_report.py",
+      "start_line": 71,
+      "end_line": 116,
+      "chunk_id": "repo_f3f75e25eeab:backend\\app\\report_builders\\explain_report.py-chunk-4",
+      "score": 0.7237879037857056
+    }
+  ],
+  "ai_metadata": {
+    "provider": "google",
+    "provider_used_after_failover": "openrouter",
+    "model": "google/gemini-2.5-flash",
+    "latency": 16.58935832977295,
+    "prompt_tokens": 3176,
+    "completion_tokens": 653,
+    "total_tokens": 0,
+    "retry_count": 0,
+    "cache_hit": false,
+    "fallback_flag": false,
+    "request_id": "ai_req_4fa15b0cb466",
+    "started_timestamp": 1783593888.0337687,
+    "completed_timestamp": 1783593904.623127,
+    "estimated_cost": 0.0
+  },
+  "high_level_architecture": [
+    "React Frontend (Vite, TypeScript, Tailwind CSS): Manages user interface, selections, file uploads, and displays analysis results.",
+    "FastAPI Backend (Python ASGI): Provides REST endpoints, orchestrates code checkouts, scanning, chunking, and AI analysis.",
+    "Repository Service (GitPython): Handles cloning GitHub repositories or extracting ZIP files.",
+    "Scanner Service (Metadata): Scans the codebase for metadata like file counts, package managers, and dependencies.",
+    "Chunk Service (Parsing): Partitions code files into smaller, manageable chunks for AI processing.",
+    "AI Service: Utilizes prompt templates and schemas to generate various reports (review, explain, tests, bugs) based on code context.",
+    "Vector Store: Stores FAISS indexes for efficient retrieval of code chunks (indicated by .faiss files)."
+  ],
+  "entry_points": [
+    "backend/main.py: This is the primary entry point for the FastAPI backend application, handling API route definitions and starting the ASGI server.",
+    "backend/vector_store/repo_9ca19d189a7c/index.faiss, backend/vector_store/repo_17c493075a38/index.faiss, backend/vector_store/repo_243e146bdf76/index.faiss: These .faiss files represent pre-computed vector store indexes for specific repositories. While not application entry points in the traditional sense, they are crucial data entry points for the AI analysis process, allowing the system to quickly retrieve relevant code chunks for a given repository."
+  ],
+  "component_relationships": [
+    "React Frontend interacts with FastAPI Backend via REST API calls (e.g., /review, /upload, /status, /result).",
+    "FastAPI Backend orchestrates calls to Repository Service, Scanner Service, Chunk Service, and AI Service.",
+    "Repository Service writes cloned/extracted code to the backend/temp/{job_id} directory.",
+    "Scanner Service reads from the backend/temp/{job_id} directory to extract metadata.",
+    "Chunk Service reads from the backend/temp/{job_id} directory to partition code into chunks.",
+    "AI Service utilizes prompt templates (prompt_templates.py) and schema mappings (ai_service.py) to generate structured AI responses.",
+    "AnalysisContext (in React Frontend) acts as a state orchestrator,"
+  ],
+  "important_modules": [],
+  "execution_flow": [],
+  "data_flow": ""
+}

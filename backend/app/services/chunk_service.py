@@ -41,8 +41,18 @@ class ChunkService:
                 ".git", "node_modules", "venv", ".venv", "dist", "build", "coverage", "__pycache__"
             }]
 
+            EXCLUDED_FILENAMES = {
+                "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "pnpm-lock.json",
+                "composer.lock", "cargo.lock", "poetry.lock", "gemfile.lock",
+                "package.pin", "mix.lock"
+            }
+
             for file in files:
-                _, ext = os.path.splitext(file.lower())
+                f_lower = file.lower()
+                if f_lower in EXCLUDED_FILENAMES or f_lower.endswith(".min.js") or f_lower.endswith(".js.map"):
+                    continue
+
+                _, ext = os.path.splitext(f_lower)
                 if ext not in self.supported_extensions:
                     continue
 

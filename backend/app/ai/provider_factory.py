@@ -4,7 +4,8 @@ from app.ai.client import (
     GeminiProviderClient,
     GroqProviderClient,
     OpenRouterProviderClient,
-    NvidiaNimProviderClient
+    NvidiaNimProviderClient,
+    OllamaProviderClient,  # Phase 5
 )
 
 class ProviderFactory:
@@ -19,7 +20,7 @@ class ProviderFactory:
         Retrieves a cached instance of the client matching the target provider name.
         """
         provider_key = provider_name.strip().lower()
-        
+
         # Check cache dictionary first
         if provider_key in self._clients:
             return self._clients[provider_key]
@@ -33,10 +34,12 @@ class ProviderFactory:
             client = OpenRouterProviderClient()
         elif provider_key == "nvidia":
             client = NvidiaNimProviderClient()
+        elif provider_key == "ollama":            # Phase 5 — local inference
+            client = OllamaProviderClient()
         else:
             raise ValueError(
                 f"Unsupported AI provider option: '{provider_name}'. "
-                f"Supported profiles: google, groq, openrouter, nvidia."
+                f"Supported profiles: google, groq, openrouter, nvidia, ollama."
             )
 
         # Cache initialized instance

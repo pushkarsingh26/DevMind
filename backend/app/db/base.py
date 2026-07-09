@@ -24,5 +24,14 @@ from app.models.repository import Repository
 from app.models.job import AnalysisJobORM
 from app.models.chunk import Chunk
 from app.models.embedding import Embedding
+from app.models.chat import ChatConversation, ChatMessage  # Phase 5
 
-__all__ = ["Base", "Repository", "AnalysisJobORM", "Chunk", "Embedding"]
+__all__ = [
+    "Base",
+    "Repository",
+    "AnalysisJobORM",
+    "Chunk",
+    "Embedding",
+    "ChatConversation",  # Phase 5
+    "ChatMessage",       # Phase 5
+]

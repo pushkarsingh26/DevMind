@@ -187,7 +187,7 @@ def test_ai_service_retry_and_failover():
 
         res_fallback = await ai_service.analyze_repository(MockDB(), "repo-999", "review", MockMetadata())
         assert res_fallback.is_fallback is True
-        assert res_fallback.executive_summary == ""  # Default empty fallback value
+        assert "assessment" in res_fallback.executive_summary  # New populated heuristic fallback summary
         assert res_fallback.ai_metadata.fallback_flag is True
 
     try:
