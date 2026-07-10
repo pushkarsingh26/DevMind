@@ -20,9 +20,10 @@ class PromptBuilder:
             "bugs": (SYSTEM_PROMPT_BUGS, USER_PROMPT_BUGS)
         }
 
-    def optimize_chunks(self, chunks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def optimize_chunks(self, chunks: List[Dict[str, Any]], query: str = "") -> List[Dict[str, Any]]:
         """
-        Deduplicates context chunks and merges contiguous or overlapping spans from the same file.
+        Deduplicates context chunks, merges contiguous file ranges, and applies Context Compression
+        to ensure minimal token consumption (preserves imports, decorators, and declarations).
         """
         if not chunks:
             return []
@@ -48,7 +49,6 @@ class PromptBuilder:
             deduplicated.append(chunk)
 
         # 2. Group and merge contiguous or overlapping spans from the same file
-        # Group by path
         grouped_by_path: Dict[str, List[Dict[str, Any]]] = {}
         for chunk in deduplicated:
             path = chunk.get("path", "Unknown")
@@ -57,7 +57,6 @@ class PromptBuilder:
         merged_chunks = []
 
         for path, file_chunks in grouped_by_path.items():
-            # Sort by start_line ascending
             file_chunks.sort(key=lambda x: x.get("start_line", 0))
             
             current_merged = file_chunks[0]
@@ -70,10 +69,8 @@ class PromptBuilder:
                 prev_content = current_merged.get("content", "")
                 next_content = next_chunk.get("content", "")
 
-                # Merging threshold: overlap or gap <= 5 lines
                 if next_start <= prev_end + 5:
                     if next_start <= prev_end:
-                        # Overlap: Align line numbers and slice strings
                         lines_prev = prev_content.split("\n")
                         lines_next = next_content.split("\n")
                         
@@ -82,10 +79,8 @@ class PromptBuilder:
                             merged_lines = lines_prev[:overlap_start_index] + lines_next
                             new_content = "\n".join(merged_lines)
                         else:
-                            # Fallback if line indexing math breaks
                             new_content = prev_content + "\n" + next_content
                     else:
-                        # Gap of 1 to 5 lines: Join with placeholder
                         gap_size = next_start - prev_end - 1
                         gap_msg = f"\n[... {gap_size} lines gap ...]\n" if gap_size > 0 else "\n"
                         new_content = prev_content + gap_msg + next_content
@@ -98,6 +93,51 @@ class PromptBuilder:
                     current_merged = next_chunk
             
             merged_chunks.append(current_merged)
+
+        # 3. Context Compression (Targeting 30-40% fewer tokens on large chunks)
+        query_words = [w.lower() for w in query.split() if len(w) > 3] if query else []
+        for chunk in merged_chunks:
+            content = chunk.get("content", "")
+            lines = content.split("\n")
+            if len(lines) <= 50:
+                continue
+
+            # Preserve imports/header declarations (first 15 lines)
+            keep_indices = set(range(min(len(lines), 15)))
+            
+            for idx, line in enumerate(lines):
+                line_lower = line.lower()
+                is_import = "import " in line_lower or "require(" in line_lower or "from " in line_lower
+                is_package = "package " in line_lower or "module " in line_lower or "namespace " in line_lower
+                is_decorator = line.strip().startswith("@")
+                is_declaration = any(k in line_lower for k in ("def ", "class ", "function", "const ", "let ", "export "))
+                is_query_match = any(w in line_lower for w in query_words)
+                
+                if is_import or is_package or is_decorator or is_declaration or is_query_match:
+                    # Keep matched line and a window of 1 line before and after
+                    for i in range(max(0, idx - 1), min(len(lines), idx + 2)):
+                        keep_indices.add(i)
+
+            # Keep the last 10 lines
+            for idx in range(max(0, len(lines) - 10), len(lines)):
+                keep_indices.add(idx)
+
+            # Reconstruct compressed content
+            compressed_lines = []
+            in_gap = False
+            for idx in range(len(lines)):
+                if idx in keep_indices:
+                    if in_gap:
+                        compressed_lines.append("[... compressed/trimmed ...]")
+                        in_gap = False
+                    compressed_lines.append(lines[idx])
+                else:
+                    in_gap = True
+
+            if len(compressed_lines) >= len(lines) * 0.8:
+                chunk["content"] = "\n".join(lines[:20]) + "\n[... compressed/trimmed ...]\n" + "\n".join(lines[-20:])
+            else:
+                chunk["content"] = "\n".join(compressed_lines)
 
         return merged_chunks
 

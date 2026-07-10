@@ -5,45 +5,42 @@ from app.ai.client import (
     GroqProviderClient,
     OpenRouterProviderClient,
     NvidiaNimProviderClient,
-    OllamaProviderClient,  # Phase 5
 )
+
 
 class ProviderFactory:
     """
-    Factory mapping provider strings to cached LLM client instances.
+    Factory mapping provider name strings to cached LLM client instances.
+    Supported providers: google, groq, openrouter, nvidia.
     """
     def __init__(self):
         self._clients: Dict[str, LLMProviderClient] = {}
 
     def get_client(self, provider_name: str) -> LLMProviderClient:
         """
-        Retrieves a cached instance of the client matching the target provider name.
+        Retrieves (or lazily instantiates) the client for the given provider name.
         """
         provider_key = provider_name.strip().lower()
 
-        # Check cache dictionary first
         if provider_key in self._clients:
             return self._clients[provider_key]
 
-        # Instantiate target client profile
         if provider_key == "google":
-            client = GeminiProviderClient()
+            client: LLMProviderClient = GeminiProviderClient()
         elif provider_key == "groq":
             client = GroqProviderClient()
         elif provider_key == "openrouter":
             client = OpenRouterProviderClient()
         elif provider_key == "nvidia":
             client = NvidiaNimProviderClient()
-        elif provider_key == "ollama":            # Phase 5 — local inference
-            client = OllamaProviderClient()
         else:
             raise ValueError(
-                f"Unsupported AI provider option: '{provider_name}'. "
-                f"Supported profiles: google, groq, openrouter, nvidia, ollama."
+                f"Unsupported AI provider: '{provider_name}'. "
+                f"Supported providers: google, groq, openrouter, nvidia."
             )
 
-        # Cache initialized instance
         self._clients[provider_key] = client
         return client
+
 
 provider_factory = ProviderFactory()

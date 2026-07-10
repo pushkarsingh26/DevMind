@@ -1,5 +1,7 @@
 """
-AI Provider Clients — Phases 4 & 5
+AI Provider Clients — Phase 7.5
+
+Cloud-only providers: Google AI Studio (Gemini), Groq, OpenRouter, NVIDIA NIM.
 
 Phase 4 interface (unchanged):
   generate(system_prompt, user_prompt, ...)  → ProviderResponse
@@ -79,13 +81,22 @@ class LLMProviderClient(ABC):
     ) -> AsyncIterator[str]:
         """
         Streaming single-turn generation.
-        Default: delegates to generate() and yields the full text as one chunk.
+        Delegates to generate_chat_stream to leverage native streaming.
         """
-        resp = await self.generate(
-            system_prompt, user_prompt, model_name, api_key,
-            temperature, max_tokens, timeout
-        )
-        yield resp.text
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": user_prompt})
+        
+        async for chunk in self.generate_chat_stream(
+            messages=messages,
+            model_name=model_name,
+            api_key=api_key,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            timeout=timeout
+        ):
+            yield chunk
 
     # ------------------------------------------------------------------
     # Phase 5 API (multi-turn messages[] list)
@@ -494,96 +505,3 @@ class NvidiaNimProviderClient(OpenAICompatibleClient):
             temperature, max_tokens, timeout, custom_url=url
         )
 
-
-# ---------------------------------------------------------------------------
-# Ollama — Phase 5 local provider (optional)
-# ---------------------------------------------------------------------------
-
-class OllamaProviderClient(LLMProviderClient):
-    """
-    Ollama local inference client.
-    Uses the OpenAI-compatible /api/chat endpoint available in Ollama >= 0.1.14.
-    Activated only when OLLAMA_BASE_URL is configured in .env.
-    """
-
-    def _endpoint(self) -> str:
-        base = (settings.OLLAMA_BASE_URL or "http://localhost:11434").rstrip("/")
-        return f"{base}/api/chat"
-
-    async def generate(
-        self,
-        system_prompt: str,
-        user_prompt: str,
-        model_name: str,
-        api_key: str,  # unused for Ollama
-        temperature: float,
-        max_tokens: int,
-        timeout: float
-    ) -> ProviderResponse:
-        messages = []
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
-        messages.append({"role": "user", "content": user_prompt})
-        return await self.generate_chat(
-            messages, model_name, api_key, temperature, max_tokens, timeout
-        )
-
-    async def generate_chat(
-        self,
-        messages: List[Dict[str, str]],
-        model_name: str,
-        api_key: str,
-        temperature: float,
-        max_tokens: int,
-        timeout: float
-    ) -> ProviderResponse:
-        payload = {
-            "model": model_name,
-            "messages": messages,
-            "stream": False,
-            "options": {"temperature": temperature, "num_predict": max_tokens}
-        }
-        async with httpx.AsyncClient(timeout=timeout) as client:
-            response = await client.post(self._endpoint(), json=payload)
-            response.raise_for_status()
-            data = response.json()
-
-        try:
-            text = data["message"]["content"]
-        except (KeyError, TypeError) as err:
-            logger.error(f"OllamaClient: Parse error: {err}. Response: {data}")
-            raise ValueError("Malformed Ollama response payload")
-
-        return ProviderResponse(text=text, estimated_cost=0.0)
-
-    async def generate_chat_stream(
-        self,
-        messages: List[Dict[str, str]],
-        model_name: str,
-        api_key: str,
-        temperature: float,
-        max_tokens: int,
-        timeout: float
-    ) -> AsyncIterator[str]:
-        payload = {
-            "model": model_name,
-            "messages": messages,
-            "stream": True,
-            "options": {"temperature": temperature, "num_predict": max_tokens}
-        }
-        async with httpx.AsyncClient(timeout=timeout) as client:
-            async with client.stream("POST", self._endpoint(), json=payload) as response:
-                response.raise_for_status()
-                async for line in response.aiter_lines():
-                    line = line.strip()
-                    if not line:
-                        continue
-                    try:
-                        chunk = json.loads(line)
-                        content = chunk.get("message", {}).get("content", "")
-                        if content:
-                            yield content
-                        if chunk.get("done"):
-                            break
-                    except json.JSONDecodeError:
-                        continue

@@ -1,0 +1,23 @@
+{
+  "queue_time": 19800.06012892723,
+  "retrieval_time": 0.4533884525299072,
+  "planning_time": 0.005212306976318359,
+  "disk_write_time": 0.1196737289428711,
+  "tokens_used": 7927,
+  "providers_used": [
+    "openrouter",
+    "google"
+  ],
+  "retry_count": 0,
+  "cache_hits": 0,
+  "cache_misses": 4,
+  "agent_durations": {
+    "Repository Agent": 20.738814115524292,
+    "Security Agent": 9.52530574798584,
+    "Refactor Agent": 11.18953537940979,
+    "Summary Agent": 3.224868059158325
+  },
+  "elapsed": 45.27733540534973,
+  "cache_hit_ratio": 0.0,
+  "average_agent_duration": 11.169630825519562
+}

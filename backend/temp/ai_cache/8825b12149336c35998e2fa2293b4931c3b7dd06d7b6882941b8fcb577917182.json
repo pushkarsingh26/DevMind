@@ -1,0 +1,84 @@
+{
+  "is_fallback": false,
+  "traceability_refs": [
+    {
+      "path": "README.md",
+      "start_line": 33,
+      "end_line": 55,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-2",
+      "score": 0.9704028964042664
+    },
+    {
+      "path": "README.md",
+      "start_line": 141,
+      "end_line": 178,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-9",
+      "score": 0.9284641146659851
+    },
+    {
+      "path": "README.md",
+      "start_line": 279,
+      "end_line": 305,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-15",
+      "score": 0.9384656548500061
+    },
+    {
+      "path": "README.md",
+      "start_line": 330,
+      "end_line": 394,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-19",
+      "score": 0.9767141342163086
+    },
+    {
+      "path": "docs\\architecture.md",
+      "start_line": 1,
+      "end_line": 18,
+      "chunk_id": "repo_231ef14bce4d:docs\\architecture.md-chunk-0",
+      "score": 0.8900150775909423
+    },
+    {
+      "path": "backend\\app\\ai\\ai_service.py",
+      "start_line": 35,
+      "end_line": 57,
+      "chunk_id": "repo_231ef14bce4d:backend\\app\\ai\\ai_service.py-chunk-1",
+      "score": 0.8030444383621216
+    },
+    {
+      "path": "backend\\app\\agents\\workflow_templates.json",
+      "start_line": 31,
+      "end_line": 58,
+      "chunk_id": "repo_231ef14bce4d:backend\\app\\agents\\workflow_templates.json-chunk-1",
+      "score": 0.7549077868461609
+    },
+    {
+      "path": "backend\\app\\report_builders\\review_report.py",
+      "start_line": 58,
+      "end_line": 93,
+      "chunk_id": "repo_231ef14bce4d:backend\\app\\report_builders\\review_report.py-chunk-3",
+      "score": 0.7453527450561523
+    }
+  ],
+  "ai_metadata": {
+    "provider": "google",
+    "provider_used_after_failover": "openrouter",
+    "model": "google/gemini-2.5-flash",
+    "latency": 16.631991386413574,
+    "prompt_tokens": 3119,
+    "completion_tokens": 76,
+    "total_tokens": 0,
+    "retry_count": 1,
+    "cache_hit": false,
+    "fallback_flag": false,
+    "request_id": "ai_req_7e993107cdc5",
+    "started_timestamp": 1783690176.1728396,
+    "completed_timestamp": 1783690192.804831,
+    "estimated_cost": 0.0
+  },
+  "executive_summary": "DevMind is a sophisticated AI Code Intelligence Engine designed to address common limitations of LLMs in code analysis, such as context limits, context drift, and truncated responses. It employs a Retrieval-Augmented Generation (RAG) pipeline, semantic vector stores, and a multi-agent architecture to provide in-depth repository scans, structural analysis, and",
+  "strengths": [],
+  "improvements": [],
+  "security_observations": [],
+  "performance_observations": [],
+  "maintainability_observations": [],
+  "recommendations": []
+}

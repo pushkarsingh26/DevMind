@@ -7,10 +7,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardContent, CardFooter, Button, Badge } from '../components/ui';
-import { 
-  executeWorkflow, getHistory, getWorkflowDetail, 
-  approveWorkflow, deleteWorkflow, getWorkflowStreamUrl 
-} from '../services/agentService';
+import { useWorkflow } from '../context/WorkflowContext';
 import ReactMarkdown from 'react-markdown';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
@@ -69,17 +66,18 @@ const EmptyState: React.FC<{ message: string; actionText?: string; onAction?: ()
 // -------------------------------------------------------------
 interface GraphNodeProps {
   step: any;
+  index: number;
   isActive: boolean;
   isCompleted: boolean;
-  onClick: () => void;
+  onClick: (index: number) => void;
 }
 
 const GraphNode: React.FC<GraphNodeProps> = React.memo(({ 
-  step, isActive, isCompleted, onClick 
+  step, index, isActive, isCompleted, onClick 
 }) => {
   return (
     <div 
-      onClick={onClick}
+      onClick={() => onClick(index)}
       className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border text-[11px] font-mono transition-all duration-300 cursor-pointer select-none hover:border-cyan-accent/50 ${
         isActive 
           ? 'bg-cyan-accent/15 border-cyan-accent text-cyan-accent shadow-[0_0_15px_rgba(6,182,212,0.25)] scale-105 z-10' 
@@ -171,6 +169,53 @@ const AnalyticsDashboard: React.FC<AnalyticsProps> = React.memo(({
 export const AgentWorkspacePage: React.FC = () => {
   const navigate = useNavigate();
 
+  const {
+    workflows,
+    activeWorkflowId,
+    historyWorkflows,
+    isLoadingHistory,
+    startWorkflow,
+    pauseWorkflow,
+    resumeWorkflow,
+    cancelWorkflow,
+    approveWorkflow,
+    deleteWorkflow,
+    loadWorkflowDetails,
+    fetchHistory,
+    setActiveWorkflowId,
+    setSelectedWorkflowId,
+  } = useWorkflow();
+
+  const activeWorkflow = activeWorkflowId ? workflows[activeWorkflowId] : null;
+
+  const executionStatus = activeWorkflow ? activeWorkflow.status : 'idle';
+  const logs = activeWorkflow ? activeWorkflow.logs : [];
+  const planSteps = activeWorkflow ? activeWorkflow.planSteps : [];
+  const currentStepIdx = activeWorkflow ? activeWorkflow.currentStepIdx : -1;
+  const retrievedChunks = activeWorkflow ? activeWorkflow.retrievedChunks : [];
+  const tokensUsed = activeWorkflow ? activeWorkflow.tokensUsed : 0;
+  const providersUsed = activeWorkflow ? activeWorkflow.providersUsed : [];
+  const duration = activeWorkflow ? activeWorkflow.duration : 0;
+  const confidence = activeWorkflow ? activeWorkflow.confidence : 1.0;
+  const analytics = activeWorkflow ? activeWorkflow.analytics : null;
+  const executionReport = activeWorkflow ? activeWorkflow.executionReport : null;
+  const approvalDiff = activeWorkflow ? activeWorkflow.approvalDiff : null;
+  const approvalFiles = activeWorkflow ? activeWorkflow.approvalFiles : [];
+  const approvalReason = activeWorkflow ? activeWorkflow.approvalReason : '';
+  const streamingProgress = activeWorkflow ? activeWorkflow.current_step || activeWorkflow.status : 'Standby';
+  const workflowId = activeWorkflowId;
+
+  // Selected node in timeline
+  const [selectedNodeIdx, setSelectedNodeIdx] = useState<number | null>(null);
+
+  // local approval metadata
+  const [approvalRisk] = useState<string>('Low');
+  const [approvalImpact] = useState<string>('');
+  const [approvalConfidence] = useState<number>(1.0);
+  const [approvalSubmitting, setApprovalSubmitting] = useState<boolean>(false);
+  const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [showSideBySide, setShowSideBySide] = useState<boolean>(false);
+
   // Config state
   const [repositories, setRepositories] = useState<any[]>([]);
   const [selectedRepoId, setSelectedRepoId] = useState<string>('');
@@ -179,68 +224,52 @@ export const AgentWorkspacePage: React.FC = () => {
   const [isLoadingRepos, setIsLoadingRepos] = useState<boolean>(true);
   const [repoError, setRepoError] = useState<string | null>(null);
 
-  // Execution state
-  const [workflowId, setWorkflowId] = useState<string | null>(null);
-  const [executionStatus, setExecutionStatus] = useState<'idle' | 'running' | 'pending_approval' | 'completed' | 'failed'>('idle');
-  const [logs, setLogs] = useState<any[]>([]);
-  const [planSteps, setPlanSteps] = useState<any[]>([]);
-  const [currentStepIdx, setCurrentStepIdx] = useState<number>(-1);
-  const [retrievedChunks, setRetrievedChunks] = useState<any[]>([]);
-  const [tokensUsed, setTokensUsed] = useState<number>(0);
-  const [providersUsed, setProvidersUsed] = useState<string[]>([]);
-  const [duration, setDuration] = useState<number>(0);
-  const [confidence, setConfidence] = useState<number>(1.0);
-  
-  // Analytics
-  const [analytics, setAnalytics] = useState<any | null>(null);
-
-  // Interactive Node Viewer Drawer State
-  const [selectedNodeIdx, setSelectedNodeIdx] = useState<number | null>(null);
-
-  // Recommendations and Report
-  const [executionReport, setExecutionReport] = useState<any | null>(null);
-  
-  // Approval state
-  const [approvalDiff, setApprovalDiff] = useState<string | null>(null);
-  const [approvalFiles, setApprovalFiles] = useState<string[]>([]);
-  const [approvalReason, setApprovalReason] = useState<string>('');
-  const [approvalRisk, setApprovalRisk] = useState<string>('Low');
-  const [approvalImpact, setApprovalImpact] = useState<string>('');
-  const [approvalConfidence, setApprovalConfidence] = useState<number>(1.0);
-  const [approvalSubmitting, setApprovalSubmitting] = useState<boolean>(false);
-  const [isCopied, setIsCopied] = useState<boolean>(false);
-  const [showSideBySide, setShowSideBySide] = useState<boolean>(false);
-
-  // Streaming status text
-  const [streamingProgress, setStreamingProgress] = useState<string>('Standby');
-
   // History Runs & Filter State
-  const [historyRuns, setHistoryRuns] = useState<any[]>([]);
-  const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(true);
   const [filterSearch, setFilterSearch] = useState<string>('');
   const [filterWorkflow, setFilterWorkflow] = useState<string>('ALL');
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
-  const eventSourceRef = useRef<EventSource | null>(null);
   const logContainerRef = useRef<HTMLDivElement | null>(null);
+  const [logScrollTop, setLogScrollTop] = useState(0);
+  const containerHeight = 280; // approximate viewport height of log container minus padding
+  const itemHeight = 22; // average line height for log entries
+  
+  const historyRuns = historyWorkflows;
 
   // Load repositories & history on mount
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchRepositories();
     fetchHistory();
-  }, []); // intentionally empty — fetchRepositories/fetchHistory are stable useCallback refs
+  }, [fetchHistory]);
 
   // Scroll logs to bottom of the container when logs update
   useEffect(() => {
     if (logContainerRef.current) {
-      logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
+      const sh = logContainerRef.current.scrollHeight;
+      logContainerRef.current.scrollTop = sh;
+      setLogScrollTop(Math.max(0, sh - containerHeight));
     }
   }, [logs]);
 
-  // Fetch registered repos — correct endpoint is /repositories (no /api prefix)
-  const fetchRepositories = useCallback(async () => {
+  const handleLogScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    setLogScrollTop(e.currentTarget.scrollTop);
+  }, []);
+
+  const startIndex = Math.max(0, Math.floor(logScrollTop / itemHeight) - 4);
+  const endIndex = Math.min(logs.length, Math.floor((logScrollTop + containerHeight) / itemHeight) + 4);
+
+  const visibleLogs = useMemo(() => {
+    return logs.slice(startIndex, endIndex).map((log, i) => ({
+      log,
+      actualIndex: startIndex + i
+    }));
+  }, [logs, startIndex, endIndex]);
+
+  const totalLogsHeight = logs.length * itemHeight;
+
+  // Fetch registered repos
+  const fetchRepositories = async () => {
     setIsLoadingRepos(true);
     setRepoError(null);
     try {
@@ -262,144 +291,18 @@ export const AgentWorkspacePage: React.FC = () => {
     } finally {
       setIsLoadingRepos(false);
     }
-  }, [selectedRepoId]);
-
-  // Fetch workflow history runs
-  const fetchHistory = useCallback(async () => {
-    setIsLoadingHistory(true);
-    try {
-      const rawHistory: unknown = await getHistory();
-      setHistoryRuns(toSafeArray<any>(rawHistory, 'history'));
-    } catch (e) {
-      console.error('[DevMind] fetchHistory error:', e);
-      setHistoryRuns([]);
-    } finally {
-      setIsLoadingHistory(false);
-    }
-  }, []);
-
-  // Setup Server-Sent Events stream connection
-  const connectStream = useCallback((id: string) => {
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close();
-    }
-
-    const streamUrl = getWorkflowStreamUrl(id);
-    const source = new EventSource(streamUrl);
-    eventSourceRef.current = source;
-
-    source.onmessage = (event) => {
-      try {
-        const payload = JSON.parse(event.data);
-        const { type, data } = payload;
-
-        if (type === 'init') {
-          setLogs(data.logs || []);
-          setDuration(data.duration || 0);
-          setStreamingProgress('Searching repository...');
-        } else if (type === 'progress') {
-          setStreamingProgress(data);
-        } else if (type === 'log') {
-          setLogs(prev => [...prev, { level: 'INFO', message: data, timestamp: Date.now() }]);
-        } else if (type === 'plan') {
-          setPlanSteps(data.steps || []);
-          setLogs(prev => [...prev, { level: 'INFO', message: `Execution Plan loaded: ${data.rationale}`, timestamp: Date.now() }]);
-        } else if (type === 'step_start') {
-          setCurrentStepIdx(data.step_index);
-          const stepObj = data.step;
-          setLogs(prev => [...prev, { level: 'INFO', message: `Step Started: ${stepObj.name}`, timestamp: Date.now() }]);
-        } else if (type === 'step_complete') {
-          setCurrentStepIdx(data.step_index);
-          const ctx = data.context || {};
-          setRetrievedChunks(ctx.retrieved_chunks || []);
-          setTokensUsed(ctx.tokens_used || 0);
-          setProvidersUsed(ctx.providers_used || []);
-          setDuration(ctx.duration || 0);
-          setConfidence(ctx.confidence || 1.0);
-          setAnalytics(ctx.analytics || null);
-          setLogs(ctx.logs || []);
-        } else if (type === 'pending_approval') {
-          setExecutionStatus('pending_approval');
-          setStreamingProgress('Waiting for approval...');
-          setApprovalDiff(data.diff);
-          setApprovalFiles(data.affected_files || []);
-          setApprovalReason(data.approval_reason || 'Code edits suggested by Refactor Agent.');
-          setLogs(prev => [...prev, { level: 'WARNING', message: 'Workflow suspended. Awaiting Human Approval.', timestamp: Date.now() }]);
-          
-          // Attempt to extract risk and expected impact from active context if available
-          const ctx = data.context || {};
-          if (ctx.agent_outputs) {
-            const refactorOut = ctx.agent_outputs.find((o: any) => o.agent === 'Refactor Agent');
-            if (refactorOut && refactorOut.result) {
-              setApprovalRisk(refactorOut.result.risk_level || 'Low');
-              setApprovalImpact(refactorOut.result.expected_impact || 'Improves safety and readability');
-              setApprovalConfidence(refactorOut.confidence || 1.0);
-            }
-          }
-        } else if (type === 'report') {
-          setExecutionReport(data);
-        } else if (type === 'done') {
-          setExecutionStatus('completed');
-          setStreamingProgress('Done');
-          setLogs(prev => [...prev, { level: 'SUCCESS', message: 'Workflow finished successfully!', timestamp: Date.now() }]);
-          source.close();
-          fetchHistory();
-        } else if (type === 'error') {
-          setExecutionStatus('failed');
-          setStreamingProgress('Failed');
-          setLogs(prev => [...prev, { level: 'ERROR', message: `Error occurred: ${data.message}`, timestamp: Date.now() }]);
-          source.close();
-          fetchHistory();
-        }
-      } catch (err) {
-        console.error('Error parsing event data:', err);
-      }
-    };
-
-    source.onerror = (e) => {
-      console.error('SSE Error occurred:', e);
-      setLogs(prev => [...prev, { level: 'ERROR', message: 'Connection to stream lost. Reconnecting...', timestamp: Date.now() }]);
-    };
-  }, [fetchHistory]);
+  };
 
   // Execute workflow trigger
   const handleStartWorkflow = useCallback(async () => {
-    if (!selectedRepoId || !Array.isArray(repositories) || repositories.length === 0) {
-      return; // button is disabled in this state, guard is defensive
-    }
-    if (!goal.trim()) {
-      return;
-    }
-
-    setWorkflowId(null);
-    setExecutionStatus('running');
-    setStreamingProgress('Planning workflow...');
-    setLogs([]);
-    setPlanSteps([]);
-    setCurrentStepIdx(-1);
+    if (!selectedRepoId || !goal.trim()) return;
     setSelectedNodeIdx(null);
-    setRetrievedChunks([]);
-    setTokensUsed(0);
-    setProvidersUsed([]);
-    setDuration(0);
-    setConfidence(1.0);
-    setAnalytics(null);
-    setExecutionReport(null);
-    setApprovalDiff(null);
-    setApprovalFiles([]);
-    setApprovalReason('');
-
     try {
-      const { workflow_id } = await executeWorkflow(selectedRepoId, goal, selectedTemplate);
-      setWorkflowId(workflow_id);
-      connectStream(workflow_id);
+      await startWorkflow(selectedRepoId, goal, selectedTemplate);
     } catch (e) {
       console.error('Failed to trigger workflow:', e);
-      setExecutionStatus('failed');
-      setStreamingProgress('Failed');
-      setLogs([{ message: 'Failed to initiate agent workflow job on backend.', level: 'ERROR', timestamp: 0 }]);
     }
-  }, [selectedRepoId, goal, selectedTemplate, connectStream, repositories]);
+  }, [selectedRepoId, goal, selectedTemplate, startWorkflow]);
 
   // Submit Approval decision
   const handleApprovalDecision = useCallback(async (approved: boolean) => {
@@ -407,66 +310,20 @@ export const AgentWorkspacePage: React.FC = () => {
     setApprovalSubmitting(true);
     try {
       await approveWorkflow(workflowId, approved, approved ? 'Approved via cockpit UI' : 'Rejected via cockpit UI');
-      setExecutionStatus('running');
-      setStreamingProgress('Applying edits and resuming...');
     } catch (e) {
       console.error('Failed to submit approval:', e);
-      alert('Failed to send approval check response.');
     } finally {
       setApprovalSubmitting(false);
     }
-  }, [workflowId]);
+  }, [workflowId, approveWorkflow]);
 
   // Fetch detailed report of a completed run from history
   const handleLoadHistoryRun = useCallback(async (id: string) => {
-    setExecutionReport(null);
-    setLogs([]);
-    setPlanSteps([]);
-    setCurrentStepIdx(-1);
     setSelectedNodeIdx(null);
-    setWorkflowId(id);
-    setAnalytics(null);
-    
-    try {
-      const details = await getWorkflowDetail(id);
-      if (!details || typeof details !== 'object') {
-        throw new Error('Invalid workflow detail response');
-      }
-      setExecutionStatus(details.status || 'completed');
-      setGoal(details.goal || '');
-      setSelectedTemplate(details.workflow_type || 'Security Audit');
-      setPlanSteps(toSafeArray(details.steps, 'steps'));
-      setExecutionReport(details.report && typeof details.report === 'object' ? details.report : null);
-      setApprovalDiff(typeof details.diff === 'string' ? details.diff : null);
-      setApprovalFiles(toSafeArray(details.affected_files, 'affected_files'));
-      setApprovalReason(details.approval_reason || '');
-      setDuration(typeof details.duration === 'number' ? details.duration : 0);
-      setConfidence(typeof details.confidence === 'number' ? details.confidence : 1.0);
-      
-      // Map analytics if present
-      if (details.analytics && typeof details.analytics === 'object') {
-        setAnalytics(details.analytics);
-      } else if (details.report && typeof details.report === 'object') {
-        setAnalytics({
-          retry_count: 0,
-          cache_hits: 0,
-          cache_misses: 1,
-          agent_durations: {},
-          chunks_used_count: Array.isArray(details.report.chunks_used) ? details.report.chunks_used.length : 0,
-          tools_used_count: Array.isArray(details.report.tools_used) ? details.report.tools_used.length : 0
-        });
-      }
-
-      if (details.report && Array.isArray(details.report.chunks_used)) {
-        setRetrievedChunks(details.report.chunks_used);
-      } else {
-        setRetrievedChunks([]);
-      }
-    } catch (e) {
-      console.error('[DevMind] Failed to load history run:', e);
-      setExecutionReport(null);
-    }
-  }, []);
+    setActiveWorkflowId(id);
+    setSelectedWorkflowId(id);
+    await loadWorkflowDetails(id);
+  }, [setActiveWorkflowId, setSelectedWorkflowId, loadWorkflowDetails]);
 
   // Delete history run
   const handleDeleteRun = useCallback(async (id: string, e: React.MouseEvent) => {
@@ -474,19 +331,10 @@ export const AgentWorkspacePage: React.FC = () => {
     if (!confirm('Are you sure you want to delete this run record?')) return;
     try {
       await deleteWorkflow(id);
-      fetchHistory();
-      if (workflowId === id) {
-        setWorkflowId(null);
-        setExecutionReport(null);
-        setLogs([]);
-        setPlanSteps([]);
-        setExecutionStatus('idle');
-        setAnalytics(null);
-      }
     } catch (err) {
       console.error('Delete run failed:', err);
     }
-  }, [workflowId, fetchHistory]);
+  }, [deleteWorkflow]);
 
   // Rerun a previous workflow from history
   const handleRerunWorkflow = useCallback((run: any, e: React.MouseEvent) => {
@@ -495,8 +343,9 @@ export const AgentWorkspacePage: React.FC = () => {
     setSelectedRepoId(run.repository_id);
     setGoal(run.goal);
     setSelectedTemplate(run.workflow_type || 'Security Audit');
-    // User clicks START to trigger — prevents stale-closure rerun issues
-  }, []);
+    setActiveWorkflowId(null);
+    setSelectedWorkflowId(null);
+  }, [setActiveWorkflowId, setSelectedWorkflowId]);
 
   // Export report to markdown file
   const handleExportReport = useCallback(() => {
@@ -552,7 +401,6 @@ ${executionReport.executive_summary || 'Analysis complete.'}
   const processedHistory = useMemo(() => {
     const safeRuns = Array.isArray(historyRuns) ? historyRuns : [];
     let result = [...safeRuns];
-
     
     // Search filter
     if (filterSearch.trim()) {
@@ -584,15 +432,6 @@ ${executionReport.executive_summary || 'Analysis complete.'}
     return result;
   }, [historyRuns, filterSearch, filterWorkflow, filterStatus, sortOrder]);
 
-  // Clean SSE on destroy
-  useEffect(() => {
-    return () => {
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-      }
-    };
-  }, []);
-
   return (
     <div className="space-y-8 select-none text-left">
       
@@ -607,7 +446,13 @@ ${executionReport.executive_summary || 'Analysis complete.'}
             <div>
               <h1 className="text-xl font-bold text-dark-50 font-display tracking-tight flex items-center gap-2">
                 Autonomous Agent Workspace
-                <Badge variant={executionStatus === 'running' ? 'primary' : executionStatus === 'pending_approval' ? 'warning' : executionStatus === 'completed' ? 'success' : 'neutral'}>
+                <Badge variant={
+                  executionStatus === 'completed' ? 'success' :
+                  executionStatus === 'failed' ? 'danger' :
+                  executionStatus === 'cancelled' ? 'neutral' :
+                  ['waiting_approval', 'paused'].includes(executionStatus) ? 'warning' :
+                  'primary'
+                }>
                   {executionStatus.toUpperCase()}
                 </Badge>
               </h1>
@@ -617,12 +462,46 @@ ${executionReport.executive_summary || 'Analysis complete.'}
             </div>
           </div>
           
-          {executionStatus === 'running' && (
-            <div className="flex items-center gap-3 bg-dark-900/60 border border-cyan-accent/25 px-4.5 py-2.5 rounded-xl text-xs font-mono">
-              <Activity className="w-4 h-4 text-cyan-accent animate-spin" />
-              <div>
-                <span className="text-dark-500 block text-[9px] uppercase">Active Status</span>
-                <span className="text-cyan-accent font-bold">{streamingProgress}</span>
+          {['queued', 'starting', 'retrieving', 'planning', 'executing', 'waiting_approval', 'paused'].includes(executionStatus) && (
+            <div className="flex items-center gap-4 flex-wrap sm:flex-nowrap">
+              <div className="flex items-center gap-3 bg-dark-900/60 border border-cyan-accent/25 px-4.5 py-2.5 rounded-xl text-xs font-mono">
+                <Activity className={`w-4 h-4 text-cyan-accent ${executionStatus === 'paused' ? '' : 'animate-spin'}`} />
+                <div>
+                  <span className="text-dark-500 block text-[9px] uppercase">Active Status</span>
+                  <span className="text-cyan-accent font-bold uppercase">{executionStatus}: {streamingProgress}</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                {executionStatus === 'paused' ? (
+                  <Button
+                    variant="glass"
+                    size="sm"
+                    className="border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/10 text-[10px] font-mono uppercase cursor-pointer"
+                    onClick={() => resumeWorkflow(workflowId!)}
+                  >
+                    Resume
+                  </Button>
+                ) : (
+                  <Button
+                    variant="glass"
+                    size="sm"
+                    className="border-amber-500/20 text-amber-400 hover:bg-amber-500/10 text-[10px] font-mono uppercase cursor-pointer"
+                    onClick={() => pauseWorkflow(workflowId!)}
+                    disabled={executionStatus === 'queued' || executionStatus === 'waiting_approval'}
+                  >
+                    Pause
+                  </Button>
+                )}
+                
+                <Button
+                  variant="danger"
+                  size="sm"
+                  className="text-[10px] font-mono uppercase cursor-pointer"
+                  onClick={() => cancelWorkflow(workflowId!)}
+                >
+                  Cancel
+                </Button>
               </div>
             </div>
           )}
@@ -675,7 +554,7 @@ ${executionReport.executive_summary || 'Analysis complete.'}
                   <select
                     value={selectedRepoId}
                     onChange={(e) => setSelectedRepoId(e.target.value)}
-                    disabled={executionStatus === 'running'}
+                    disabled={['queued', 'starting', 'retrieving', 'planning', 'executing', 'waiting_approval', 'paused'].includes(executionStatus)}
                     className="w-full bg-[#0a0f1d] border border-border-primary text-dark-200 rounded-xl px-3.5 py-2.5 text-xs focus:border-cyan-accent/50 outline-none cursor-pointer"
                   >
                     {Array.isArray(repositories) && repositories.map((repo) => (
@@ -692,7 +571,7 @@ ${executionReport.executive_summary || 'Analysis complete.'}
                 <select
                   value={selectedTemplate}
                   onChange={(e) => setSelectedTemplate(e.target.value)}
-                  disabled={executionStatus === 'running'}
+                  disabled={['queued', 'starting', 'retrieving', 'planning', 'executing', 'waiting_approval', 'paused'].includes(executionStatus)}
                   className="w-full bg-[#0a0f1d] border border-border-primary text-dark-200 rounded-xl px-3.5 py-2.5 text-xs focus:border-cyan-accent/50 outline-none cursor-pointer"
                 >
                   {TEMPLATE_PRESETS.map((tpl) => (
@@ -712,7 +591,7 @@ ${executionReport.executive_summary || 'Analysis complete.'}
                 <textarea
                   value={goal}
                   onChange={(e) => setGoal(e.target.value)}
-                  disabled={executionStatus === 'running'}
+                  disabled={['queued', 'starting', 'retrieving', 'planning', 'executing', 'waiting_approval', 'paused'].includes(executionStatus)}
                   placeholder="e.g., Audit security vulnerabilities in auth module or refactor unhandled JWT signature decodes"
                   rows={4}
                   className="w-full bg-[#0a0f1d] border border-border-primary text-dark-200 rounded-xl p-3.5 text-xs focus:border-cyan-accent/50 outline-none resize-none font-sans"
@@ -721,10 +600,10 @@ ${executionReport.executive_summary || 'Analysis complete.'}
 
             </CardContent>
             <CardFooter className="border-t border-border-primary/30 pt-4 mt-4">
-              {executionStatus === 'running' ? (
+              {['queued', 'starting', 'retrieving', 'planning', 'executing', 'waiting_approval', 'paused'].includes(executionStatus) ? (
                 <div className="w-full flex items-center justify-center gap-3 p-3 rounded-xl bg-purple-accent/5 border border-purple-accent/25">
                   <div className="w-4 h-4 border-2 border-t-cyan-accent border-r-transparent rounded-full animate-spin" />
-                  <span className="text-xs text-cyan-accent font-mono uppercase font-bold tracking-wider">Executing workflow...</span>
+                  <span className="text-xs text-cyan-accent font-mono uppercase font-bold tracking-wider">{executionStatus.toUpperCase()}...</span>
                 </div>
               ) : (
                 <Button
@@ -732,7 +611,7 @@ ${executionReport.executive_summary || 'Analysis complete.'}
                   glow
                   onClick={handleStartWorkflow}
                   disabled={!selectedRepoId || !goal.trim()}
-                  className="w-full flex items-center justify-center gap-4"
+                  className="w-full flex items-center justify-center gap-4 cursor-pointer"
                 >
                   <Play className="w-4 h-4" />
                   <span>START AGENTS FLIGHT</span>
@@ -768,9 +647,10 @@ ${executionReport.executive_summary || 'Analysis complete.'}
                         <React.Fragment key={idx}>
                           <GraphNode
                             step={step}
+                            index={idx}
                             isActive={isActive}
                             isCompleted={isCompleted}
-                            onClick={() => setSelectedNodeIdx(idx)}
+                            onClick={setSelectedNodeIdx}
                           />
                           {idx < planSteps.length - 1 && (
                             <ArrowRight className="w-3.5 h-3.5 text-dark-600 shrink-0" />
@@ -875,28 +755,40 @@ ${executionReport.executive_summary || 'Analysis complete.'}
               </h3>
             </CardHeader>
             <CardContent>
-              <div ref={logContainerRef} className="w-full min-h-[220px] max-h-[320px] overflow-y-auto bg-[#040811]/90 border border-border-primary rounded-xl p-4 font-mono text-[11px] leading-relaxed space-y-2 scrollbar-thin">
+              <div ref={logContainerRef} onScroll={handleLogScroll} className="w-full min-h-[220px] max-h-[320px] overflow-y-auto bg-[#040811]/90 border border-border-primary rounded-xl p-4 font-mono text-[11px] leading-relaxed scrollbar-thin">
                 {logs.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-dark-600 italic py-16">
                     <span>Logs output standby...</span>
                   </div>
                 ) : (
-                  logs.map((log, idx) => {
-                    const isWarn = log.level === 'WARNING';
-                    const isErr = log.level === 'ERROR';
-                    const isSucc = log.level === 'SUCCESS';
-                    return (
-                      <div key={idx} className="flex gap-2.5 text-left items-start">
-                        <span className="text-dark-600 shrink-0 select-none">[{log.timestamp ? log.timestamp.toFixed(1) + 's' : 'info'}]</span>
-                        <span className={`shrink-0 select-none font-bold ${isErr ? 'text-red-500' : isWarn ? 'text-amber-500' : isSucc ? 'text-green-accent' : 'text-cyan-accent'}`}>
-                            {isErr ? '✗' : isWarn ? '!' : isSucc ? '✓' : 'ℹ'}
-                        </span>
-                        <span className={isErr ? 'text-red-400' : isWarn ? 'text-amber-400' : isSucc ? 'text-green-300' : 'text-dark-300'}>
-                          {log.message}
-                        </span>
-                      </div>
-                    );
-                  })
+                  <div style={{ height: totalLogsHeight, position: 'relative', width: '100%' }}>
+                    {visibleLogs.map(({ log, actualIndex }) => {
+                      const isWarn = log.level === 'WARNING';
+                      const isErr = log.level === 'ERROR';
+                      const isSucc = log.level === 'SUCCESS';
+                      return (
+                        <div 
+                          key={actualIndex} 
+                          style={{
+                            position: 'absolute',
+                            top: actualIndex * itemHeight,
+                            left: 0,
+                            right: 0,
+                            height: itemHeight
+                          }}
+                          className="flex gap-2.5 text-left items-start overflow-hidden whitespace-nowrap"
+                        >
+                          <span className="text-dark-600 shrink-0 select-none">[{log.timestamp ? log.timestamp.toFixed(1) + 's' : 'info'}]</span>
+                          <span className={`shrink-0 select-none font-bold ${isErr ? 'text-red-500' : isWarn ? 'text-amber-500' : isSucc ? 'text-green-accent' : 'text-cyan-accent'}`}>
+                              {isErr ? '✗' : isWarn ? '!' : isSucc ? '✓' : 'ℹ'}
+                          </span>
+                          <span className={isErr ? 'text-red-400' : isWarn ? 'text-amber-400' : isSucc ? 'text-green-300' : 'text-dark-300'}>
+                            {log.message}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
                 )}
               </div>
             </CardContent>
@@ -991,7 +883,7 @@ ${executionReport.executive_summary || 'Analysis complete.'}
       <div className="space-y-6 w-full">
         
         {/* Enhanced Approval Panel */}
-        {executionStatus === 'pending_approval' && approvalDiff && (
+        {executionStatus === 'waiting_approval' && approvalDiff && (
           <Card variant="soft" className="border-2 border-amber-500/50 bg-amber-500/5 text-left p-6">
             <CardHeader className="pb-3 border-b border-amber-500/20 flex justify-between items-center mb-4">
               <div>
@@ -1148,7 +1040,7 @@ ${executionReport.executive_summary || 'Analysis complete.'}
             </CardContent>
           </Card>
         ) : (
-          executionStatus !== 'pending_approval' && (
+          executionStatus !== 'waiting_approval' && (
             <Card variant="soft" className="min-h-[140px] flex flex-col justify-center items-center text-center text-dark-500 italic p-6">
               <ScrollText className="w-8 h-8 text-dark-600 mb-2" />
               <span>Run an analysis to generate your first report.</span>
@@ -1167,7 +1059,7 @@ ${executionReport.executive_summary || 'Analysis complete.'}
                 </h3>
                 <p className="text-[10px] text-dark-500 font-mono mt-0.5">Track, filter, rerun, or delete past agent execution workflows</p>
               </div>
-              <Button variant="glass" size="sm" onClick={fetchHistory} className="font-mono text-[9px] uppercase tracking-wider">
+              <Button variant="glass" size="sm" onClick={() => fetchHistory()} className="font-mono text-[9px] uppercase tracking-wider">
                 Refresh history
               </Button>
             </div>

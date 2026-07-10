@@ -467,10 +467,6 @@ class ConversationService:
             except ValueError:
                 continue
 
-        # Ollama needs no key
-        if settings.OLLAMA_BASE_URL:
-            return "ollama", settings.OLLAMA_MODEL_NAME, ""
-
         raise RuntimeError("No AI provider with valid credentials found in the chain.")
 
     async def _run_provider_chain(
@@ -480,16 +476,19 @@ class ConversationService:
         """
         Non-streaming provider failover. Returns:
           (raw_text, provider_used, model_used, prompt_tokens, completion_tokens)
+
+        Retry policy:
+          - Retryable (timeout, 429, 5xx): retry with exponential backoff
+          - Non-retryable (400, 401, 403, 404): skip to next provider immediately
         """
+        import httpx as _httpx
+        from app.ai.provider_registry import RETRYABLE_STATUS_CODES, NON_RETRYABLE_STATUS_CODES
+
         chain = [p.strip().lower() for p in settings.AI_PROVIDER_CHAIN.split(",")]
         default = settings.AI_PROVIDER.strip().lower()
         if default in chain:
             chain.remove(default)
         chain.insert(0, default)
-
-        # Append Ollama at the end if configured
-        if settings.OLLAMA_BASE_URL and "ollama" not in chain:
-            chain.append("ollama")
 
         last_err: Optional[Exception] = None
 
@@ -499,7 +498,7 @@ class ConversationService:
             except ValueError:
                 continue
 
-            if provider != "ollama" and (not key or "api_key_here" in key):
+            if not key or "api_key_here" in key:
                 # Not configured — skip silently (not a failure)
                 logger.info(f"ConversationService: Provider '{provider}' has no API key configured. Skipping.")
                 continue
@@ -517,11 +516,38 @@ class ConversationService:
                         timeout=settings.TIMEOUT,
                     )
                     return resp.text, provider, model, resp.prompt_tokens, resp.completion_tokens
+
+                except _httpx.HTTPStatusError as http_err:
+                    status_code = http_err.response.status_code
+                    last_err = http_err
+                    if status_code in NON_RETRYABLE_STATUS_CODES:
+                        logger.warning(
+                            f"ConversationService: Provider '{provider}' returned non-retryable "
+                            f"HTTP {status_code}. Skipping to next provider."
+                        )
+                        break  # Skip to next provider immediately
+                    # Retryable (429, 5xx)
+                    logger.warning(
+                        f"ConversationService: Provider '{provider}' attempt {attempt + 1} "
+                        f"retryable HTTP {status_code}."
+                    )
+                    if attempt < settings.MAX_RETRIES - 1:
+                        await asyncio.sleep((2 ** attempt) + random.uniform(0.1, 0.5))
+
+                except (_httpx.TimeoutException, _httpx.ConnectError) as net_err:
+                    last_err = net_err
+                    logger.warning(
+                        f"ConversationService: Provider '{provider}' attempt {attempt + 1} "
+                        f"network error: {type(net_err).__name__}: {net_err}"
+                    )
+                    if attempt < settings.MAX_RETRIES - 1:
+                        await asyncio.sleep((2 ** attempt) + random.uniform(0.1, 0.5))
+
                 except Exception as err:
                     last_err = err
-                    # Only warn when provider was actually attempted and failed
                     logger.warning(
-                        f"ConversationService: Provider '{provider}' attempt {attempt + 1}/{settings.MAX_RETRIES} failed: {type(err).__name__}: {err}"
+                        f"ConversationService: Provider '{provider}' attempt {attempt + 1}/{settings.MAX_RETRIES} "
+                        f"failed: {type(err).__name__}: {err}"
                     )
                     if attempt < settings.MAX_RETRIES - 1:
                         await asyncio.sleep((2 ** attempt) + random.uniform(0.1, 0.5))
@@ -531,7 +557,7 @@ class ConversationService:
         )
 
     def _provider_credentials(self, provider: str) -> Tuple[str, str]:
-        """Returns (model_name, api_key) for the given provider name."""
+        """Returns (model_name, api_key) for the given cloud provider name."""
         p = provider.strip().lower()
         if p == "google":
             return settings.GOOGLE_MODEL_NAME, settings.GOOGLE_API_KEY or ""
@@ -541,8 +567,6 @@ class ConversationService:
             return settings.OPENROUTER_MODEL_NAME, settings.OPENROUTER_API_KEY or ""
         elif p == "nvidia":
             return settings.NVIDIA_MODEL_NAME, settings.NVIDIA_API_KEY or ""
-        elif p == "ollama":
-            return settings.OLLAMA_MODEL_NAME, ""
         raise ValueError(f"Unknown provider: {provider}")
 
     def _save_message(

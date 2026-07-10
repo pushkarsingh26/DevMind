@@ -9,6 +9,7 @@ from sqlalchemy import (
     Text,
     ForeignKey,
     Index,
+    Integer,
 )
 from sqlalchemy.orm import relationship
 from app.db.database import Base
@@ -43,6 +44,19 @@ class WorkflowExecutionORM(Base):
     affected_files = Column(Text, nullable=True)  # JSON string of list[str]
     approval_status = Column(String(32), nullable=True)  # pending, approved, rejected
     approval_reason = Column(Text, nullable=True)
+
+    # Rich workflow states columns
+    progress = Column(Integer, nullable=True, default=0)
+    current_step = Column(String(255), nullable=True)
+    summary = Column(Text, nullable=True)
+    telemetry = Column(Text, nullable=True)
+
+    # File paths for decoupled storage
+    report_path = Column(String(512), nullable=True)
+    logs_path = Column(String(512), nullable=True)
+    graph_path = Column(String(512), nullable=True)
+    diff_path = Column(String(512), nullable=True)
+    telemetry_path = Column(String(512), nullable=True)
 
     # Relationships
     repository = relationship("Repository", back_populates="workflow_executions")

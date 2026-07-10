@@ -379,7 +379,7 @@ class WorkflowHistoryTool(BaseTool):
                 f"Workflow ID: {r.id}\n"
                 f"  Type: {r.workflow_type} | Status: {r.status}\n"
                 f"  Goal: {r.goal}\n"
-                f"  Duration: {r.duration:.1f}s | Confidence: {r.confidence:.2f}\n"
+                f"  Duration: {(r.duration or 0.0):.1f}s\n"
                 f"{'-'*40}"
             )
         return "\n".join(out)

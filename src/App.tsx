@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AnalysisProvider } from './context/AnalysisContext';
+import { WorkflowProvider } from './context/WorkflowContext';
 import { ChatProvider } from './chat/ChatContext';
 import { MainLayout } from './layouts/MainLayout';
 import { Loader2 } from 'lucide-react';
@@ -28,30 +29,32 @@ function App() {
   return (
     <BrowserRouter>
       <AnalysisProvider>
-        <ChatProvider>
-          <MainLayout>
-            <Suspense fallback={<LoadingFallback />}>
-              <ErrorBoundary>
-                <Routes>
-                  {/* Redirect root to dashboard */}
-                  <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                  
-                  <Route path="/dashboard" element={<DashboardPage />} />
-                  <Route path="/repositories" element={<RepositoriesPage />} />
-                  <Route path="/chat" element={<ChatPage />} />
-                  <Route path="/agents" element={<AgentWorkspacePage />} />
-                  <Route path="/reports" element={<ReportsPage />} />
-                  <Route path="/history" element={<HistoryPage />} />
-                  <Route path="/settings" element={<SettingsPage />} />
-                  <Route path="/future" element={<FuturePage />} />
-                  
-                  {/* Fallback redirect */}
-                  <Route path="*" element={<Navigate to="/dashboard" replace />} />
-                </Routes>
-              </ErrorBoundary>
-            </Suspense>
-          </MainLayout>
-        </ChatProvider>
+        <WorkflowProvider>
+          <ChatProvider>
+            <MainLayout>
+              <Suspense fallback={<LoadingFallback />}>
+                <ErrorBoundary>
+                  <Routes>
+                    {/* Redirect root to dashboard */}
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    
+                    <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/repositories" element={<RepositoriesPage />} />
+                    <Route path="/chat" element={<ChatPage />} />
+                    <Route path="/agents" element={<AgentWorkspacePage />} />
+                    <Route path="/reports" element={<ReportsPage />} />
+                    <Route path="/history" element={<HistoryPage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    <Route path="/future" element={<FuturePage />} />
+                    
+                    {/* Fallback redirect */}
+                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                  </Routes>
+                </ErrorBoundary>
+              </Suspense>
+            </MainLayout>
+          </ChatProvider>
+        </WorkflowProvider>
       </AnalysisProvider>
     </BrowserRouter>
   );

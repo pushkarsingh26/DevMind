@@ -1,0 +1,20 @@
+{
+  "steps": [
+    {
+      "name": "Locate Undocumented Files",
+      "agent": "Repository Agent",
+      "description": "Find modules lacking JSDoc, Docstrings, or README files."
+    },
+    {
+      "name": "Generate Inline Docstrings & READMEs",
+      "agent": "Documentation Agent",
+      "description": "Write block comments, module descriptions, and API guides."
+    },
+    {
+      "name": "Assemble Documentation Report",
+      "agent": "Summary Agent",
+      "description": "Summarize new docs created and outline remaining gaps."
+    }
+  ],
+  "rationale": "Executing predefined 'Documentation Generation' template agent chain."
+}

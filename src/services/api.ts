@@ -28,7 +28,7 @@ export const uploadRepository = async (file: File, task: TaskType): Promise<{ ta
     const formData = new FormData();
     formData.append('file', file);
     formData.append('task', task);
-    
+
     const response = await client.post('/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

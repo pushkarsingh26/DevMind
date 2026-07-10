@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import { AnalysisContext } from '../context/AnalysisContext';
+import { useWorkflow } from '../context/WorkflowContext';
 import { useChatContext } from '../chat/ChatContext';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -13,6 +14,14 @@ export const HistoryPage: React.FC = () => {
   const navigate = useNavigate();
   const analysisContext = useContext(AnalysisContext);
   const chatContext = useChatContext();
+  
+  const {
+    historyWorkflows,
+    loadWorkflowDetails,
+    setActiveWorkflowId,
+    setSelectedWorkflowId,
+    deleteWorkflow
+  } = useWorkflow();
 
   const [activeTab, setActiveTab] = useState<'runs' | 'chats' | 'repos'>('runs');
   const [deletingRepoId, setDeletingRepoId] = useState<string | null>(null);
@@ -22,6 +31,31 @@ export const HistoryPage: React.FC = () => {
   const { history, clearHistory, deleteHistoryItem, loadHistoryItem } = analysisContext;
   const { conversations, selectConversation, deleteConversation, readyRepositories, deleteRepository, clearAll } = chatContext;
 
+  const combinedRuns = useMemo(() => {
+    const analysisItems = history.map(item => ({
+      ...item,
+      isAgentWorkflow: false,
+      timestamp: item.timestamp
+    }));
+
+    const agentItems = historyWorkflows.map(item => ({
+      id: item.id,
+      timestamp: new Date(item.created_at).getTime(),
+      taskType: item.workflow_type,
+      repositoryName: item.repository_name || 'Repository',
+      repositoryOwner: 'Agent Run',
+      provider: item.agents_used && item.agents_used.length > 0 ? item.agents_used.join(', ') : 'Autonomous Agent',
+      model: item.status.toUpperCase(),
+      duration: item.duration || 0,
+      cacheHit: false,
+      fallbackFlag: false,
+      report: item,
+      isAgentWorkflow: true
+    }));
+
+    return [...analysisItems, ...agentItems].sort((a, b) => b.timestamp - a.timestamp);
+  }, [history, historyWorkflows]);
+
   const formatTimestamp = (timestamp: number) => {
     return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   };
@@ -30,9 +64,16 @@ export const HistoryPage: React.FC = () => {
     return new Date(timestamp).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
   };
 
-  const handleRestoreRun = (item: any) => {
-    loadHistoryItem(item);
-    navigate('/repositories');
+  const handleRestoreRun = async (item: any) => {
+    if (item.isAgentWorkflow) {
+      setActiveWorkflowId(item.id);
+      setSelectedWorkflowId(item.id);
+      await loadWorkflowDetails(item.id);
+      navigate('/agents');
+    } else {
+      loadHistoryItem(item);
+      navigate('/repositories');
+    }
   };
 
   const handleRestoreChat = (id: string) => {
@@ -71,11 +112,19 @@ export const HistoryPage: React.FC = () => {
     }
   };
 
-  const handleDeleteAnalysisItem = (id: string, e: React.MouseEvent) => {
+  const handleDeleteAnalysisItem = async (id: string, isAgentWorkflow: boolean, e: React.MouseEvent) => {
     e.stopPropagation();
-    const confirm = window.confirm('Remove this analysis record from cache history?');
+    const confirm = window.confirm(
+      isAgentWorkflow
+        ? 'Delete this agent workflow run record completely?'
+        : 'Remove this analysis record from cache history?'
+    );
     if (confirm) {
-      deleteHistoryItem(id);
+      if (isAgentWorkflow) {
+        await deleteWorkflow(id);
+      } else {
+        deleteHistoryItem(id);
+      }
     }
   };
 
@@ -102,7 +151,7 @@ export const HistoryPage: React.FC = () => {
             }`}
         >
           <History className="w-3.5 h-3.5" />
-          <span>Runs ({history.length})</span>
+          <span>Runs ({combinedRuns.length})</span>
         </button>
         <button
           onClick={() => setActiveTab('chats')}
@@ -142,13 +191,13 @@ export const HistoryPage: React.FC = () => {
                 exit={{ opacity: 0, y: 5 }}
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
               >
-                {history.length === 0 ? (
+                {combinedRuns.length === 0 ? (
                   <div className="md:col-span-2 py-16 flex flex-col items-center justify-center text-center text-dark-500 font-mono text-xs">
                     <Cpu className="w-8 h-8 text-dark-600 mb-2.5 animate-pulse" />
-                    <span>No historical analysis runs cached.</span>
+                    <span>No historical runs cached.</span>
                   </div>
                 ) : (
-                  history.map((item) => (
+                  combinedRuns.map((item) => (
                     <Card
                       key={item.id}
                       interactive
@@ -172,7 +221,7 @@ export const HistoryPage: React.FC = () => {
                             {item.taskType}
                           </Badge>
                           <button
-                            onClick={(e) => handleDeleteAnalysisItem(item.id, e)}
+                            onClick={(e) => handleDeleteAnalysisItem(item.id, item.isAgentWorkflow, e)}
                             className="p-1 rounded-lg hover:bg-rose-500/10 text-dark-500 hover:text-rose-500 transition cursor-pointer bg-transparent border-none"
                             title="Delete record"
                           >
@@ -182,11 +231,11 @@ export const HistoryPage: React.FC = () => {
                       </div>
 
                       <div className="border-t border-border-primary/50 pt-3 mt-3 flex items-center justify-between text-[9px] font-mono text-dark-500">
-                        <span className="flex items-center gap-1">
+                        <span className="flex items-center gap-1 truncate max-w-[70%]">
                           <Cpu className="w-3.5 h-3.5 text-purple-accent" />
                           {item.provider} ({item.model.split('/').pop()})
                         </span>
-                        <span className="text-dark-300 font-bold uppercase flex items-center gap-1">
+                        <span className="text-dark-300 font-bold uppercase flex items-center gap-1 shrink-0">
                           RESTORE <ArrowUpRight className="w-3 h-3 text-cyan-accent" />
                         </span>
                       </div>

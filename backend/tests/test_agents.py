@@ -7,6 +7,7 @@ import asyncio
 from unittest.mock import AsyncMock, MagicMock, patch
 from sqlalchemy.orm import Session
 
+import app.db.base
 from app.models.repository import Repository
 from app.agents.execution_context import ExecutionContext
 from app.agents.execution_report import ExecutionReport

@@ -1,0 +1,8 @@
+{"timestamp": 2.002716064453125e-05, "level": "INFO", "message": "Workflow initialized"}
+{"timestamp": 0.013642549514770508, "level": "INFO", "message": "Starting background workflow executor"}
+{"timestamp": 0.02768707275390625, "level": "INFO", "message": "Reconstructing workspace files from database indexes..."}
+{"timestamp": 0.709658145904541, "level": "INFO", "message": "Formulating execution plan..."}
+{"timestamp": 0.7105739116668701, "level": "INFO", "message": "Loaded preset workflow template: Security Audit"}
+{"timestamp": 0.7263569831848145, "level": "INFO", "message": "Starting step 'Map Auth & Security Entries' with Agent 'Repository Agent'"}
+{"timestamp": 0.7943153381347656, "level": "ERROR", "message": "Workflow execution failed: name 'time' is not defined"}
+{"timestamp": 0.877979040145874, "level": "INFO", "message": "Cleaned up temporary workspace directories."}

@@ -1,0 +1,99 @@
+{
+  "is_fallback": false,
+  "traceability_refs": [
+    {
+      "path": "README.md",
+      "start_line": 33,
+      "end_line": 55,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-2",
+      "score": 0.9460510611534119
+    },
+    {
+      "path": "README.md",
+      "start_line": 77,
+      "end_line": 96,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-6",
+      "score": 0.9419609308242798
+    },
+    {
+      "path": "README.md",
+      "start_line": 141,
+      "end_line": 202,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-9",
+      "score": 0.9482815861701965
+    },
+    {
+      "path": "README.md",
+      "start_line": 279,
+      "end_line": 292,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-15",
+      "score": 0.953148365020752
+    },
+    {
+      "path": "README.md",
+      "start_line": 344,
+      "end_line": 370,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-20",
+      "score": 0.9508152008056641
+    },
+    {
+      "path": "docs\\architecture.md",
+      "start_line": 1,
+      "end_line": 18,
+      "chunk_id": "repo_231ef14bce4d:docs\\architecture.md-chunk-0",
+      "score": 0.9002962827682495
+    },
+    {
+      "path": "docs\\architecture.md",
+      "start_line": 55,
+      "end_line": 61,
+      "chunk_id": "repo_231ef14bce4d:docs\\architecture.md-chunk-3",
+      "score": 0.8884637475013732
+    },
+    {
+      "path": "backend\\app\\ai\\ai_service.py",
+      "start_line": 35,
+      "end_line": 57,
+      "chunk_id": "repo_231ef14bce4d:backend\\app\\ai\\ai_service.py-chunk-1",
+      "score": 0.7998260259628296
+    },
+    {
+      "path": "backend\\app\\ai\\prompt_templates.py",
+      "start_line": 46,
+      "end_line": 61,
+      "chunk_id": "repo_231ef14bce4d:backend\\app\\ai\\prompt_templates.py-chunk-2",
+      "score": 0.786638617515564
+    },
+    {
+      "path": "backend\\app\\agents\\workflow_templates.json",
+      "start_line": 31,
+      "end_line": 58,
+      "chunk_id": "repo_231ef14bce4d:backend\\app\\agents\\workflow_templates.json-chunk-1",
+      "score": 0.7582831978797913
+    }
+  ],
+  "ai_metadata": {
+    "provider": "google",
+    "provider_used_after_failover": "openrouter",
+    "model": "google/gemini-2.5-flash",
+    "latency": 19.757034063339233,
+    "prompt_tokens": 3083,
+    "completion_tokens": 24,
+    "total_tokens": 0,
+    "retry_count": 1,
+    "cache_hit": false,
+    "fallback_flag": false,
+    "request_id": "ai_req_9ecca8bcba6e",
+    "started_timestamp": 1783690194.7391746,
+    "completed_timestamp": 1783690214.4962087,
+    "estimated_cost": 0.0
+  },
+  "high_level_architecture": [
+    "React Frontend (Vite, TypeScript, Tailwind CSS):"
+  ],
+  "entry_points": [],
+  "component_relationships": [],
+  "important_modules": [],
+  "execution_flow": [],
+  "data_flow": ""
+}

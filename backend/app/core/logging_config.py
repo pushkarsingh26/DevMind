@@ -19,6 +19,13 @@ import os
 import sys
 
 # ---------------------------------------------------------------------------
+# Log directory — ensure it exists before dictConfig references it
+# ---------------------------------------------------------------------------
+_BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+_LOGS_DIR = os.path.join(_BASE_DIR, "logs")
+os.makedirs(_LOGS_DIR, exist_ok=True)
+
+# ---------------------------------------------------------------------------
 # Read environment before settings are loaded (avoids import cycle)
 # ---------------------------------------------------------------------------
 _LOG_LEVEL_ENV = os.environ.get("LOG_LEVEL", "INFO").upper()
@@ -61,6 +68,25 @@ LOGGING_CONFIG: dict = {
             "formatter": "devmind",
             "level": _DEVMIND_LEVEL,
         },
+        # ── Rotating file handlers (one per log category) ─────────────────
+        "file_workflow": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(_LOGS_DIR, "workflow.log"),
+            "maxBytes": 10 * 1024 * 1024,
+            "backupCount": 5,
+            "encoding": "utf-8",
+            "formatter": "plain",
+            "level": "DEBUG",
+        },
+        "file_startup": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(_LOGS_DIR, "startup.log"),
+            "maxBytes": 5 * 1024 * 1024,
+            "backupCount": 3,
+            "encoding": "utf-8",
+            "formatter": "plain",
+            "level": "DEBUG",
+        },
         "null": {
             "class": "logging.NullHandler",
         },
@@ -78,10 +104,10 @@ LOGGING_CONFIG: dict = {
     # Named loggers
     # ---------------------------------------------------------------------------
     "loggers": {
-        # ── DevMind application ────────────────────────────────────────────────
+        # ── DevMind application — console + workflow file ──────────────────────
         "devmind": {
             "level": _DEVMIND_LEVEL,
-            "handlers": ["devmind_console"],
+            "handlers": ["devmind_console", "file_workflow"],
             "propagate": False,
         },
 

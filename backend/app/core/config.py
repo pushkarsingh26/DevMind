@@ -85,12 +85,6 @@ class Settings(BaseSettings):
     CHAT_MAX_MESSAGE_LENGTH: int = 4000    # Max user message character count
     CHAT_PROMPT_VERSION: str = "1.0.0"    # Reserved for future cache keying
 
-    # --------------------------------------------------------------------------
-    # Phase 5 — Ollama (optional local provider)
-    # --------------------------------------------------------------------------
-    OLLAMA_BASE_URL: Optional[str] = None  # e.g. http://localhost:11434
-    OLLAMA_MODEL_NAME: str = "llama3.2"   # Default model to pull in Ollama
-
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
     def parse_origins(cls, value):

@@ -1,0 +1,103 @@
+{
+  "is_fallback": false,
+  "traceability_refs": [
+    {
+      "path": "README.md",
+      "start_line": 33,
+      "end_line": 55,
+      "chunk_id": "repo_c647f1ab2e75:README.md-chunk-2",
+      "score": 0.9460510611534119
+    },
+    {
+      "path": "README.md",
+      "start_line": 77,
+      "end_line": 96,
+      "chunk_id": "repo_c647f1ab2e75:README.md-chunk-6",
+      "score": 0.9419609308242798
+    },
+    {
+      "path": "README.md",
+      "start_line": 141,
+      "end_line": 202,
+      "chunk_id": "repo_c647f1ab2e75:README.md-chunk-9",
+      "score": 0.9482815861701965
+    },
+    {
+      "path": "README.md",
+      "start_line": 279,
+      "end_line": 292,
+      "chunk_id": "repo_c647f1ab2e75:README.md-chunk-15",
+      "score": 0.953148365020752
+    },
+    {
+      "path": "README.md",
+      "start_line": 344,
+      "end_line": 370,
+      "chunk_id": "repo_c647f1ab2e75:README.md-chunk-20",
+      "score": 0.9508152008056641
+    }
+  ],
+  "ai_metadata": {
+    "provider": "google",
+    "provider_used_after_failover": "openrouter",
+    "model": "google/gemini-2.5-flash",
+    "latency": 18.538698196411133,
+    "prompt_tokens": 2427,
+    "completion_tokens": 834,
+    "total_tokens": 3261,
+    "retry_count": 0,
+    "cache_hit": false,
+    "fallback_flag": false,
+    "request_id": "ai_req_06044b0fd667",
+    "started_timestamp": 1783686637.1488867,
+    "completed_timestamp": 1783686655.6875849,
+    "estimated_cost": 0.0
+  },
+  "high_level_architecture": [
+    "Frontend (React, Vite, TypeScript)",
+    "Backend (FastAPI, Python)",
+    "AI/LLM Orchestration Layer",
+    "Data Storage (PostgreSQL, FAISS Vector Store)"
+  ],
+  "entry_points": [
+    "backend/app/main.py: Main ASGI application entry point for the FastAPI backend.",
+    "src/main.tsx: Vite render mount point for the React frontend application."
+  ],
+  "component_relationships": [
+    "ReactApp interacts with Chat API Router for grounded questions.",
+    "Chat API Router queries Retrieval Service for relevant code chunks.",
+    "Retrieval Service performs FAISS search and path boost reranking against the VectorStore.",
+    "Retrieval Service provides high-quality source chunks to the PromptBuilder.",
+    "PromptBuilder constructs context-grounded messages for the AIOrchestrator.",
+    "AIOrchestrator utilizes a Model Failover Pipeline to query LLMChain (Cloud Providers / Ollama).",
+    "LLMChain returns JSON responses to the ResponseParser.",
+    "ResponseParser cleans and formats the LLM output, including citations, for the ReactApp.",
+    "PipelineService processes raw code files and sends them to ChunkService.",
+    "ChunkService generates code chunks for the RAGService.",
+    "RAGService generates embeddings via EmbeddingService.",
+    "EmbeddingService stores FAISS vectors in the VectorStore."
+  ],
+  "important_modules": [
+    "backend/app/services/: Contains core pipeline, scanning, chunking, and RAG services.",
+    "backend/app/ai/: Manages AI provider clients and prompt registry.",
+    "backend/app/chat/: Implements the grounded chat service, schemas, prompts, and parser.",
+    "backend/app/api/: Defines API routers, endpoint schemas, and dependencies.",
+    "src/chat/ChatContext.tsx: Manages state for the grounded chat in the frontend.",
+    "src/chat/api.ts: Handles SSE Fetch API and conversation services for the frontend."
+  ],
+  "execution_flow": [
+    "User uploads a repository ZIP or provides a GitHub link via the React frontend.",
+    "Backend's PipelineService ingests raw code files.",
+    "ChunkService breaks down code into manageable chunks.",
+    "RAGService and EmbeddingService generate vector embeddings for these chunks.",
+    "Embeddings are stored in the local FAISS Vector Store.",
+    "User asks a grounded question in the React chat interface.",
+    "The question is sent to the Backend's Chat API Router.",
+    "RetrievalService queries the FAISS Vector Store, applying path-based reranking to find relevant code snippets.",
+    "PromptBuilder constructs a context-grounded prompt using retrieved snippets.",
+    "AIOrchestrator sends the prompt through a multi-provider failover pipeline to LLMs (Cloud/Ollama).",
+    "LLM response is processed by ResponseParser, which also handles JSON repair and extracts citations.",
+    "Cleaned markdown answer with interactive code previews and line citations is streamed back to the React frontend."
+  ],
+  "data_flow": "Raw code files (ZIP/GitHub) are ingested by the backend, chunked, and transformed into vector embeddings stored in a local FAISS vector store. User queries from the React frontend are sent to the backend, which retrieves relevant code chunks from the vector store. These chunks, along with the user's query, form a context-grounded prompt for an LLM. The LLM's response, potentially including code citations, is then parsed, repaired if necessary, and streamed back to the React frontend for display. This process ensures a localized Retrieval-Augmented Generation (RAG) pipeline, minimizing context drift and providing accurate, cited responses."
+}

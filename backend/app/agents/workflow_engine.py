@@ -1,7 +1,11 @@
 import os
 import json
+import time
+import traceback
 from typing import List, Dict, Any, Tuple
 from sqlalchemy.orm import Session
+from app.core.logger import logger
+from app.models.repository import Repository
 from app.services.retrieval_service import retrieval_service
 from app.ai.prompt_builder import prompt_builder
 from app.agents.execution_context import ExecutionContext
@@ -27,6 +31,7 @@ class WorkflowEngine:
         """
         Executes a single step in the workflow.
         Returns a tuple of (status, telemetry_dict).
+        Supports adaptive retrieval, shared context bundles, and throttled streaming.
         """
         step_name = step.get("name", "Unnamed Step")
         agent_name = step.get("agent", "Review Agent")
@@ -34,7 +39,6 @@ class WorkflowEngine:
         
         context.record_step_start(step_name, agent_name)
         
-        # Dynamically resolve agent class via registry
         try:
             agent = agent_registry.get_agent(agent_name)
         except Exception as e:
@@ -45,13 +49,49 @@ class WorkflowEngine:
         # 1. Retrieve RAG code context if repository is indexed
         code_context_str = ""
         if context.repository_id:
-            # Query semantic chunks relevant to this specific step description
-            retrieved_pairs = retrieval_service.retrieve_chunks(
-                db=db,
-                repository_id=context.repository_id,
-                query=step_desc or context.goal,
-                top_k=8
-            )
+            # Query repo total_files once to determine adaptive top_k bounds
+            repo = db.query(Repository).filter(Repository.id == context.repository_id).first()
+            total_files = repo.total_files if repo else 100
+            
+            # Adaptive top_k selection: Small (6-8), Medium (10-15), Large (15-20)
+            if total_files <= 50:
+                top_k = 8
+            elif total_files <= 250:
+                top_k = 12
+            else:
+                top_k = 18
+                
+            # Retrieve more chunks only if average confidence is below 0.75
+            if context.get_average_confidence() < 0.75:
+                top_k += 5
+            
+            # Check if SharedContextBundle exists on context to avoid duplicate FAISS/DB queries
+            bundle = getattr(context, "shared_context_bundle", None)
+            if bundle is not None:
+                # Sort/filter chunks locally using simple keyword similarity against step_desc
+                words = [w.lower() for w in (step_desc or context.goal).split() if len(w) > 3]
+                scored = []
+                for chunk, score in bundle.get("relevant_chunks", []):
+                    match_score = score
+                    content_lower = chunk.content.lower()
+                    path_lower = chunk.path.lower()
+                    for w in words:
+                        if w in content_lower:
+                            match_score += 0.1
+                        if w in path_lower:
+                            match_score += 0.2
+                    scored.append((chunk, match_score))
+                
+                scored.sort(key=lambda x: x[1], reverse=True)
+                retrieved_pairs = scored[:top_k]
+            else:
+                retrieved_pairs = retrieval_service.retrieve_chunks(
+                    db=db,
+                    repository_id=context.repository_id,
+                    query=step_desc or context.goal,
+                    top_k=top_k,
+                    workflow_type=context.workflow_type
+                )
             
             chunks_list = []
             for chunk, score in retrieved_pairs:
@@ -65,10 +105,9 @@ class WorkflowEngine:
                     "score": score
                 })
             
-            # Optimize and deduplicate chunks using existing prompt_builder helper
-            optimized_chunks = prompt_builder.optimize_chunks(chunks_list)
+            # Optimize and deduplicate chunks (uses query for context compression)
+            optimized_chunks = prompt_builder.optimize_chunks(chunks_list, query=step_desc or context.goal)
             
-            # Format chunks as text
             context_blocks = []
             for c in optimized_chunks:
                 context_blocks.append(
@@ -77,8 +116,20 @@ class WorkflowEngine:
                 )
             code_context_str = "\n".join(context_blocks)
 
-        # 2. Execute target Agent reasoning
+        # 2. Bind dynamic throttled streaming callback to agent
+        from app.services.workflow_manager import workflow_manager
+        
+        def on_chunk_cb(text: str):
+            # Immediately publish to SSE listeners
+            workflow_manager.publish_event(
+                workflow_id=context.workflow_id,
+                event_type="workflow_log",
+                data=text
+            )
+            
+        agent.on_chunk = on_chunk_cb
         step_started = time.time()
+        
         try:
             telemetry = {}
             if agent_name == "Summary Agent":
@@ -107,10 +158,8 @@ class WorkflowEngine:
                 # Special Check: If Refactor Agent recommends code changes, flag for approval
                 if agent_name == "Refactor Agent":
                     if res_dict.get("diff") or res_dict.get("proposed_code_blocks") or res_dict.get("refactorings"):
-                        # Support both new schema keys and original backward compatible fields
                         context.diff = res_dict.get("diff") or ""
                         if not context.diff and res_dict.get("proposed_code_blocks"):
-                            # construct unified diff if only proposed code blocks provided
                             blocks = []
                             for idx, b in enumerate(res_dict["proposed_code_blocks"]):
                                 blocks.append(
@@ -131,7 +180,6 @@ class WorkflowEngine:
                         context.add_log("Refactor Agent generated code modifications. Halting for Human Approval.")
                         context.record_step_complete(step_name, "pending_approval", "Code edits proposed. Requires developer verification.")
                         
-                        # Accumulate tokens used
                         context.tokens_used += telemetry.get("total_tokens", 0)
                         if telemetry.get("provider"):
                             context.providers_used.append(telemetry["provider"])
@@ -163,10 +211,20 @@ class WorkflowEngine:
             return "completed", telemetry
 
         except Exception as e:
+            tb = traceback.format_exc()
             elapsed = time.time() - step_started
             context.agent_durations[agent_name] = context.agent_durations.get(agent_name, 0.0) + elapsed
             context.cache_misses += 1
-            err_msg = f"Exception in {agent_name}: {str(e)}"
+            err_msg = f"{type(e).__name__} in {agent_name}: {e}"
+            logger.exception(
+                f"[WorkflowEngine] Step '{step_name}' failed — {err_msg}\n{tb}"
+            )
             context.add_log(err_msg, level="ERROR")
+            context.add_log(f"Traceback:\n{tb}", level="ERROR")
             context.record_step_complete(step_name, "failed", err_msg)
             return "failed", {"error": err_msg}
+            
+        finally:
+            # Safely cleanup dynamic stream callback attribute
+            if hasattr(agent, "on_chunk"):
+                delattr(agent, "on_chunk")

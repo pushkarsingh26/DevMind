@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "name": "Map Auth & Security Entries",
+      "agent": "Repository Agent",
+      "description": "Locate files that contain authentication middleware, tokens, encryption, or permissions."
+    },
+    {
+      "name": "Scan Code Vulnerabilities",
+      "agent": "Security Agent",
+      "description": "Analyze JWT verification, credentials leaks, bare exceptions, and sanitization issues."
+    },
+    {
+      "name": "Draft Security Fixes",
+      "agent": "Refactor Agent",
+      "description": "Propose security refactoring modifications to correct vulnerabilities."
+    },
+    {
+      "name": "Compile Security Audit Report",
+      "agent": "Summary Agent",
+      "description": "Summarize security findings, scores, and improvements."
+    }
+  ],
+  "rationale": "Executing predefined 'Security Audit' template agent chain."
+}

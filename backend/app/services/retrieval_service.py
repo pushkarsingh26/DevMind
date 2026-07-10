@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional, Any
 from sqlalchemy.orm import Session, joinedload
 from app.models.embedding import Embedding
 from app.models.chunk import Chunk
@@ -47,24 +47,58 @@ _PENALTY_TEST      = -0.10
 _PENALTY_GENERATED = -0.30   # Heavy penalty for lockfiles / generated files
 
 
+import hashlib
+import time
+from collections import OrderedDict
+
+class LRUCacheWithTTL:
+    def __init__(self, maxsize: int = 128, ttl_seconds: int = 1800):
+        self.maxsize = maxsize
+        self.ttl_seconds = ttl_seconds
+        self.cache = OrderedDict()
+
+    def get(self, key: str) -> Optional[List[Any]]:
+        if key not in self.cache:
+            return None
+        val, expiry = self.cache[key]
+        if time.time() > expiry:
+            del self.cache[key]
+            return None
+        self.cache.move_to_end(key)
+        return val
+
+    def set(self, key: str, value: Any):
+        expiry = time.time() + self.ttl_seconds
+        if key in self.cache:
+            del self.cache[key]
+        elif len(self.cache) >= self.maxsize:
+            self.cache.popitem(last=False)
+        self.cache[key] = (value, expiry)
+
+
 class RetrievalService:
+    def __init__(self):
+        self._cache = LRUCacheWithTTL(maxsize=128, ttl_seconds=1800)
+
     def retrieve_chunks(
         self,
         db: Session,
         repository_id: str,
         query: str,
         top_k: int = 5,
+        workflow_type: Optional[str] = None
     ) -> List[Tuple[Chunk, float]]:
         """
         Performs semantic search across repository chunks and returns a list of
-        (Chunk, boosted_similarity_score) tuples.
-
-        Improvements vs. original:
-          - Bulk-loads Embedding + Chunk in a single JOIN query (no N+1)
-          - Excludes lockfiles, generated files, and build artifacts entirely
-          - Applies path-based score boosting for high-signal files
-          - Only warns when the index is genuinely missing
+        (Chunk, boosted_similarity_score) tuples. Includes 30-min LRU caching.
         """
+        query_hash = hashlib.sha256(query.encode("utf-8")).hexdigest()
+        cache_key = f"{repository_id}:{workflow_type or 'default'}:{query_hash}:{top_k}"
+        
+        cached = self._cache.get(cache_key)
+        if cached is not None:
+            logger.info(f"RetrievalService: Cache HIT for query: '{query[:40]}...'")
+            return cached
         # 1. Guard: check index exists before attempting search
         if not vector_store_service.index_exists(repository_id):
             logger.warning(f"RetrievalService: Vector store index not found for repository: {repository_id}")
@@ -143,6 +177,7 @@ class RetrievalService:
             f"(from {len(boosted_results)} candidates, excluded {excluded_count}) "
             f"for query '{query[:60]}'"
         )
+        self._cache.set(cache_key, final_results)
         return final_results
 
 
