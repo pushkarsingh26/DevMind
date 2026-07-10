@@ -146,7 +146,10 @@ export interface AnalysisContextType {
   startAnalysis: () => Promise<void>;
   resetAnalysis: () => void;
   clearHistory: () => void;
+  deleteHistoryItem: (id: string) => void;
   loadHistoryItem: (item: HistoryItem) => void;
   removeToast: (id: string) => void;
   addToast: (type: 'success' | 'info' | 'warning' | 'error', message: string) => void;
+  theme: 'dark' | 'light';
+  toggleTheme: () => void;
 }

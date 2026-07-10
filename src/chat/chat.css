@@ -2,12 +2,9 @@
 
 .chat-workspace {
   display: flex;
-  height: calc(100vh - 12rem); /* Fits nicely between Navbar and Footer */
+  height: 100%;
   background-color: #0b111e;
-  border: 1px solid #1f2937;
-  border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* ---------------------------------------------------------------------------

@@ -1,0 +1,123 @@
+{
+  "is_fallback": false,
+  "traceability_refs": [
+    {
+      "path": "README.md",
+      "start_line": 33,
+      "end_line": 55,
+      "chunk_id": "repo_32bd8446a4d7:README.md-chunk-2",
+      "score": 0.9460510611534119
+    },
+    {
+      "path": "README.md",
+      "start_line": 77,
+      "end_line": 96,
+      "chunk_id": "repo_32bd8446a4d7:README.md-chunk-6",
+      "score": 0.9419610500335693
+    },
+    {
+      "path": "README.md",
+      "start_line": 141,
+      "end_line": 202,
+      "chunk_id": "repo_32bd8446a4d7:README.md-chunk-9",
+      "score": 0.9482815861701965
+    },
+    {
+      "path": "README.md",
+      "start_line": 250,
+      "end_line": 261,
+      "chunk_id": "repo_32bd8446a4d7:README.md-chunk-13",
+      "score": 0.9328939914703369
+    },
+    {
+      "path": "README.md",
+      "start_line": 279,
+      "end_line": 292,
+      "chunk_id": "repo_32bd8446a4d7:README.md-chunk-15",
+      "score": 0.953148365020752
+    },
+    {
+      "path": "README.md",
+      "start_line": 306,
+      "end_line": 321,
+      "chunk_id": "repo_32bd8446a4d7:README.md-chunk-17",
+      "score": 0.9361057281494141
+    },
+    {
+      "path": "README.md",
+      "start_line": 330,
+      "end_line": 394,
+      "chunk_id": "repo_32bd8446a4d7:README.md-chunk-19",
+      "score": 0.9365338087081909
+    }
+  ],
+  "ai_metadata": {
+    "provider": "google",
+    "provider_used_after_failover": "openrouter",
+    "model": "google/gemini-2.5-flash",
+    "latency": 20.525859594345093,
+    "prompt_tokens": 3338,
+    "completion_tokens": 1274,
+    "total_tokens": 4612,
+    "retry_count": 0,
+    "cache_hit": false,
+    "fallback_flag": false,
+    "request_id": "ai_req_dbc8df654881",
+    "started_timestamp": 1783667574.818175,
+    "completed_timestamp": 1783667595.3440347,
+    "estimated_cost": 0.0
+  },
+  "high_level_architecture": [
+    "Frontend (React, Vite, TypeScript)",
+    "Backend (FastAPI, Python)",
+    "Database (PostgreSQL)",
+    "Vector Store (FAISS)",
+    "AI/LLM Providers (Google Gemini, HuggingFace, Ollama)"
+  ],
+  "entry_points": [
+    "backend/app/main.py: This is the main ASGI application entry point for the FastAPI backend, handling all API requests.",
+    "src/main.tsx: This is the primary entry point for the React frontend application, responsible for rendering the main application component.",
+    "backend/vector_store/repo_f3f75e25eeab/index.faiss, backend/vector_store/repo_9f42f8fba292/index.faiss: These are examples of FAISS index files, which serve as entry points for the Retrieval Service to perform semantic searches on stored code embeddings."
+  ],
+  "component_relationships": [
+    "ReactApp interacts with Chat API Router for all chat-related functionalities.",
+    "Chat API Router communicates with RetrievalService for fetching relevant code chunks.",
+    "RetrievalService queries the FAISS Vector Store for semantic search and uses PromptBuilder to construct context-grounded messages.",
+    "PromptBuilder feeds into AIOrchestrator, which manages the conversation flow and LLM interactions.",
+    "AIOrchestrator utilizes the LLMChain (Cloud Providers / Ollama) for generating AI responses.",
+    "LLMChain's JSON responses are processed by ResponseParser for cleaning and JSON repair.",
+    "ResponseParser sends cleaned markdown answers and citations back to the ReactApp.",
+    "PipelineService processes raw code files and sends them to ChunkService.",
+    "ChunkService generates code chunks and passes them to RAGService.",
+    "RAGService generates embeddings via EmbeddingService.",
+    "EmbeddingService stores FAISS vectors in the FAISS Vector Store Disk.",
+    "Backend services (e.g., PipelineService, ChunkService, RAGService, RetrievalService) interact with the PostgreSQL database for storing repository metadata, chat history, and other application data.",
+    "Backend services also interact with external AI providers (Google Gemini, HuggingFace) or local models (Ollama) for embedding generation and LLM inference."
+  ],
+  "important_modules": [
+    "backend/app/main.py: Core FastAPI application setup and routing.",
+    "backend/app/services/: Contains core business logic for pipeline, scanning, chunking, and RAG services.",
+    "backend/app/chat/: Manages grounded chat service, schemas, and prompts.",
+    "backend/app/ai/: Handles AI provider clients and prompt registry.",
+    "backend/app/api/: Defines API routers, endpoint schemas, and dependencies.",
+    "src/chat/ChatContext.tsx: Manages global state for the grounded chat in the frontend.",
+    "src/chat/api.ts: Handles SSE Fetch API and conversation services for the frontend.",
+    "backend/app/utils/json_repair.py: Critical for repairing truncated JSON responses from LLMs."
+  ],
+  "execution_flow": [
+    "1. **Repository Ingestion:** User uploads a ZIP or provides a Git URL via the ReactApp.",
+    "2. **Backend Processing:** The request hits the FastAPI backend (e.g., `/api/analyze/upload` or `/api/analyze/git`).",
+    "3. **Pipeline Service:** The PipelineService initiates the processing of raw code files.",
+    "4. **Chunk Service:** Raw code is broken down into manageable chunks by the ChunkService.",
+    "5. **RAG Service & Embedding Service:** Code chunks are sent to the RAGService, which uses the EmbeddingService to generate vector embeddings.",
+    "6. **Vector Store:** These embeddings are stored in the local FAISS Vector Store.",
+    "7. **Chat Interaction:** User asks a question in the ReactApp's chat interface.",
+    "8. **Chat API Router:** The question is sent to the backend's Chat API Router.",
+    "9. **Retrieval Service:** The RetrievalService performs a semantic search in the FAISS Vector Store, using path-based reranking to find relevant code chunks.",
+    "10. **Prompt Builder:** High-quality source chunks are used by the PromptBuilder to construct a context-grounded message for the LLM.",
+    "11. **AI Orchestrator & LLM Chain:** The AIOrchestrator sends the message through the Multi-Provider Failover Chain (LLMChain) to an AI model (e.g., Google Gemini, Ollama).",
+    "12. **Response Parser:** The LLM's JSON response is processed by the ResponseParser, which includes JSON repair mechanisms.",
+    "13. **Frontend Display:** A clean markdown answer with code citations is streamed back to the ReactApp for display."
+  ],
+  "data_flow": "User-provided code (ZIP or Git URL) is ingested by the backend, processed into code chunks, and then transformed into vector embeddings by the Embedding Service. These embeddings are stored in a local FAISS Vector Store. When a user asks a question in the chat, the query is sent to the backend's Retrieval Service, which performs a semantic search against the FAISS store to retrieve relevant code snippets. These snippets, along with the user's query, are used to construct a context-grounded prompt by the Prompt Builder. This prompt is then sent to an LLM via the AI Orchestrator and LLM Chain. The LLM's response, potentially in JSON format, is parsed and repaired by the Response Parser, and finally streamed back to the frontend as a clean markdown answer with code citations. Chat conversations and repository metadata are persisted in a PostgreSQL database."
+}

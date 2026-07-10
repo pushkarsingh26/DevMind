@@ -25,6 +25,8 @@ from app.models.job import AnalysisJobORM
 from app.models.chunk import Chunk
 from app.models.embedding import Embedding
 from app.models.chat import ChatConversation, ChatMessage  # Phase 5
+from app.models.workflow import WorkflowExecutionORM
+from app.models.memory import RepositoryMemoryORM
 
 __all__ = [
     "Base",
@@ -34,4 +36,6 @@ __all__ = [
     "Embedding",
     "ChatConversation",  # Phase 5
     "ChatMessage",       # Phase 5
+    "WorkflowExecutionORM",
+    "RepositoryMemoryORM",
 ]

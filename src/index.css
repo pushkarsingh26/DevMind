@@ -1,55 +1,494 @@
 @import "tailwindcss";
 @import "./chat/chat.css";
 
-@theme {
-  --color-brand-50: #f0f7ff;
-  --color-brand-100: #e0effe;
-  --color-brand-200: #bae2fd;
-  --color-brand-300: #7dd2fc;
-  --color-brand-400: #38bdf8;
-  --color-brand-500: #0ea5e9;
-  --color-brand-600: #0284c7;
-  --color-brand-700: #0369a1;
-  --color-brand-800: #075985;
-  --color-brand-900: #0c4a6e;
-  --color-brand-950: #030712;
+/* Typography and Color System Custom Variables */
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', SFMono-Regular, Consolas, monospace;
 
-  --color-dark-50: #f9fafb;
-  --color-dark-100: #f3f4f6;
-  --color-dark-200: #e5e7eb;
-  --color-dark-300: #d1d5db;
-  --color-dark-400: #9ca3af;
-  --color-dark-500: #6b7280;
-  --color-dark-600: #4b5563;
-  --color-dark-700: #374151;
-  --color-dark-800: #1f2937;
-  --color-dark-900: #111827;
-  --color-dark-950: #030712;
+  /* Theme Tokens - LIGHT MODE */
+  --bg-canvas: #f1f5f9;
+  --bg-panel-1: rgba(243, 244, 246, 0.65);
+  --bg-panel-2: rgba(255, 255, 255, 0.85);
+  --bg-panel-3: rgba(255, 255, 255, 0.94);
+  --bg-panel-solid: #ffffff;
+  
+  --border-glass: rgba(0, 0, 0, 0.06);
+  --border-glass-highlight: rgba(255, 255, 255, 0.8);
+  --border-cyan-glow: rgba(6, 182, 212, 0.35);
+  --border-purple-glow: rgba(168, 85, 247, 0.35);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-tertiary: #475569;
+  
+  --primary-accent: #7c3aed; /* Purple */
+  --secondary-accent: #0891b2; /* Cyan */
+  --success-accent: #059669; /* Green */
+  --warning-accent: #d97706; /* Amber */
+  --danger-accent: #dc2626; /* Red */
+  --neutral-accent: #4b5563; /* Gray */
+
+  --shadow-premium: 0 10px 30px -10px rgba(0, 0, 0, 0.03), 0 1px 1px rgba(0, 0, 0, 0.01);
+  --shadow-dropdown: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+  --shadow-glow-cyan: 0 0 25px rgba(6, 182, 212, 0.06);
+  --shadow-glow-purple: 0 0 25px rgba(168, 85, 247, 0.06);
+  
+  --aurora-opacity: 0.06;
+  --glass-blur: 20px;
+  --glass-liquid-blur: 28px;
 }
 
-@utility bg-dark-950 {
-  background-color: #090d16;
+.dark {
+  /* Theme Tokens - DARK MODE */
+  --bg-canvas: #060813;
+  --bg-panel-1: rgba(10, 15, 30, 0.35);
+  --bg-panel-2: rgba(15, 22, 42, 0.5);
+  --bg-panel-3: rgba(20, 27, 50, 0.75);
+  --bg-panel-solid: #090d16;
+
+  --border-glass: rgba(255, 255, 255, 0.05);
+  --border-glass-highlight: rgba(255, 255, 255, 0.03);
+  --border-cyan-glow: rgba(6, 182, 212, 0.18);
+  --border-purple-glow: rgba(168, 85, 247, 0.18);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #475569;
+
+  --primary-accent: #a855f7;
+  --secondary-accent: #06b6d4;
+  --success-accent: #10b981;
+  --warning-accent: #f59e0b;
+  --danger-accent: #ef4444;
+  --neutral-accent: #64748b;
+
+  --shadow-premium: 0 15px 40px -20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  --shadow-dropdown: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
+  --shadow-glow-cyan: 0 0 30px rgba(6, 182, 212, 0.15);
+  --shadow-glow-purple: 0 0 30px rgba(168, 85, 247, 0.15);
+
+  --aurora-opacity: 0.14;
+}
+
+@theme {
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+
+  --color-canvas: var(--bg-canvas);
+  --color-panel: var(--bg-panel-2);
+  --color-panel-solid: var(--bg-panel-solid);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-border-primary: var(--border-glass);
+
+  --color-purple-accent: var(--primary-accent);
+  --color-cyan-accent: var(--secondary-accent);
+  --color-green-accent: var(--success-accent);
+  --color-amber-accent: var(--warning-accent);
+  --color-red-accent: var(--danger-accent);
+  --color-gray-accent: var(--neutral-accent);
+
+  /* Map old utility color classes for backwards compatibility */
+  --color-dark-50: var(--text-primary);
+  --color-dark-100: var(--text-primary);
+  --color-dark-200: var(--text-primary);
+  --color-dark-300: var(--text-secondary);
+  --color-dark-400: var(--text-secondary);
+  --color-dark-500: var(--text-tertiary);
+  --color-dark-600: var(--text-tertiary);
+  --color-dark-700: var(--border-glass);
+  --color-dark-800: var(--border-glass);
+  --color-dark-850: var(--border-glass);
+  --color-dark-900: var(--bg-panel-2);
+  --color-dark-950: var(--bg-canvas);
 }
 
 @layer base {
+  html, body, #root {
+    height: 100vh;
+    overflow: hidden;
+  }
   body {
-    @apply text-dark-100 antialiased;
-    background-color: #090d16;
+    background-color: var(--bg-canvas);
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    letter-spacing: -0.011em;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    @apply antialiased;
   }
 
-  /* Custom scrollbar styling */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--text-primary);
+    font-weight: 700;
+    letter-spacing: -0.022em;
+  }
+
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #0f172a;
+    background: rgba(255, 255, 255, 0.01);
+    border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 3px;
+    background: var(--border-glass);
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.02);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #475569;
+    background: linear-gradient(180deg, var(--secondary-accent) 0%, var(--primary-accent) 100%);
   }
+}
+
+/* Glass Elevation Levels */
+.glass-lvl1 {
+  background: var(--bg-panel-1);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border-glass);
+}
+
+.glass-lvl2 {
+  background: var(--bg-panel-2);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-premium);
+  position: relative;
+}
+
+.glass-lvl2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid var(--border-glass-highlight);
+  opacity: 0.6;
+}
+
+.glass-lvl3 {
+  background: var(--bg-panel-3);
+  backdrop-filter: blur(var(--glass-liquid-blur));
+  -webkit-backdrop-filter: blur(var(--glass-liquid-blur));
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-dropdown);
+  position: relative;
+}
+
+.glass-lvl3::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid var(--border-glass-highlight);
+  opacity: 0.85;
+}
+
+/* Aurora background layers */
+@keyframes float-aurora {
+  0% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.08) rotate(120deg);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.95) rotate(240deg);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1) rotate(360deg);
+  }
+}
+
+.animate-aurora-1 {
+  animation: float-aurora 28s infinite ease-in-out alternate;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+.animate-aurora-2 {
+  animation: float-aurora 34s infinite ease-in-out alternate-reverse;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+.animate-aurora-3 {
+  animation: float-aurora 24s infinite ease-in-out alternate;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+/* High-fidelity liquid button effect styling */
+.liquid-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.liquid-btn:hover {
+  transform: translateY(-1px) scale(1.015);
+}
+.liquid-btn:active {
+  transform: translateY(0.5px) scale(0.985);
+}
+
+.shimmer-mask {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.08) 25%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.08) 75%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer-anim 2s infinite linear;
+}
+
+/* Sparkline charts keyframe */
+@keyframes draw-sparkline {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.sparkline-path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw-sparkline 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   DevMind Shooting Stars Background Animation
+   ────────────────────────────────────────────────────────────────── */
+
+.stars {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  box-shadow: 2vw 5vh 0 white, 10vw 8vh 0 white, 15vw 15vh 0 white,
+    22vw 22vh 0 white, 28vw 12vh 0 white, 32vw 32vh 0 white,
+    38vw 18vh 0 white, 42vw 35vh 0 white, 48vw 25vh 0 white,
+    53vw 42vh 0 white, 58vw 15vh 0 white, 63vw 38vh 0 white,
+    68vw 28vh 0 white, 73vw 45vh 0 white, 78vw 32vh 0 white,
+    83vw 48vh 0 white, 88vw 20vh 0 white, 93vw 52vh 0 white,
+    98vw 35vh 0 white, 5vw 60vh 0 white, 12vw 65vh 0 white,
+    18vw 72vh 0 white, 25vw 78vh 0 white, 30vw 85vh 0 white,
+    35vw 68vh 0 white, 40vw 82vh 0 white, 45vw 92vh 0 white,
+    50vw 75vh 0 white, 55vw 88vh 0 white, 60vw 95vh 0 white,
+    65vw 72vh 0 white, 70vw 85vh 0 white, 75vw 78vh 0 white,
+    80vw 92vh 0 white, 85vw 82vh 0 white, 90vw 88vh 0 white,
+    95vw 75vh 0 white;
+  animation: twinkle 8s infinite linear;
+  will-change: opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.stars::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow: 8vw 12vh 0 white, 16vw 18vh 0 white, 24vw 25vh 0 white,
+    33vw 15vh 0 white, 41vw 28vh 0 white, 49vw 35vh 0 white,
+    57vw 22vh 0 white, 65vw 42vh 0 white, 73vw 28vh 0 white,
+    81vw 48vh 0 white, 89vw 32vh 0 white, 97vw 45vh 0 white,
+    3vw 68vh 0 white, 11vw 75vh 0 white, 19vw 82vh 0 white,
+    27vw 88vh 0 white, 35vw 72vh 0 white, 43vw 85vh 0 white,
+    51vw 92vh 0 white, 59vw 78vh 0 white;
+  animation: twinkle 6s infinite linear reverse;
+  will-change: opacity;
+}
+
+.shooting-star {
+  position: absolute;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), transparent);
+  animation: shoot 3s infinite ease-in;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.shooting-star:nth-child(2) {
+  top: 20%;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.shooting-star:nth-child(3) {
+  top: 35%;
+  left: -100px;
+  animation-delay: 1.2s;
+  animation-duration: 2.5s;
+}
+
+.shooting-star:nth-child(4) {
+  top: 50%;
+  left: -100px;
+  animation-delay: 2.2s;
+  animation-duration: 3.5s;
+}
+
+.shooting-star:nth-child(5) {
+  top: 65%;
+  left: -100px;
+  animation-delay: 0.6s;
+  animation-duration: 2.8s;
+}
+
+.shooting-star:nth-child(6) {
+  top: 80%;
+  left: -100px;
+  animation-delay: 1.8s;
+  animation-duration: 4s;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes shoot {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(25deg);
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(120vw, 50vh, 0) rotate(25deg);
+    opacity: 0;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   DevMind Rainbow Sliding Background (Light Mode)
+   ────────────────────────────────────────────────────────────────── */
+.rainbow-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(100px);
+  opacity: 0.28; /* Creamy dreamy pastel look for extreme readability */
+  will-change: transform;
+}
+
+.rainbow {
+  height: 120vh;
+  width: 320px;
+  top: -10%;
+  left: 0;
+  position: absolute;
+  transform-origin: top left;
+  will-change: transform;
+  transform: translate3d(-40vw, 0, 0) rotate(15deg);
+}
+
+@keyframes slide {
+  from {
+    transform: translate3d(-40vw, 0, 0) rotate(15deg);
+  }
+  to {
+    transform: translate3d(140vw, 0, 0) rotate(15deg);
+  }
+}
+
+.rainbow-h {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, var(--bg-canvas) 0%, transparent 12%, transparent 88%, var(--bg-canvas) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.rainbow-v {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--bg-canvas) 0%, transparent 12%, transparent 88%, var(--bg-canvas) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Shimmer Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, var(--bg-panel-1) 25%, var(--border-glass) 50%, var(--bg-panel-1) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   Performance & Accessibility Optimizations
+   ────────────────────────────────────────────────────────────────── */
+
+/* Respect user's reduced-motion preference — disables all background animations */
+@media (prefers-reduced-motion: reduce) {
+  .rainbow,
+  .stars,
+  .stars::after,
+  .shooting-star,
+  .animate-aurora-1,
+  .animate-aurora-2,
+  .animate-aurora-3 {
+    animation: none !important;
+  }
+
+  /* Reduce page transition speed */
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Isolate sidebar stacking context — prevents glass blur bleed into main content */
+aside {
+  isolation: isolate;
+}
+
+/* Contain fixed overlay elements — limits repaint to the element’s bounding box */
+.fixed, [data-fixed] {
+  contain: layout style;
+}
+
+/* Optimize off-screen content rendering — saves GPU cycles for below-fold sections */
+.workspace-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
 }

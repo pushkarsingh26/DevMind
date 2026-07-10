@@ -1,0 +1,158 @@
+{
+  "Security Audit": [
+    {
+      "name": "Map Auth & Security Entries",
+      "agent": "Repository Agent",
+      "description": "Locate files that contain authentication middleware, tokens, encryption, or permissions."
+    },
+    {
+      "name": "Scan Code Vulnerabilities",
+      "agent": "Security Agent",
+      "description": "Analyze JWT verification, credentials leaks, bare exceptions, and sanitization issues."
+    },
+    {
+      "name": "Draft Security Fixes",
+      "agent": "Refactor Agent",
+      "description": "Propose security refactoring modifications to correct vulnerabilities."
+    },
+    {
+      "name": "Compile Security Audit Report",
+      "agent": "Summary Agent",
+      "description": "Summarize security findings, scores, and improvements."
+    }
+  ],
+  "Performance Audit": [
+    {
+      "name": "Identify Critical Path Files",
+      "agent": "Repository Agent",
+      "description": "Find large modules, database models, and I/O handlers."
+    },
+    {
+      "name": "Audit Resource Bottlenecks",
+      "agent": "Performance Agent",
+      "description": "Inspect DB query efficiency, resource leak possibilities, and memory operations."
+    },
+    {
+      "name": "Propose Efficiency Refactor",
+      "agent": "Refactor Agent",
+      "description": "Suggest optimizations, caching strategies, and memory buffering upgrades."
+    },
+    {
+      "name": "Generate Performance Summary",
+      "agent": "Summary Agent",
+      "description": "Summarize bottlenecks, CPU/memory recommendations, and overall speed rating."
+    }
+  ],
+  "Architecture Review": [
+    {
+      "name": "Inspect Module Tree",
+      "agent": "Repository Agent",
+      "description": "Trace structural entrypoints and module dependencies."
+    },
+    {
+      "name": "Review Design Patterns",
+      "agent": "Review Agent",
+      "description": "Analyze modularity, decoupling, SOLID structure, and dependencies."
+    },
+    {
+      "name": "Summarize Architectural Blueprint",
+      "agent": "Summary Agent",
+      "description": "Formulate executive report on structural strengths, flaws, and plans."
+    }
+  ],
+  "Documentation Generation": [
+    {
+      "name": "Locate Undocumented Files",
+      "agent": "Repository Agent",
+      "description": "Find modules lacking JSDoc, Docstrings, or README files."
+    },
+    {
+      "name": "Generate Inline Docstrings & READMEs",
+      "agent": "Documentation Agent",
+      "description": "Write block comments, module descriptions, and API guides."
+    },
+    {
+      "name": "Assemble Documentation Report",
+      "agent": "Summary Agent",
+      "description": "Summarize new docs created and outline remaining gaps."
+    }
+  ],
+  "Test Generation": [
+    {
+      "name": "Map Test Coverage Gaps",
+      "agent": "Repository Agent",
+      "description": "Scan codebase for unit tests, specs, and modules lacking tests."
+    },
+    {
+      "name": "Draft Test Suites",
+      "agent": "Testing Agent",
+      "description": "Write unit, integration, or mock tests for unverified functions."
+    },
+    {
+      "name": "Assemble Testing Strategy",
+      "agent": "Summary Agent",
+      "description": "Output testing recommendations and test suite report."
+    }
+  ],
+  "Bug Investigation": [
+    {
+      "name": "Trace Bug Repros",
+      "agent": "Repository Agent",
+      "description": "Find components handling parameters, exceptions, or errors."
+    },
+    {
+      "name": "Scan Critical Logic Vulnerabilities",
+      "agent": "Security Agent",
+      "description": "Examine bare except blocks, bad variables typing, or resource leakage."
+    },
+    {
+      "name": "Suggest Bugfix Refactorings",
+      "agent": "Refactor Agent",
+      "description": "Formulate code changes to patch the target issue."
+    },
+    {
+      "name": "Generate Bug Summary Report",
+      "agent": "Summary Agent",
+      "description": "Draft findings, root causes, and verification strategies."
+    }
+  ],
+  "Dependency Review": [
+    {
+      "name": "Scan Core Package Files",
+      "agent": "Repository Agent",
+      "description": "Locate package.json, requirements.txt, and lockfiles."
+    },
+    {
+      "name": "Review Installed Packages Quality",
+      "agent": "Review Agent",
+      "description": "Analyze package versions, deprecations, and redundant imports."
+    },
+    {
+      "name": "Dependency Summary Report",
+      "agent": "Summary Agent",
+      "description": "Audit library sizes, licensing, and update recommendations."
+    }
+  ],
+  "Refactoring Plan": [
+    {
+      "name": "Audit Structural Layouts",
+      "agent": "Repository Agent",
+      "description": "Locate unmodular code modules and messy folders."
+    },
+    {
+      "name": "Identify Code Smells",
+      "agent": "Review Agent",
+      "description": "Detect duplication, long methods, nested conditional branches."
+    },
+    {
+      "name": "Propose Refactoring Diffs",
+      "agent": "Refactor Agent",
+      "description": "Draft code modifications diffs for human approval."
+    },
+    {
+      "name": "Synthesize Refactoring Report",
+      "agent": "Summary Agent",
+      "description": "Detail changes, impacts, and verification plans."
+    }
+  ]
+}

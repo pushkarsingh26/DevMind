@@ -61,6 +61,14 @@ class Settings(BaseSettings):
     PROMPT_VERSION_EXPLAIN: str = "1.0.0"
     PROMPT_VERSION_TESTS: str = "1.0.0"
     PROMPT_VERSION_BUGS: str = "1.0.0"
+    PROMPT_VERSION_PLANNER: str = "1.0.0"
+    PROMPT_VERSION_REPOSITORY: str = "1.0.0"
+    PROMPT_VERSION_SECURITY: str = "1.0.0"
+    PROMPT_VERSION_PERFORMANCE: str = "1.0.0"
+    PROMPT_VERSION_TESTING: str = "1.0.0"
+    PROMPT_VERSION_DOCUMENTATION: str = "1.0.0"
+    PROMPT_VERSION_REFACTOR: str = "1.0.0"
+    PROMPT_VERSION_SUMMARY: str = "1.0.0"
 
     # Optimization, Cache and Logging
     RETRIEVAL_LIMIT: int = 15

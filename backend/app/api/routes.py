@@ -165,7 +165,11 @@ async def get_job_result(
 async def list_repositories(db: Session = Depends(get_db)):
     from app.models.repository import Repository
     from datetime import datetime
-    repos = db.query(Repository).all()
+    try:
+        repos = db.query(Repository).all()
+    except Exception as e:
+        logger.error(f"DB error listing repositories: {e}")
+        return []
     
     # Deduplicate: return only the latest record for each unique (owner, name) combo
     unique_repos = {}
@@ -185,6 +189,16 @@ async def list_repositories(db: Session = Depends(get_db)):
             "created_at": r.created_at
         } for r in unique_repos.values()
     ]
+
+# Alias: /api/repositories — some clients may call with /api/ prefix
+@router.get(
+    "/api/repositories",
+    summary="List all indexed repositories (API prefix alias)",
+    include_in_schema=False
+)
+async def list_repositories_alias(db: Session = Depends(get_db)):
+    return await list_repositories(db)
+
 
 @router.get(
     "/repositories/{id}",

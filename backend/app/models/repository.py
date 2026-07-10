@@ -39,9 +39,15 @@ class Repository(Base):
     chunks = relationship("Chunk", back_populates="repository", cascade="all, delete-orphan")
     embeddings = relationship("Embedding", back_populates="repository", cascade="all, delete-orphan")
     chat_conversations = relationship("ChatConversation", back_populates="repository", cascade="all, delete-orphan")  # Phase 5
+    workflow_executions = relationship("WorkflowExecutionORM", back_populates="repository", cascade="all, delete-orphan")
+    memories = relationship("RepositoryMemoryORM", back_populates="repository", cascade="all, delete-orphan")
 
 # Import related models at bottom to avoid circular import issues in SQLAlchemy registry
 from app.models.job import AnalysisJobORM
 from app.models.chunk import Chunk
 from app.models.embedding import Embedding
+from app.models.workflow import WorkflowExecutionORM
+from app.models.memory import RepositoryMemoryORM
+
+
 

@@ -1,137 +1,183 @@
-import React, { useContext } from 'react';
-import { Cpu, History, MessageSquare, LayoutDashboard } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import { AnalysisContext } from '../context/AnalysisContext';
+﻿import { useContext, useState, useRef, useEffect, useMemo, useCallback, memo } from 'react';
+import { Menu, Sun, Moon, LogOut, KeyRound, Cpu } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { AnalysisContext, AnalysisUIContext } from '../context/AnalysisContext';
+import { DevMindLogo } from '../layouts/MainLayout';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Avatar, GlassPanel } from './ui';
 
 interface NavbarProps {
-  onOpenHistory: () => void;
+  onOpenMobileSidebar?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenHistory }) => {
-  const context = useContext(AnalysisContext);
-  const location = useLocation();
-  
-  // Safe fallback if context is not loaded yet
-  const historyCount = context ? context.history.length : 0;
-  const isAnalyzing = context ? context.isAnalyzing : false;
-  const parsedReport = context ? context.parsedReport : null;
+// Static map � no closure, computed once at module load
+const PAGE_TITLES: Record<string, string> = {
+  '/dashboard':    'Dashboard Overview',
+  '/repositories': 'Repository Analysis',
+  '/chat':         'Grounded Assistant',
+  '/agents':       'Agent Workspace',
+  '/reports':      'Interactive Audit Reports',
+  '/history':      'Platform History Logs',
+  '/settings':     'Intelligence Settings',
+  '/future':       'Roadmap Blueprint',
+};
 
-  const isChatRoute = location.pathname === '/chat';
+export const Navbar = memo<NavbarProps>(({ onOpenMobileSidebar }) => {
+  const dataContext = useContext(AnalysisContext);
+  const uiContext   = useContext(AnalysisUIContext);
+  const location    = useLocation();
 
-  const renderStatusBadge = () => {
-    if (isAnalyzing) {
-      return (
-        <span className="px-2 py-0.5 rounded border border-cyan-500/30 bg-cyan-950/20 text-cyan-400 animate-pulse font-mono text-[10px]">
-          RUNNING AUDIT...
-        </span>
-      );
-    }
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-    if (parsedReport) {
-      const meta = parsedReport.aiOutput?.ai_metadata;
-      const isFallback = parsedReport.aiOutput?.is_fallback || meta?.fallback_flag;
-
-      if (isFallback) {
-        return (
-          <span className="px-2 py-0.5 rounded border border-amber-500/30 bg-amber-950/20 text-amber-400 font-mono text-[10px]" title="LLMs offline. Static analyzer active.">
-            HEURISTIC FALLBACK
-          </span>
-        );
+  // Close profile dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsProfileOpen(false);
       }
+    };
+    document.addEventListener('mousedown', handleClickOutside, { passive: true });
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-      return (
-        <div className="flex items-center gap-1.5 font-mono text-[10px]">
-          <span className="px-2 py-0.5 rounded border border-emerald-500/30 bg-emerald-950/20 text-emerald-400">
-            AI MODE
-          </span>
-          <span className="text-dark-600">/</span>
-          <span className="text-dark-300">
-            {meta?.provider?.toUpperCase()} ({meta?.model?.split('/').pop()?.toUpperCase()})
-          </span>
-        </div>
-      );
-    }
+  // Read from UI context (theme) � isolated, doesn't trigger on data changes
+  const theme       = uiContext?.theme       || 'dark';
+  const toggleTheme = uiContext?.toggleTheme || (() => {});
+  const addToast    = uiContext?.addToast    || (() => {});
 
-    return (
-      <span className="px-2 py-0.5 rounded border border-dark-800 bg-dark-950 text-dark-500 font-mono text-[10px]">
-        AI ENGINE STANDBY
-      </span>
-    );
-  };
+  // Read only the fields we need from data context
+  const parsedReport = dataContext?.parsedReport;
+  const isAnalyzing  = dataContext?.isAnalyzing || false;
+
+  // Memoized derived values � recompute only when dependencies change
+  const pageTitle = useMemo(
+    () => PAGE_TITLES[location.pathname] || 'DevMind Console',
+    [location.pathname]
+  );
+
+  const activeProvider = useMemo(
+    () => parsedReport?.aiOutput?.ai_metadata?.provider || 'GOOGLE AI',
+    [parsedReport]
+  );
+
+  const activeModel = useMemo(
+    () => (parsedReport?.aiOutput?.ai_metadata?.model?.split('/').pop() || 'gemini-2.5-flash'),
+    [parsedReport]
+  );
+
+  const handleToggleProfile = useCallback(() => setIsProfileOpen(prev => !prev), []);
+
+  const handleSessionLock = useCallback(() => {
+    setIsProfileOpen(false);
+    addToast('info', 'Developer security keys are locked.');
+  }, [addToast]);
 
   return (
-    <header className="border-b border-dark-800 bg-dark-900/50 backdrop-blur-md px-6 py-4 z-30 relative">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Left Side: Brand Logo */}
-        <div className="flex items-center gap-6">
-          <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-            <div className="bg-brand-600/10 p-2 rounded-lg border border-brand-500/20 text-brand-400">
-              <Cpu className="w-6 h-6" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-dark-50 tracking-tight flex items-center gap-2 m-0 p-0 leading-none">
-                DevMind
-                <span className="text-xs font-normal text-brand-400 px-2 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/25">
-                  Phase 5
-                </span>
-              </h1>
-              <p className="text-xs text-dark-400 mt-1 font-mono">AI Code Intelligence Engine</p>
-            </div>
-          </Link>
+    <header className="sticky top-0 z-30 w-full px-5 py-3.5 border-b border-border-primary/80 bg-[#070b14]/50 dark:bg-[#070b14]/70 backdrop-blur-md select-none print:hidden">
+      <div className="w-full flex items-center justify-between gap-4">
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 border-l border-dark-800 pl-6 h-8">
-            <Link
-              to="/"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded font-mono text-xs transition-all ${
-                !isChatRoute
-                  ? 'bg-dark-850 text-cyan-400 border border-dark-750'
-                  : 'text-dark-400 hover:text-dark-100 hover:bg-dark-900/50 border border-transparent'
-              }`}
-            >
-              <LayoutDashboard className="w-3.5 h-3.5" />
-              <span>DASHBOARD</span>
-            </Link>
+        {/* Left: Hamburger + Logo + Route Title */}
+        <div className="flex items-center gap-3.5 truncate min-w-0">
+          <button
+            onClick={onOpenMobileSidebar}
+            className="md:hidden p-2 border border-border-primary hover:border-dark-700 bg-dark-900/40 rounded-xl text-dark-300 hover:text-dark-100 cursor-pointer"
+            title="Open navigation menu"
+          >
+            <Menu className="w-4 h-4" />
+          </button>
 
-            <Link
-              to="/chat"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded font-mono text-xs transition-all ${
-                isChatRoute
-                  ? 'bg-dark-850 text-cyan-400 border border-dark-750'
-                  : 'text-dark-400 hover:text-dark-100 hover:bg-dark-900/50 border border-transparent'
-              }`}
-            >
-              <MessageSquare className="w-3.5 h-3.5" />
-              <span>GROUNDED CHAT</span>
-            </Link>
-          </nav>
-        </div>
-        
-        {/* Right Side: System Telemetry & Utilities */}
-        <div className="flex items-center gap-5">
-          {/* Dynamic AI status badge */}
-          <div className="hidden sm:flex items-center gap-2">
-            <span className="text-dark-500 font-mono text-[10px]">SYSTEM STATUS:</span>
-            {renderStatusBadge()}
+          <div className="flex md:hidden items-center gap-2 shrink-0">
+            <DevMindLogo className="w-6 h-6 shadow-[0_0_10px_rgba(6,182,212,0.1)]" />
           </div>
 
-          <span className="text-dark-700 hidden sm:inline">|</span>
+          <span className="hidden md:inline-block w-px h-4 bg-border-primary" />
 
-          {/* History drawer button */}
+          <h2 className="text-sm font-bold text-dark-100 font-display truncate leading-none">
+            {pageTitle}
+          </h2>
+        </div>
+
+        {/* Center: Telemetry */}
+        <div className="hidden lg:flex items-center gap-4 text-[9px] font-mono border border-border-primary/80 bg-[#070b14]/30 px-3 py-1.5 rounded-xl shrink-0">
+          <div className="flex items-center gap-1.5 text-dark-400">
+            <Cpu className="w-3.5 h-3.5 text-cyan-accent shrink-0" />
+            <span>AI CORE:</span>
+            <span className="text-dark-200 font-bold">{activeProvider.toUpperCase()}</span>
+          </div>
+          <span className="w-px h-3 bg-border-primary" />
+          <div className="flex items-center gap-1.5 text-dark-400">
+            <KeyRound className="w-3.5 h-3.5 text-purple-accent shrink-0" />
+            <span>MODEL:</span>
+            <span className="text-dark-200 font-bold">{activeModel.toUpperCase()}</span>
+          </div>
+          {isAnalyzing && (
+            <>
+              <span className="w-px h-3 bg-border-primary" />
+              <span className="w-2 h-2 rounded-full bg-cyan-accent animate-ping shrink-0" />
+            </>
+          )}
+        </div>
+
+        {/* Right: Theme + Profile */}
+        <div className="flex items-center gap-3 shrink-0">
+          {isAnalyzing && <span className="lg:hidden w-2 h-2 rounded-full bg-cyan-accent animate-ping" />}
+
           <button
-            onClick={onOpenHistory}
-            className="flex items-center gap-2 px-3.5 py-2 border border-dark-800 hover:border-dark-750 bg-dark-950 hover:bg-dark-900 rounded font-mono text-xs text-dark-300 hover:text-dark-100 transition-all cursor-pointer relative"
+            onClick={toggleTheme}
+            className="p-2.5 border border-border-primary hover:border-dark-700 bg-dark-900/35 hover:bg-dark-900/60 text-dark-400 hover:text-dark-100 transition rounded-xl cursor-pointer"
+            title="Toggle theme mode"
           >
-            <History className="w-4 h-4 text-cyan-400" />
-            <span>HISTORY</span>
-            {historyCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-cyan-500 text-dark-950 font-bold rounded-full flex items-center justify-center text-[9px] scale-95 shadow-[0_0_6px_rgba(34,211,238,0.4)]">
-                {historyCount}
-              </span>
-            )}
+            {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-accent" /> : <Moon className="w-4 h-4 text-purple-accent" />}
           </button>
+
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={handleToggleProfile}
+              className="cursor-pointer select-none"
+              title="User Actions Profile Menu"
+            >
+              <Avatar initials="PC" size="md" />
+            </button>
+
+            <AnimatePresence>
+              {isProfileOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ duration: 0.18 }}
+                  className="absolute right-0 mt-2 z-50 w-64"
+                >
+                  <GlassPanel variant="soft" elevation={3} className="overflow-hidden text-left border border-border-primary">
+                    <div className="p-4 border-b border-border-primary bg-dark-900/40">
+                      <span className="text-xs font-bold text-dark-100 font-display block leading-tight">Pushkar Chhokar</span>
+                    </div>
+
+                    <div className="p-3.5 space-y-2 text-[9px] font-mono text-dark-400 border-b border-border-primary">
+                      <div className="flex justify-between items-center bg-dark-950/20 border border-border-primary/50 p-2 rounded-xl">
+                        <span className="text-dark-500">ENGINE ROLE:</span>
+                        <span className="text-cyan-accent font-bold uppercase">System Admin</span>
+                      </div>
+                    </div>
+
+                    <div className="p-2 bg-dark-900/20">
+                      <button
+                        onClick={handleSessionLock}
+                        className="w-full flex items-center justify-between px-3 py-2 hover:bg-dark-900/50 text-[10px] font-mono text-rose-500 rounded-xl transition cursor-pointer bg-transparent border-none text-left"
+                      >
+                        <span>SESSION LOCK</span>
+                        <LogOut className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </GlassPanel>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </header>
   );
-};
+});
+

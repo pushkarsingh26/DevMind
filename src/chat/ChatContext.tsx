@@ -1,74 +1,52 @@
 /**
- * Phase 5 — ChatContext
- *
- * Manages all chat state: conversations, messages, streaming, repositories.
- * Completely independent of AnalysisContext — no shared state.
+ * Phase 5 - ChatContext (Performance Optimized)
+ * Key optimizations:
+ * - Context value memoized - no identity churn
+ * - Streaming token updates batched via requestAnimationFrame
+ * - All callbacks wrapped in useCallback
+ * - Abort controller + rAF cleaned on unmount
  */
-
 import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
+  createContext, useCallback, useContext, useEffect,
+  useMemo, useRef, useState,
 } from 'react';
 import { useAnalysis } from '../hooks/useAnalysis';
 import type {
-  ChatContextType,
-  ChatMessage,
-  CitationRef,
-  Conversation,
-  RepositoryListItem,
-  SSEDonePayload,
+  ChatContextType, ChatMessage, CitationRef,
+  Conversation, RepositoryListItem, SSEDonePayload,
 } from './types';
 import * as chatApi from './api';
 
 const ChatContext = createContext<ChatContextType | null>(null);
 
 export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Core state
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [repositories, setRepositories] = useState<RepositoryListItem[]>([]);
   const [selectedRepositoryId, setSelectedRepositoryId] = useState<string | null>(null);
-
-  // Streaming state
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [streamingCitations, setStreamingCitations] = useState<CitationRef[]>([]);
   const [streamingFollowUps, setStreamingFollowUps] = useState<string[]>([]);
-
-  // Pagination
   const [hasMoreMessages, setHasMoreMessages] = useState(false);
   const [messageOffset, setMessageOffset] = useState(0);
-
-  // Loading / error
   const [isLoadingConversations, setIsLoadingConversations] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Abort controller ref for cancelling in-flight streams
   const abortRef = useRef<AbortController | null>(null);
-
+  const rafRef = useRef<number | null>(null);
+  const pendingTokenRef = useRef<string>('');
+  const accumulatedContentRef = useRef<string>('');
   const analysis = useAnalysis();
   const wasAnalyzingRef = useRef(false);
 
-  // ---------------------------------------------------------------------------
-  // Bootstrap: load repositories on mount
-  // ---------------------------------------------------------------------------
   useEffect(() => {
     chatApi.listRepositories()
       .then(setRepositories)
       .catch((err) => console.warn('ChatContext: Failed to load repositories:', err));
   }, []);
-
-
-  // ---------------------------------------------------------------------------
-  // Actions
-  // ---------------------------------------------------------------------------
 
   const selectRepository = useCallback((id: string) => {
     setSelectedRepositoryId(id);
@@ -80,7 +58,6 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       .then(async (res) => {
         setConversations(res.conversations);
         if (res.conversations.length === 0) {
-          // Auto-create initial conversation if none exist
           try {
             const conv = await chatApi.startConversation(id, 'General Grounded Chat');
             setConversations([conv]);
@@ -92,7 +69,6 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setErrorMessage(err.message || 'Failed to start conversation');
           }
         } else {
-          // Auto-select the latest existing conversation
           const latestConv = res.conversations[0];
           setActiveConversation(latestConv);
           setIsLoadingMessages(true);
@@ -112,37 +88,26 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       .finally(() => setIsLoadingConversations(false));
   }, []);
 
-  // Stable ref to selectRepository so the analysis-monitoring effect
-  // doesn't need it in its dep array (breaks useCallback identity re-render cycle)
   const selectRepositoryRef = useRef<(id: string) => void>(() => {});
   useEffect(() => { selectRepositoryRef.current = selectRepository; }, [selectRepository]);
 
-  // Derived: only repositories that are fully indexed and ready for chat
   const readyRepositories = useMemo(
     () => repositories.filter((r) => r.status === 'READY'),
     [repositories]
   );
 
-  // Monitor analysis completion to bind the freshly indexed repository and
-  // auto-create a conversation — uses the stable ref to avoid dep-array cycle.
   useEffect(() => {
     if (wasAnalyzingRef.current && !analysis.isAnalyzing && analysis.parsedReport?.repository?.id) {
       const repoId = analysis.parsedReport.repository.id;
       chatApi.listRepositories()
-        .then((repos) => {
-          setRepositories(repos);
-          selectRepositoryRef.current(repoId);
-        })
+        .then((repos) => { setRepositories(repos); selectRepositoryRef.current(repoId); })
         .catch((err) => console.warn('ChatContext: Failed to refresh repos after analysis:', err));
     }
     wasAnalyzingRef.current = analysis.isAnalyzing;
   }, [analysis.isAnalyzing, analysis.parsedReport]);
 
   const startNewConversation = useCallback(async (title?: string) => {
-    if (!selectedRepositoryId) {
-      setErrorMessage('Please select a repository first.');
-      return;
-    }
+    if (!selectedRepositoryId) { setErrorMessage('Please select a repository first.'); return; }
     try {
       const conv = await chatApi.startConversation(selectedRepositoryId, title);
       setConversations((prev) => [conv, ...prev]);
@@ -190,92 +155,88 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const sendMessage = useCallback(async (text: string) => {
     if (!activeConversation || isStreaming) return;
-
-    // Abort any previous stream
     abortRef.current?.abort();
+    if (rafRef.current !== null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
 
-    // Optimistic user message
-    const tempUserId = `temp_${Date.now()}`;
+    const tempUserId = 'temp_' + Date.now();
     const optimisticUser: ChatMessage = {
-      id: tempUserId,
-      conversation_id: activeConversation.id,
-      role: 'user',
-      content: text,
-      citations: [],
-      follow_up_questions: [],
-      is_fallback: false,
+      id: tempUserId, conversation_id: activeConversation.id, role: 'user',
+      content: text, citations: [], follow_up_questions: [], is_fallback: false,
       created_at: new Date().toISOString(),
     };
     setMessages((prev) => [...prev, optimisticUser]);
-
-    // Reset streaming state
     setIsStreaming(true);
     setStreamingContent('');
     setStreamingCitations([]);
     setStreamingFollowUps([]);
+    accumulatedContentRef.current = '';
+    pendingTokenRef.current = '';
 
-    let accumulatedContent = '';
     let finalCitations: CitationRef[] = [];
     let finalFollowUps: string[] = [];
 
-    const controller = chatApi.streamMessage(
-      activeConversation.id,
-      text,
-      {
-        onToken: (token) => {
-          accumulatedContent += token;
-          setStreamingContent((prev) => prev + token);
-        },
-        onCitations: (citations) => {
-          finalCitations = citations;
-          setStreamingCitations(citations);
-        },
-        onFollowUps: (questions) => {
-          finalFollowUps = questions;
-          setStreamingFollowUps(questions);
-        },
-        onDone: (payload: SSEDonePayload) => {
-          // Finalize assistant message
-          const assistantMsg: ChatMessage = {
-            id: `stream_${Date.now()}`,
-            conversation_id: activeConversation.id,
-            role: 'assistant',
-            content: accumulatedContent,
-            citations: finalCitations,
-            follow_up_questions: finalFollowUps,
-            provider: payload.provider,
-            model: payload.model,
-            latency: payload.latency,
-            prompt_tokens: payload.prompt_tokens,
-            completion_tokens: payload.completion_tokens,
-            is_fallback: payload.is_fallback,
-            created_at: new Date().toISOString(),
-          };
-          setMessages((prev) => [...prev, assistantMsg]);
-          setIsStreaming(false);
-          setStreamingContent('');
-          setStreamingCitations([]);
-          setStreamingFollowUps([]);
-          // Update conversation message count
-          setActiveConversation((prev) =>
-            prev ? { ...prev, message_count: prev.message_count + 2 } : prev
-          );
-          setConversations((prev) =>
-            prev.map((c) =>
-              c.id === activeConversation.id
-                ? { ...c, message_count: c.message_count + 2, updated_at: new Date().toISOString() }
-                : c
-            )
-          );
-        },
-        onError: (msg) => {
-          setErrorMessage(msg);
-          setIsStreaming(false);
-          setStreamingContent('');
-        },
+    const flushPending = () => {
+      if (pendingTokenRef.current) {
+        accumulatedContentRef.current += pendingTokenRef.current;
+        pendingTokenRef.current = '';
+        setStreamingContent(accumulatedContentRef.current);
       }
-    );
+      rafRef.current = null;
+    };
 
+    const controller = chatApi.streamMessage(activeConversation.id, text, {
+      onToken: (token) => {
+        pendingTokenRef.current += token;
+        if (rafRef.current === null) {
+          rafRef.current = requestAnimationFrame(flushPending);
+        }
+      },
+      onCitations: (citations) => { finalCitations = citations; setStreamingCitations(citations); },
+      onFollowUps: (questions) => { finalFollowUps = questions; setStreamingFollowUps(questions); },
+      onDone: (payload: SSEDonePayload) => {
+        if (rafRef.current !== null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
+        if (pendingTokenRef.current) {
+          accumulatedContentRef.current += pendingTokenRef.current;
+          pendingTokenRef.current = '';
+        }
+        const assistantMsg: ChatMessage = {
+          id: 'stream_' + Date.now(),
+          conversation_id: activeConversation.id,
+          role: 'assistant',
+          content: accumulatedContentRef.current,
+          citations: finalCitations,
+          follow_up_questions: finalFollowUps,
+          provider: payload.provider,
+          model: payload.model,
+          latency: payload.latency,
+          prompt_tokens: payload.prompt_tokens,
+          completion_tokens: payload.completion_tokens,
+          is_fallback: payload.is_fallback,
+          created_at: new Date().toISOString(),
+        };
+        setMessages((prev) => [...prev, assistantMsg]);
+        setIsStreaming(false);
+        setStreamingContent('');
+        setStreamingCitations([]);
+        setStreamingFollowUps([]);
+        setActiveConversation((prev) =>
+          prev ? { ...prev, message_count: prev.message_count + 2 } : prev
+        );
+        setConversations((prev) =>
+          prev.map((c) =>
+            c.id === activeConversation.id
+              ? { ...c, message_count: c.message_count + 2, updated_at: new Date().toISOString() }
+              : c
+          )
+        );
+      },
+      onError: (msg) => {
+        setErrorMessage(msg);
+        setIsStreaming(false);
+        setStreamingContent('');
+        if (rafRef.current !== null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
+      },
+    });
     abortRef.current = controller;
   }, [activeConversation, isStreaming]);
 
@@ -283,10 +244,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await chatApi.deleteConversation(id);
       setConversations((prev) => prev.filter((c) => c.id !== id));
-      if (activeConversation?.id === id) {
-        setActiveConversation(null);
-        setMessages([]);
-      }
+      if (activeConversation?.id === id) { setActiveConversation(null); setMessages([]); }
     } catch (err: unknown) {
       setErrorMessage(err instanceof Error ? err.message : 'Failed to delete conversation');
     }
@@ -295,10 +253,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const searchConversations = useCallback(async (query: string) => {
     setIsLoadingConversations(true);
     try {
-      const res = await chatApi.listConversations(
-        selectedRepositoryId ?? undefined,
-        query
-      );
+      const res = await chatApi.listConversations(selectedRepositoryId ?? undefined, query);
       setConversations(res.conversations);
     } catch (err: unknown) {
       setErrorMessage(err instanceof Error ? err.message : 'Search failed');
@@ -311,7 +266,6 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await chatApi.deleteRepository(id);
       setRepositories((prev) => prev.filter((r) => r.id !== id));
-      
       if (selectedRepositoryId === id) {
         setSelectedRepositoryId(null);
         setActiveConversation(null);
@@ -331,13 +285,9 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setActiveConversation(null);
       setConversations([]);
       setMessages([]);
-      
       localStorage.removeItem('devmind_history');
       localStorage.clear();
-      
-      chatApi.listRepositories()
-        .then(setRepositories)
-        .catch(() => {});
+      chatApi.listRepositories().then(setRepositories).catch(() => {});
     } catch (err: unknown) {
       setErrorMessage(err instanceof Error ? err.message : 'Failed to clear repositories');
     }
@@ -345,37 +295,30 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const clearError = useCallback(() => setErrorMessage(null), []);
 
-  // Cleanup on unmount
   useEffect(() => {
-    return () => { abortRef.current?.abort(); };
+    return () => {
+      abortRef.current?.abort();
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
-  const value: ChatContextType = {
-    conversations,
-    activeConversation,
-    messages,
-    isStreaming,
-    streamingContent,
-    streamingCitations,
-    streamingFollowUps,
-    selectedRepositoryId,
-    repositories,
-    readyRepositories,
-    isLoadingConversations,
-    isLoadingMessages,
-    hasMoreMessages,
-    errorMessage,
-    selectRepository,
-    startNewConversation,
-    selectConversation,
-    sendMessage,
-    loadMoreMessages,
-    deleteConversation,
-    searchConversations,
-    clearError,
-    deleteRepository,
-    clearAll,
-  };
+  const value = useMemo<ChatContextType>(() => ({
+    conversations, activeConversation, messages,
+    isStreaming, streamingContent, streamingCitations, streamingFollowUps,
+    selectedRepositoryId, repositories, readyRepositories,
+    isLoadingConversations, isLoadingMessages, hasMoreMessages, errorMessage,
+    selectRepository, startNewConversation, selectConversation, sendMessage,
+    loadMoreMessages, deleteConversation, searchConversations, clearError,
+    deleteRepository, clearAll,
+  }), [
+    conversations, activeConversation, messages,
+    isStreaming, streamingContent, streamingCitations, streamingFollowUps,
+    selectedRepositoryId, repositories, readyRepositories,
+    isLoadingConversations, isLoadingMessages, hasMoreMessages, errorMessage,
+    selectRepository, startNewConversation, selectConversation, sendMessage,
+    loadMoreMessages, deleteConversation, searchConversations, clearError,
+    deleteRepository, clearAll,
+  ]);
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };

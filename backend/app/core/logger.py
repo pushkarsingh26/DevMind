@@ -1,54 +1,42 @@
+"""
+DevMind Application Logger
+===========================
+Provides a single shared ``logger`` instance for all DevMind modules.
+
+This module imports ``logging_config`` as its very first statement so
+that the full logging configuration is applied before any third-party
+library can emit a record.
+
+Usage
+-----
+    from app.core.logger import logger
+
+    logger.info("Repository indexed successfully")
+    logger.warning("Provider unavailable, switching fallback")
+    logger.error("Failed to connect to database")
+"""
+
+# ── Logging configuration MUST come first ────────────────────────────────────
+import app.core.logging_config  # noqa: F401  (side-effect: applies dictConfig)
+
 import logging
-import sys
-
-# Format definition
-LOG_FORMAT = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-
-# Third-party libraries that produce noisy output at WARNING/DEBUG level
-# when running normally. Suppress them to ERROR-only unless DEBUG mode is on.
-_NOISY_LOGGERS = [
-    "sentence_transformers",
-    "transformers",
-    "huggingface_hub",
-    "huggingface_hub.utils",
-    "filelock",
-    "urllib3",
-    "httpx",
-    "httpcore",
-    "sqlalchemy.engine",
-    "sqlalchemy.pool",
-    "sqlalchemy.dialects",
-    "sqlalchemy.orm",
-    "asyncio",
-    "multipart",
-    "uvicorn.access",
-    "faiss",
-    "PIL",
-    "torch",
-]
 
 
-def setup_logger(name: str = "devmind") -> logging.Logger:
-    logger = logging.getLogger(name)
+def get_logger(name: str = "devmind") -> logging.Logger:
+    """Return a named child of the DevMind root logger.
 
-    # Avoid duplicate handlers if already configured
-    if logger.handlers:
-        return logger
+    All child loggers inherit the handler and level set in logging_config,
+    so they will appear with the ``[INFO] DevMind | …`` format automatically.
 
-    logger.setLevel(logging.INFO)
+    Args:
+        name: Dot-separated logger name, e.g. ``"devmind.agents"``
+              or ``"devmind.chat"``. Defaults to ``"devmind"``.
 
-    # Console handler
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setFormatter(logging.Formatter(LOG_FORMAT))
-    logger.addHandler(handler)
-
-    # Suppress noisy third-party loggers
-    for lib_name in _NOISY_LOGGERS:
-        lib_logger = logging.getLogger(lib_name)
-        lib_logger.setLevel(logging.ERROR)
-        lib_logger.propagate = False
-
-    return logger
+    Returns:
+        A configured :class:`logging.Logger` instance.
+    """
+    return logging.getLogger(name)
 
 
-logger = setup_logger()
+# Shared singleton — drop-in replacement for the previous ``logger``
+logger: logging.Logger = get_logger("devmind")
