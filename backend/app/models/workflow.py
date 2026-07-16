@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import (
     Column,
     String,
@@ -34,7 +34,7 @@ class WorkflowExecutionORM(Base):
     workflow_type = Column(String(100), nullable=False)
     status = Column(String(64), nullable=False, default="running")  # running, completed, failed, pending_approval
     duration = Column(Float, nullable=True)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    created_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
     
     # Store complex structures as serialized JSON strings for SQLite & PostgreSQL compatibility
     agents_used = Column(Text, nullable=True)     # JSON string of list[str]

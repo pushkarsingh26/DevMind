@@ -1,0 +1,106 @@
+{
+  "is_fallback": false,
+  "traceability_refs": [
+    {
+      "path": "README.md",
+      "start_line": 33,
+      "end_line": 55,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-2",
+      "score": 0.9460510611534119
+    },
+    {
+      "path": "README.md",
+      "start_line": 141,
+      "end_line": 178,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-9",
+      "score": 0.9482815265655518
+    },
+    {
+      "path": "README.md",
+      "start_line": 279,
+      "end_line": 292,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-15",
+      "score": 0.953148365020752
+    },
+    {
+      "path": "README.md",
+      "start_line": 344,
+      "end_line": 370,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-20",
+      "score": 0.9508152008056641
+    },
+    {
+      "path": "docs\\architecture.md",
+      "start_line": 1,
+      "end_line": 18,
+      "chunk_id": "repo_231ef14bce4d:docs\\architecture.md-chunk-0",
+      "score": 0.9002962827682495
+    },
+    {
+      "path": "backend\\app\\ai\\ai_service.py",
+      "start_line": 35,
+      "end_line": 57,
+      "chunk_id": "repo_231ef14bce4d:backend\\app\\ai\\ai_service.py-chunk-1",
+      "score": 0.7998260259628296
+    }
+  ],
+  "ai_metadata": {
+    "provider": "google",
+    "provider_used_after_failover": "openrouter",
+    "model": "google/gemini-2.5-flash",
+    "latency": 108.33014011383057,
+    "prompt_tokens": 2427,
+    "completion_tokens": 1266,
+    "total_tokens": 3693,
+    "retry_count": 0,
+    "cache_hit": false,
+    "fallback_flag": false,
+    "request_id": "ai_req_43a2373c345b",
+    "started_timestamp": 1784224986.397007,
+    "completed_timestamp": 1784225094.727147,
+    "estimated_cost": 0.0
+  },
+  "high_level_architecture": [
+    "React Frontend (Vite, TypeScript, Tailwind CSS): User interface for interaction, displaying analysis, and chat.",
+    "FastAPI Backend (Python ASGI): High-performance backend handling code processing, AI agents, and data storage.",
+    "Vector Store (FAISS): Local storage for semantic embeddings of code, used for Retrieval-Augmented Generation (RAG).",
+    "PostgreSQL Database: Persistent storage for repository metadata, chat history, and other application data.",
+    "AI Agents (Planner, Reviewer, Security, Critic): Specialized agents within the backend for various code analysis tasks.",
+    "Multi-Provider Failover Chain: Mechanism for resilient AI reasoning across multiple cloud providers and local models."
+  ],
+  "entry_points": [
+    "backend/app/main.py: This is the main ASGI application entry point for the FastAPI backend, where all API routes and services are initialized.",
+    "src/main.tsx (implied from React/Vite setup): This would be the primary entry point for the React frontend application, responsible for rendering the root component and initializing the UI.",
+    "backend/vector_store/repo_231ef14bce4d/index.faiss and backend/vector_store/repo_274568688eff/index.faiss: These are not application entry points but rather examples of generated FAISS index files, which are crucial data stores for the RAG system, indicating where semantic embeddings for specific repositories are stored."
+  ],
+  "component_relationships": [
+    "React Frontend <-> FastAPI Backend: The frontend communicates with the backend via REST APIs for all data fetching, repository ingestion, analysis requests, and chat interactions.",
+    "FastAPI Backend <-> PostgreSQL Database: The backend interacts with the PostgreSQL database for storing and retrieving repository metadata, user data, chat history, and other persistent application states.",
+    "FastAPI Backend <-> Vector Store (FAISS): The backend generates and queries semantic embeddings stored in local FAISS indexes for RAG operations.",
+    "FastAPI Backend <-> AI Providers (HuggingFace, Google Gemini, local models): The backend's AI service interacts with various LLM providers through a failover chain to perform code analysis and generate responses.",
+    "FastAPI Backend (services) <-> AI Agents: The backend's services orchestrate the execution of specialized AI agents (Planner, Reviewer, Security, Critic) for comprehensive code analysis.",
+    "FastAPI Backend (utils) <-> JSON Repair: Utilizes JSON repair helpers to handle malformed LLM responses before sending them to the frontend."
+  ],
+  "important_modules": [
+    "backend/app/main.py: Core application entry and setup.",
+    "backend/app/ai/: Contains AI provider clients, prompt registry, and AI service logic.",
+    "backend/app/api/: Defines API routers, endpoint schemas, and dependencies.",
+    "backend/app/chat/: Manages grounded chat service, schemas, prompts, and parsing.",
+    "backend/app/services/: Houses pipeline, scanning, chunking, and RAG services, orchestrating core logic.",
+    "backend/app/models/: Defines SQLAlchemy ORM models for database interactions.",
+    "backend/app/utils/: Provides utility functions like JSON repair and Git helpers.",
+    "src/ (Frontend root): Contains the main React application logic, components, and state management."
+  ],
+  "execution_flow": [
+    "1. User Interaction (Frontend): User uploads a repository ZIP or provides a GitHub link via the React frontend.",
+    "2. Repository Ingestion (Backend): The frontend sends the repository to the FastAPI backend.",
+    "3. Static Structural Analysis (Backend): The backend clones/unzips the repository, identifies languages, frameworks, and generates structural metadata.",
+    "4. Vector Embedding Generation (Backend): Code chunks are processed, and semantic embeddings are generated using Google AI/HuggingFace models.",
+    "5. FAISS Indexing (Backend): Embeddings are indexed into local FAISS vector stores, with code-path score boosting.",
+    "6. Agent Execution (Backend): Specialized AI agents (Planner, Reviewer, Security, Critic) are run through a resilient model-failover pipeline to perform various analyses.",
+    "7. Grounded Chat (Frontend/Backend): User initiates a chat. The backend performs RAG by querying the FAISS store, retrieves relevant code snippets, and uses LLMs (via failover chain) to generate responses.",
+    "8. Response Streaming & Display (Frontend): LLM responses, including code previews, line citations, and follow-up suggestions, are streamed back to the frontend and displayed in the chat interface.",
+    "9. Data Persistence (Backend/Database): Repository metadata, chat history, and analysis results are stored in the PostgreSQL database."
+  ],
+  "data_flow": "The data flow begins with user input on the React frontend (repository upload/link or chat query). This data is sent to the FastAPI backend via REST API calls. For repository ingestion, the backend processes the code, generates semantic embeddings, and stores them in local FAISS vector stores. Repository metadata and chat history are persisted in a PostgreSQL database. For chat queries, the backend performs Retrieval-Augmented Generation (RAG) by querying the FAISS store to retrieve relevant code context. This context, along with the user's query, is then sent to various AI providers (e.g., Google Gemini, HuggingFace, or local models) through a multi-provider failover chain. The AI's response, which may include code citations and structured data, is processed by the backend (e.g., JSON repair) and streamed back to the React frontend for real-time display. The frontend renders the markdown answers, interactive code previews, and clickable citations, allowing for a continuous conversational experience."
+}

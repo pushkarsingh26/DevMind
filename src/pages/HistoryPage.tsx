@@ -26,13 +26,11 @@ export const HistoryPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'runs' | 'chats' | 'repos'>('runs');
   const [deletingRepoId, setDeletingRepoId] = useState<string | null>(null);
 
-  if (!analysisContext) return null;
-
-  const { history, clearHistory, deleteHistoryItem, loadHistoryItem } = analysisContext;
-  const { conversations, selectConversation, deleteConversation, readyRepositories, deleteRepository, clearAll } = chatContext;
+  const contextHistory = analysisContext?.history;
 
   const combinedRuns = useMemo(() => {
-    const analysisItems = history.map(item => ({
+    const historyList = contextHistory || [];
+    const analysisItems = historyList.map(item => ({
       ...item,
       isAgentWorkflow: false,
       timestamp: item.timestamp
@@ -54,7 +52,12 @@ export const HistoryPage: React.FC = () => {
     }));
 
     return [...analysisItems, ...agentItems].sort((a, b) => b.timestamp - a.timestamp);
-  }, [history, historyWorkflows]);
+  }, [contextHistory, historyWorkflows]);
+
+  if (!analysisContext) return null;
+
+  const { history, clearHistory, deleteHistoryItem, loadHistoryItem } = analysisContext;
+  const { conversations, selectConversation, deleteConversation, readyRepositories, deleteRepository, clearAll } = chatContext;
 
   const formatTimestamp = (timestamp: number) => {
     return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });

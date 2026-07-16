@@ -282,6 +282,8 @@ class ConversationService:
         self._update_conversation(db, conv, count_delta=1)
 
         # --- DB session work done; release before streaming ---
+        db.commit()
+        db.close()
 
         started = time.time()
         accumulated_text = ""
@@ -348,12 +350,15 @@ class ConversationService:
         if parsed.follow_up_questions:
             yield self._sse_line(SSEFollowUpsEvent(data=parsed.follow_up_questions))
 
-        # Persist assistant message
-        assistant_msg = self._save_assistant_message(
-            db, conversation_id, parsed, provider_used, model_used,
-            latency, prompt_tokens, completion_tokens, not parsed.parse_ok
-        )
-        self._update_conversation(db, conv, count_delta=1)
+        # Persist assistant message inside a fresh short-lived session
+        from app.db.session import SessionLocal
+        with SessionLocal() as post_db:
+            conv_rebound = post_db.query(ChatConversation).filter(ChatConversation.id == conversation_id).first()
+            assistant_msg = self._save_assistant_message(
+                post_db, conversation_id, parsed, provider_used, model_used,
+                latency, prompt_tokens, completion_tokens, not parsed.parse_ok
+            )
+            self._update_conversation(post_db, conv_rebound, count_delta=1)
 
         # Emit done event
         yield self._sse_line(

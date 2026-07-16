@@ -6,6 +6,10 @@ from app.core.config import settings
 from app.core.logger import logger
 from app.services.provider_health import provider_health_monitor
 
+# --- Phase 7 API Status Constants ---
+RETRYABLE_STATUS_CODES = [429, 500, 502, 503, 504]
+NON_RETRYABLE_STATUS_CODES = [400, 401, 403, 404]
+
 class ProviderRegistry:
     """
     Registry for managing and discovering provider model capabilities.
@@ -50,15 +54,6 @@ class ProviderRegistry:
                 "last_success": None,
                 "fallback": False
             },
-            "ollama": {
-                "status": "unavailable",
-                "models": [],
-                "selected_model": getattr(settings, "OLLAMA_MODEL_NAME", "llama3.2"),
-                "configured_model": getattr(settings, "OLLAMA_MODEL_NAME", "llama3.2"),
-                "latency": 0.0,
-                "last_success": None,
-                "fallback": False
-            },
         }
 
         # Predefined fallback lists for each provider
@@ -67,8 +62,15 @@ class ProviderRegistry:
             "groq": ["llama-3.3-70b-versatile", "llama-3.1-70b-versatile", "mixtral-8x7b-32768", "llama3-70b-8192"],
             "openrouter": ["google/gemini-2.5-flash", "meta-llama/llama-3.3-70b-instruct", "deepseek/deepseek-chat"],
             "nvidia": ["meta/llama-3.3-70b-instruct", "nvidia/llama-3.1-nemotron-70b-instruct"],
-            "ollama": ["llama3.2", "llama3", "mistral", "gemma"]
         }
+
+        # Tracks logged warnings to log each warning only once
+        self._logged_warnings = set()
+
+    def _log_warning_once(self, key: str, msg: str):
+        if key not in self._logged_warnings:
+            logger.warning(msg)
+            self._logged_warnings.add(key)
 
     def get_status(self, provider: str) -> Dict[str, Any]:
         provider = provider.strip().lower()
@@ -163,12 +165,9 @@ class ProviderRegistry:
         elif provider == "nvidia":
             api_key = settings.NVIDIA_API_KEY
             url = "https://integrate.api.nvidia.com/v1/models"
-        elif provider == "ollama":
-            base_url = (getattr(settings, "OLLAMA_BASE_URL", None) or "http://localhost:11434").rstrip("/")
-            url = f"{base_url}/api/tags"
 
         # Check configuration
-        if provider != "ollama" and (not api_key or "api_key_here" in api_key):
+        if not api_key or "api_key_here" in api_key:
             status_info["status"] = "invalid_configuration"
             return status_info
 
@@ -196,10 +195,6 @@ class ProviderRegistry:
                     models = [m["name"].replace("models/", "") for m in data.get("models", [])]
                 elif provider in ["groq", "openrouter", "nvidia"]:
                     models = [m["id"] for m in data.get("data", [])]
-                elif provider == "ollama":
-                    models = [m["name"] for m in data.get("models", [])]
-                    # Also include split version for ease of matching
-                    models += [m["name"].split(":")[0] for m in data.get("models", [])]
                 
                 status_info["models"] = list(set(models))
                 
@@ -213,13 +208,24 @@ class ProviderRegistry:
                             resolved = fb
                             break
                     
+                    # If fallback not found in listed models, auto-resolve to the first model returned by provider API
+                    if not resolved and status_info["models"]:
+                        resolved = status_info["models"][0]
+                    
                     if resolved:
                         status_info["selected_model"] = resolved
                         status_info["status"] = "available"
                         status_info["last_success"] = time.time()
+                        self._log_warning_once(
+                            f"{provider}_fallback_model",
+                            f"ProviderRegistry: Configured model '{model_name}' for '{provider}' is unavailable. Auto-resolved to supported model: '{resolved}'."
+                        )
                     else:
                         status_info["status"] = "invalid_configuration"
-                        logger.warning(f"Configured model '{model_name}' not available and no fallbacks found.")
+                        self._log_warning_once(
+                            f"{provider}_invalid_model",
+                            f"ProviderRegistry: Configured model '{model_name}' for '{provider}' is unavailable and no fallbacks found. Model validation failed."
+                        )
                 else:
                     status_info["selected_model"] = model_name
                     status_info["status"] = "available"
@@ -228,7 +234,10 @@ class ProviderRegistry:
                     
         except Exception as e:
             status_info["status"] = "unavailable"
-            logger.warning(f"ProviderRegistry: Validation failed for '{provider}': {e}")
+            self._log_warning_once(
+                f"{provider}_validation_failed",
+                f"ProviderRegistry: Validation call failed for '{provider}': {e}"
+            )
         
         return status_info
 
@@ -254,8 +263,8 @@ class ProviderRegistry:
             ordered = [p for p in preferred if p in available]
             ordered += [p for p in available if p not in preferred]
         else:
-            # Standard priority: google > openrouter > nvidia > groq > ollama
-            priority = ["google", "openrouter", "nvidia", "groq", "ollama"]
+            # Standard priority: google > openrouter > nvidia > groq
+            priority = ["google", "openrouter", "nvidia", "groq"]
             ordered = [p for p in priority if p in available]
             ordered += [p for p in available if p not in priority]
 
@@ -268,3 +277,4 @@ class ProviderRegistry:
         return status_info["selected_model"]
 
 provider_registry = ProviderRegistry()
+

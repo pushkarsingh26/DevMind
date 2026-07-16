@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, DateTime, Integer, JSON, Boolean
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone
 from app.db.database import Base
 
 class Repository(Base):
@@ -30,7 +30,7 @@ class Repository(Base):
     dependencies = Column(JSON, nullable=True)
     package_managers = Column(JSON, nullable=True)
 
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
 
 
 

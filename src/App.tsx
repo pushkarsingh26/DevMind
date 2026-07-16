@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AnalysisProvider } from './context/AnalysisContext';
-import { WorkflowProvider } from './context/WorkflowContext';
-import { ChatProvider } from './chat/ChatContext';
+import { AnalysisProvider } from './context/AnalysisProvider';
+import { WorkflowProvider } from './context/WorkflowProvider';
+import { ChatProvider } from './chat/ChatProvider';
 import { MainLayout } from './layouts/MainLayout';
 import { Loader2 } from 'lucide-react';
 import ErrorBoundary from './components/ErrorBoundary';

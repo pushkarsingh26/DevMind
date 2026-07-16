@@ -23,6 +23,9 @@ const PAGE_TITLES: Record<string, string> = {
   '/future':       'Roadmap Blueprint',
 };
 
+const fallbackToggleTheme = () => {};
+const fallbackAddToast = () => {};
+
 export const Navbar = memo<NavbarProps>(({ onOpenMobileSidebar }) => {
   const dataContext = useContext(AnalysisContext);
   const uiContext   = useContext(AnalysisUIContext);
@@ -67,8 +70,8 @@ export const Navbar = memo<NavbarProps>(({ onOpenMobileSidebar }) => {
 
   // Read from UI context (theme)  isolated, doesn't trigger on data changes
   const theme       = uiContext?.theme       || 'dark';
-  const toggleTheme = uiContext?.toggleTheme || (() => {});
-  const addToast    = uiContext?.addToast    || (() => {});
+  const toggleTheme = uiContext?.toggleTheme || fallbackToggleTheme;
+  const addToast    = uiContext?.addToast    || fallbackAddToast;
 
   // Read only the fields we need from data context
   const parsedReport = dataContext?.parsedReport;

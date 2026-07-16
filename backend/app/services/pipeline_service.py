@@ -357,6 +357,8 @@ class PipelineService:
                     existing_repo.dependencies = metadata.dependencies
                     existing_repo.package_managers = metadata.package_managers
                     db.commit()
+                    from app.services.vector_store_service import vector_store_service
+                    vector_store_service.invalidate_cache(repo_id)
                 else:
                     repo_id = f"repo_{uuid.uuid4().hex[:12]}"
                     repo = Repository(

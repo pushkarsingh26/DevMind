@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import (
     Column,
     String,
@@ -29,7 +29,7 @@ class RepositoryMemoryORM(Base):
     )
     memory_key = Column(String(100), nullable=False, index=True) # e.g. review, security, doc, general
     content = Column(Text, nullable=False)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    created_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
 
     # Relationships
     repository = relationship("Repository", back_populates="memories")

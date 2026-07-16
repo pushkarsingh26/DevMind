@@ -209,9 +209,6 @@ GOOGLE_MODEL_NAME=gemini-2.5-flash
 GROQ_API_KEY=gsk_...
 GROQ_MODEL_NAME=llama3-70b-8192
 
-# Local LLM Support (Ollama)
-OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL_NAME=llama3.2
 ```
 
 ### Backend Setup

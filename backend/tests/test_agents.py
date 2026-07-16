@@ -17,7 +17,6 @@ from app.agents.planner_agent import PlannerAgent, ExecutionPlanSchema, PlanStep
 from app.agents.security_agent import SecurityAgent
 from app.agents.refactor_agent import RefactorAgent, RefactorAgentSchema
 from app.agents.summary_agent import SummaryAgent, SummaryAgentSchema
-from app.agents.agent_orchestrator import orchestrator
 from app.db.session import SessionLocal
 
 @pytest.fixture
@@ -136,35 +135,38 @@ async def test_security_agent():
         assert len(res.vulnerabilities) == 1
         assert res.vulnerabilities[0].severity == "High"
 
-# 4. Orchestrator Approval Flow Test
+# 4. Workflow Executor Approval Flow Test
 @pytest.mark.anyio
-async def test_orchestrator_approval_flow():
-    # Setup mock context
-    workflow_id = "wf_test_approval"
-    context = ExecutionContext("Verify auth", "Security Audit", "repo_123")
-    context.diff = "--- old\n+++ new\n"
-    context.affected_files = ["auth.py"]
+async def test_executor_approval_flow():
+    from app.services.workflow_executor import WorkflowExecutor
     
-    orchestrator._active_contexts[workflow_id] = context
-    orchestrator._approval_events[workflow_id] = asyncio.Event()
+    # Create a minimal mock executor
+    executor = WorkflowExecutor(
+        workflow_id="wf_test_approval",
+        repository_id="repo_123",
+        goal="Verify auth",
+        workflow_type="Security Audit",
+        on_event_cb=lambda *args: None,
+        on_finished_cb=lambda *args: None
+    )
+    
+    # Set context diff and affected files
+    executor.context.diff = "--- old\n+++ new\n"
+    executor.context.affected_files = ["auth.py"]
+    executor._status = "waiting_approval"
     
     # We trigger approval in 50ms asynchronously to test unblocking
     async def trigger_approval_delayed():
         await asyncio.sleep(0.05)
-        await orchestrator.approve_workflow(workflow_id, approved=True, reason="Looks clean")
+        executor.submit_approval(approved=True, reason="Looks clean")
         
     asyncio.create_task(trigger_approval_delayed())
     
-    # Block on event wait (as orchestrator thread would do)
-    event = orchestrator._approval_events[workflow_id]
-    await event.wait()
+    # Block on event wait (as executor thread would do)
+    await executor._approval_event.wait()
     
-    assert context.approval_status == "approved"
-    assert context.approval_reason == "Looks clean"
-    
-    # Clean up
-    del orchestrator._active_contexts[workflow_id]
-    del orchestrator._approval_events[workflow_id]
+    assert executor.context.approval_status == "approved"
+    assert executor.context.approval_reason == "Looks clean"
 
 # 5. Registry and templates dynamic configuration tests
 def test_agent_registry_resolution():

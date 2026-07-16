@@ -27,7 +27,6 @@ from app.core.logger import logger
 from app.api.routes import router as api_router
 from app.api.provider_routes import router as provider_router
 from app.chat.routes import chat_router          # Phase 5
-from app.api.agents import router as agents_router
 from app.api.workflows import router as workflows_router
 from app.db.database import engine
 from app.db.base import Base
@@ -96,6 +95,17 @@ async def lifespan(app: FastAPI):
     """Print a clean startup summary; run cleanup on shutdown."""
     from app.core.console import console
     from app.ai.provider_registry import provider_registry
+    import os
+    import shutil
+
+    # Clean temporary workflow directories on startup
+    try:
+        temp_workflows_dir = os.path.join(str(settings.WORKSPACE_ROOT), "workflows")
+        if os.path.exists(temp_workflows_dir):
+            shutil.rmtree(temp_workflows_dir, ignore_errors=True)
+            logger.info("Cleaned temporary workflow directories on startup")
+    except Exception as e:
+        logger.error(f"Failed to clean temporary workflow directories on startup: {e}")
     
     # Perform startup validation synchronously during initialization so we have full health data
     try:
@@ -114,7 +124,6 @@ async def lifespan(app: FastAPI):
         {"name": "OpenRouter", "status": all_statuses.get("openrouter", {}).get("status", "unavailable")},
         {"name": "NVIDIA NIM", "status": all_statuses.get("nvidia", {}).get("status", "unavailable")},
         {"name": "Groq", "status": all_statuses.get("groq", {}).get("status", "unavailable")},
-        {"name": "Ollama", "status": all_statuses.get("ollama", {}).get("status", "unavailable")},
     ]
 
     console.display_startup_banner(env, py_ver, startup_time, providers_list)
@@ -126,8 +135,7 @@ async def lifespan(app: FastAPI):
             "google": "Google",
             "groq": "Groq",
             "openrouter": "OpenRouter",
-            "nvidia": "NVIDIA",
-            "ollama": "Ollama"
+            "nvidia": "NVIDIA"
         }
         validation_records.append({
             "name": name_map.get(prov_key, prov_key.capitalize()),
@@ -167,7 +175,6 @@ if settings.ALLOWED_ORIGINS:
 app.include_router(api_router)
 app.include_router(provider_router)   # Phase 7.5.2 — Provider diagnostics
 app.include_router(chat_router)       # Phase 5
-app.include_router(agents_router)
 app.include_router(workflows_router)
 
 

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone
 from app.db.database import Base
 
 class Embedding(Base):
@@ -11,7 +11,7 @@ class Embedding(Base):
     chunk_id = Column(String, ForeignKey("chunks.id", ondelete="CASCADE"), nullable=False, index=True)
     embedding_model = Column(String, nullable=False)
     embedding_dimension = Column(Integer, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
 
     # Relationships
     repository = relationship("Repository", back_populates="embeddings")

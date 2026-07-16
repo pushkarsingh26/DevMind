@@ -261,9 +261,6 @@ export const SettingsPage: React.FC = () => {
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  if (!context) return null;
-  const { parsedReport, addToast, theme, toggleTheme } = context;
-
   const fetchProviders = useCallback(async (showRefreshing = false) => {
     if (showRefreshing) setRefreshing(true);
     try {
@@ -289,8 +286,13 @@ export const SettingsPage: React.FC = () => {
   }, [fetchProviders]);
 
   const handleClearCache = () => {
-    addToast('success', 'RAG local retrieval cache and index buffers cleared successfully.');
+    if (context) {
+      context.addToast('success', 'RAG local retrieval cache and index buffers cleared successfully.');
+    }
   };
+
+  if (!context) return null;
+  const { parsedReport, addToast, theme, toggleTheme } = context;
 
   const healthyCount = providers.filter(p => p.healthy).length;
   const totalCount = providers.length;

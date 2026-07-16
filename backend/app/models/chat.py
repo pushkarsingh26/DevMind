@@ -10,7 +10,7 @@ Cascade DELETE ensures removing a repository cleans up all its conversations.
 """
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import (
     Column,
     String,
@@ -52,8 +52,8 @@ class ChatConversation(Base):
     )
     title = Column(String(500), nullable=True)
     message_count = Column(Integer, nullable=False, default=0)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
+    updated_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None), onupdate=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
 
     # Relationships
     messages = relationship(
@@ -109,7 +109,7 @@ class ChatMessage(Base):
     completion_tokens = Column(Integer, nullable=True)
     is_fallback = Column(Boolean, nullable=False, default=False)
 
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    created_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
 
     # Relationships
     conversation = relationship("ChatConversation", back_populates="messages")

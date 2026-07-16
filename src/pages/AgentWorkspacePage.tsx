@@ -11,6 +11,7 @@ import { useWorkflow } from '../context/WorkflowContext';
 import ReactMarkdown from 'react-markdown';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const EMPTY_ARRAY: any[] = [];
 
 /** Safely normalise any API response into an array. Logs bad payloads in dev. */
 function toSafeArray<T>(data: unknown, label = 'response'): T[] {
@@ -189,18 +190,18 @@ export const AgentWorkspacePage: React.FC = () => {
   const activeWorkflow = activeWorkflowId ? workflows[activeWorkflowId] : null;
 
   const executionStatus = activeWorkflow ? activeWorkflow.status : 'idle';
-  const logs = activeWorkflow ? activeWorkflow.logs : [];
-  const planSteps = activeWorkflow ? activeWorkflow.planSteps : [];
+  const logs = activeWorkflow ? activeWorkflow.logs : EMPTY_ARRAY;
+  const planSteps = activeWorkflow ? activeWorkflow.planSteps : EMPTY_ARRAY;
   const currentStepIdx = activeWorkflow ? activeWorkflow.currentStepIdx : -1;
-  const retrievedChunks = activeWorkflow ? activeWorkflow.retrievedChunks : [];
+  const retrievedChunks = activeWorkflow ? activeWorkflow.retrievedChunks : EMPTY_ARRAY;
   const tokensUsed = activeWorkflow ? activeWorkflow.tokensUsed : 0;
-  const providersUsed = activeWorkflow ? activeWorkflow.providersUsed : [];
+  const providersUsed = activeWorkflow ? activeWorkflow.providersUsed : EMPTY_ARRAY;
   const duration = activeWorkflow ? activeWorkflow.duration : 0;
   const confidence = activeWorkflow ? activeWorkflow.confidence : 1.0;
   const analytics = activeWorkflow ? activeWorkflow.analytics : null;
   const executionReport = activeWorkflow ? activeWorkflow.executionReport : null;
   const approvalDiff = activeWorkflow ? activeWorkflow.approvalDiff : null;
-  const approvalFiles = activeWorkflow ? activeWorkflow.approvalFiles : [];
+  const approvalFiles = activeWorkflow ? activeWorkflow.approvalFiles : EMPTY_ARRAY;
   const approvalReason = activeWorkflow ? activeWorkflow.approvalReason : '';
   const streamingProgress = activeWorkflow ? activeWorkflow.current_step || activeWorkflow.status : 'Standby';
   const workflowId = activeWorkflowId;
@@ -237,11 +238,36 @@ export const AgentWorkspacePage: React.FC = () => {
   
   const historyRuns = historyWorkflows;
 
+  // Fetch registered repos
+  const fetchRepositories = useCallback(async () => {
+    setIsLoadingRepos(true);
+    setRepoError(null);
+    try {
+      const response = await fetch(`${API_BASE_URL}/repositories`);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      const data: unknown = await response.json();
+      const repos = toSafeArray<any>(data, 'repositories');
+      setRepositories(repos);
+      if (repos.length > 0 && !selectedRepoId) {
+        setSelectedRepoId(repos[0].id);
+      }
+    } catch (e: any) {
+      const msg = e?.message || 'Failed to load repositories.';
+      console.error('[DevMind] fetchRepositories error:', e);
+      setRepoError(msg);
+      setRepositories([]);
+    } finally {
+      setIsLoadingRepos(false);
+    }
+  }, [selectedRepoId]);
+
   // Load repositories & history on mount
   useEffect(() => {
     fetchRepositories();
     fetchHistory();
-  }, [fetchHistory]);
+  }, [fetchRepositories, fetchHistory]);
 
   // Scroll logs to bottom of the container when logs update
   useEffect(() => {
@@ -268,30 +294,7 @@ export const AgentWorkspacePage: React.FC = () => {
 
   const totalLogsHeight = logs.length * itemHeight;
 
-  // Fetch registered repos
-  const fetchRepositories = async () => {
-    setIsLoadingRepos(true);
-    setRepoError(null);
-    try {
-      const response = await fetch(`${API_BASE_URL}/repositories`);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      const data: unknown = await response.json();
-      const repos = toSafeArray<any>(data, 'repositories');
-      setRepositories(repos);
-      if (repos.length > 0 && !selectedRepoId) {
-        setSelectedRepoId(repos[0].id);
-      }
-    } catch (e: any) {
-      const msg = e?.message || 'Failed to load repositories.';
-      console.error('[DevMind] fetchRepositories error:', e);
-      setRepoError(msg);
-      setRepositories([]);
-    } finally {
-      setIsLoadingRepos(false);
-    }
-  };
+
 
   // Execute workflow trigger
   const handleStartWorkflow = useCallback(async () => {

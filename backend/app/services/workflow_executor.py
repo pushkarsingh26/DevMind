@@ -290,11 +290,6 @@ class WorkflowExecutor:
                     vector="HIT" if memory_reusable else "MISS"
                 )
 
-                # ToolRegistry receives the live retrieval_db session.
-                # Step execution will open its own sessions for heavy DB calls,
-                # but tools.db is kept alive for the full execution lifetime.
-                tools = ToolRegistry(workspace_path, self.repository_id, retrieval_db)
-                
                 # Get file tree for SharedContextBundle
                 all_chunk_paths = retrieval_db.query(Chunk.path).filter(Chunk.repository_id == self.repository_id).distinct().all()
                 file_tree = [p[0] for p in all_chunk_paths]
@@ -345,11 +340,10 @@ class WorkflowExecutor:
                     "dependencies": repo.dependencies or {},
                     "largest_files": repo.largest_files or []
                 }
-                # Extract scalar values from repo ORM before we might close the session
+                # Extract scalar values from repo ORM before we close the session
                 repo_repository_hash = repo.repository_hash
-            except Exception:
+            finally:
                 retrieval_db.close()
-                raise
             
             retrieval_time = time.time() - retrieval_started
             console.success(f"Retrieval complete in {retrieval_time:.2f}s")
@@ -450,9 +444,10 @@ class WorkflowExecutor:
                         self._print_execution_status(plan_steps)
                         return "completed", {"cached": True, "total_tokens": 0}
                     
-                    # Run actual step
+                    # Run actual step with isolated db session and tool registry
                     with SessionLocal() as step_db:
-                        status, telemetry = await self.engine.execute_step(step_obj, self.context, tools, step_db)
+                        step_tools = ToolRegistry(workspace_path, self.repository_id, step_db)
+                        status, telemetry = await self.engine.execute_step(step_obj, self.context, step_tools, step_db)
                     self._print_execution_status(plan_steps)
                     
                     if status == "failed":

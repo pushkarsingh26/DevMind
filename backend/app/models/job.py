@@ -27,7 +27,7 @@ class AnalysisJob(BaseModel):
 # SQLAlchemy persistent database model
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone
 from app.db.database import Base as DBBase
 
 class AnalysisJobORM(DBBase):
@@ -41,7 +41,7 @@ class AnalysisJobORM(DBBase):
     current_stage = Column(String, nullable=True)
     result = Column(Text, nullable=True)  # Stored as serialized JSON string
     error = Column(Text, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
 
     # Relationships
     repository = relationship("Repository", back_populates="jobs")
