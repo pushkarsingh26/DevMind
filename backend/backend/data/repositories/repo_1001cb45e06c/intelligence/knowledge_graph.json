@@ -1,0 +1,564 @@
+{
+  "metadata": {
+    "graph_version": "v1",
+    "schema_version": "v1",
+    "generator_version": "0.1.0",
+    "generator": "devmind-knowledge-graph",
+    "repository_id": "repo_1001cb45e06c",
+    "repository_hash": "a2f8043549904865741cafc21c4b3e7e",
+    "generated_at": "2026-07-17T10:03:00.580349+00:00",
+    "build_time_ms": 1,
+    "node_count": 32,
+    "edge_count": 10,
+    "node_types": {
+      "file": 8,
+      "module": 8,
+      "symbol": 14,
+      "entry_point": 2
+    },
+    "edge_relationships": {
+      "contains": 8,
+      "entry_to": 2
+    },
+    "validation": {
+      "node_count": 32,
+      "edge_count": 10,
+      "self_loops_removed": 0,
+      "orphan_edges_removed": 0,
+      "duplicate_edges_removed": 0,
+      "is_valid": true
+    }
+  },
+  "nodes": [
+    {
+      "id": "file:extracted/main.py",
+      "type": "file",
+      "name": "main.py",
+      "file": "extracted/main.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "size_bytes": 77,
+        "sha256": "66bd61116dc587c9cff6ea412b55466bbe50d5d908379d4014b8031cf01d7371",
+        "last_modified": 1784282570.5908363,
+        "extension": ".py"
+      }
+    },
+    {
+      "id": "file:extracted/pkg/file_0.py",
+      "type": "file",
+      "name": "file_0.py",
+      "file": "extracted/pkg/file_0.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "size_bytes": 100,
+        "sha256": "9fb4d374cf2a2e133a75f7e74bdcf310626efef7f638391f0847188c89e869db",
+        "last_modified": 1784282570.5899968,
+        "extension": ".py"
+      }
+    },
+    {
+      "id": "file:extracted/pkg/file_1.py",
+      "type": "file",
+      "name": "file_1.py",
+      "file": "extracted/pkg/file_1.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "size_bytes": 100,
+        "sha256": "cd9a8c1e85e6567a17b6babf654fc91cacf35acb9dbc19f12ea20d156c8e5f1f",
+        "last_modified": 1784282570.5899968,
+        "extension": ".py"
+      }
+    },
+    {
+      "id": "file:extracted/pkg/file_2.py",
+      "type": "file",
+      "name": "file_2.py",
+      "file": "extracted/pkg/file_2.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "size_bytes": 100,
+        "sha256": "e2500b9026cc7d7cc9f07b2ed21c4122e36bb5055d95781835b82dcede46ef47",
+        "last_modified": 1784282570.5899968,
+        "extension": ".py"
+      }
+    },
+    {
+      "id": "file:repo/main.py",
+      "type": "file",
+      "name": "main.py",
+      "file": "repo/main.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "size_bytes": 77,
+        "sha256": "66bd61116dc587c9cff6ea412b55466bbe50d5d908379d4014b8031cf01d7371",
+        "last_modified": 1784282570.5908363,
+        "extension": ".py"
+      }
+    },
+    {
+      "id": "file:repo/pkg/file_0.py",
+      "type": "file",
+      "name": "file_0.py",
+      "file": "repo/pkg/file_0.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "size_bytes": 100,
+        "sha256": "9fb4d374cf2a2e133a75f7e74bdcf310626efef7f638391f0847188c89e869db",
+        "last_modified": 1784282570.5899968,
+        "extension": ".py"
+      }
+    },
+    {
+      "id": "file:repo/pkg/file_1.py",
+      "type": "file",
+      "name": "file_1.py",
+      "file": "repo/pkg/file_1.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "size_bytes": 100,
+        "sha256": "cd9a8c1e85e6567a17b6babf654fc91cacf35acb9dbc19f12ea20d156c8e5f1f",
+        "last_modified": 1784282570.5899968,
+        "extension": ".py"
+      }
+    },
+    {
+      "id": "file:repo/pkg/file_2.py",
+      "type": "file",
+      "name": "file_2.py",
+      "file": "repo/pkg/file_2.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "size_bytes": 100,
+        "sha256": "e2500b9026cc7d7cc9f07b2ed21c4122e36bb5055d95781835b82dcede46ef47",
+        "last_modified": 1784282570.5899968,
+        "extension": ".py"
+      }
+    },
+    {
+      "id": "module:extracted/main.py",
+      "type": "module",
+      "name": "main.py",
+      "file": "extracted/main.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "symbol_count": 0,
+        "import_count": 0
+      }
+    },
+    {
+      "id": "module:extracted/pkg/file_0.py",
+      "type": "module",
+      "name": "file_0.py",
+      "file": "extracted/pkg/file_0.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "symbol_count": 0,
+        "import_count": 0
+      }
+    },
+    {
+      "id": "module:extracted/pkg/file_1.py",
+      "type": "module",
+      "name": "file_1.py",
+      "file": "extracted/pkg/file_1.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "symbol_count": 0,
+        "import_count": 0
+      }
+    },
+    {
+      "id": "module:extracted/pkg/file_2.py",
+      "type": "module",
+      "name": "file_2.py",
+      "file": "extracted/pkg/file_2.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "symbol_count": 0,
+        "import_count": 0
+      }
+    },
+    {
+      "id": "module:repo/main.py",
+      "type": "module",
+      "name": "main.py",
+      "file": "repo/main.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "symbol_count": 0,
+        "import_count": 0
+      }
+    },
+    {
+      "id": "module:repo/pkg/file_0.py",
+      "type": "module",
+      "name": "file_0.py",
+      "file": "repo/pkg/file_0.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "symbol_count": 0,
+        "import_count": 0
+      }
+    },
+    {
+      "id": "module:repo/pkg/file_1.py",
+      "type": "module",
+      "name": "file_1.py",
+      "file": "repo/pkg/file_1.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "symbol_count": 0,
+        "import_count": 0
+      }
+    },
+    {
+      "id": "module:repo/pkg/file_2.py",
+      "type": "module",
+      "name": "file_2.py",
+      "file": "repo/pkg/file_2.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "symbol_count": 0,
+        "import_count": 0
+      }
+    },
+    {
+      "id": "sym:py:extracted/main.py:main:function",
+      "type": "symbol",
+      "name": "main",
+      "file": null,
+      "language": "python",
+      "line": 3,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 4,
+        "id_hash": "0062f0e3bef1b5b69a8cd21b865111bd6dc7eac4d6da676f506dc29fc91a682c",
+        "original_id": "py:extracted/main.py:main:function"
+      }
+    },
+    {
+      "id": "sym:py:extracted/pkg/file_0.py:func_0:function",
+      "type": "symbol",
+      "name": "func_0",
+      "file": null,
+      "language": "python",
+      "line": 2,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 3,
+        "id_hash": "ba61d026b81f4638123da25b12323243bcb2bbd7cd31ff6f23503953e50b24ce",
+        "original_id": "py:extracted/pkg/file_0.py:func_0:function"
+      }
+    },
+    {
+      "id": "sym:py:extracted/pkg/file_0.py:helper_0:function",
+      "type": "symbol",
+      "name": "helper_0",
+      "file": null,
+      "language": "python",
+      "line": 5,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 6,
+        "id_hash": "136d7a4f4abe791857fde47907417ea55748505b6b72faeed4585ed88482e3fe",
+        "original_id": "py:extracted/pkg/file_0.py:helper_0:function"
+      }
+    },
+    {
+      "id": "sym:py:extracted/pkg/file_1.py:func_1:function",
+      "type": "symbol",
+      "name": "func_1",
+      "file": null,
+      "language": "python",
+      "line": 2,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 3,
+        "id_hash": "60f98594643be286bbb30e62668bf7034e8e72f95aca84bd3fb950054ebddbc5",
+        "original_id": "py:extracted/pkg/file_1.py:func_1:function"
+      }
+    },
+    {
+      "id": "sym:py:extracted/pkg/file_1.py:helper_1:function",
+      "type": "symbol",
+      "name": "helper_1",
+      "file": null,
+      "language": "python",
+      "line": 5,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 6,
+        "id_hash": "257fd9e9c7f8f7a24607d99f0d615273f584ae996b84d04c806eb6e40e73732e",
+        "original_id": "py:extracted/pkg/file_1.py:helper_1:function"
+      }
+    },
+    {
+      "id": "sym:py:extracted/pkg/file_2.py:func_2:function",
+      "type": "symbol",
+      "name": "func_2",
+      "file": null,
+      "language": "python",
+      "line": 2,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 3,
+        "id_hash": "ef075ba8e39a863349cddf10f1227918f7eee51b9ca4511670db22fccddeb79c",
+        "original_id": "py:extracted/pkg/file_2.py:func_2:function"
+      }
+    },
+    {
+      "id": "sym:py:extracted/pkg/file_2.py:helper_2:function",
+      "type": "symbol",
+      "name": "helper_2",
+      "file": null,
+      "language": "python",
+      "line": 5,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 6,
+        "id_hash": "e294e0ee5de89c43b18312d698573aaae085087c51f21ec3e9426bdca994b72d",
+        "original_id": "py:extracted/pkg/file_2.py:helper_2:function"
+      }
+    },
+    {
+      "id": "sym:py:repo/main.py:main:function",
+      "type": "symbol",
+      "name": "main",
+      "file": null,
+      "language": "python",
+      "line": 3,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 4,
+        "id_hash": "5cd51341c1f5a950f2a83542df77284db8ecc53547ac2f3e824974fccf511c9c",
+        "original_id": "py:repo/main.py:main:function"
+      }
+    },
+    {
+      "id": "sym:py:repo/pkg/file_0.py:func_0:function",
+      "type": "symbol",
+      "name": "func_0",
+      "file": null,
+      "language": "python",
+      "line": 2,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 3,
+        "id_hash": "023f8255813f93da13770850b1212f5382284801565a6697da54b1aa8255e951",
+        "original_id": "py:repo/pkg/file_0.py:func_0:function"
+      }
+    },
+    {
+      "id": "sym:py:repo/pkg/file_0.py:helper_0:function",
+      "type": "symbol",
+      "name": "helper_0",
+      "file": null,
+      "language": "python",
+      "line": 5,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 6,
+        "id_hash": "1105b57eecd5dce6371718573e764e46dba53e798fca850ad388d1b5e74ca59f",
+        "original_id": "py:repo/pkg/file_0.py:helper_0:function"
+      }
+    },
+    {
+      "id": "sym:py:repo/pkg/file_1.py:func_1:function",
+      "type": "symbol",
+      "name": "func_1",
+      "file": null,
+      "language": "python",
+      "line": 2,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 3,
+        "id_hash": "5a7e46db7e55b11c49106e78763a115e53cd015daf2a0fca1539d9fc867d011c",
+        "original_id": "py:repo/pkg/file_1.py:func_1:function"
+      }
+    },
+    {
+      "id": "sym:py:repo/pkg/file_1.py:helper_1:function",
+      "type": "symbol",
+      "name": "helper_1",
+      "file": null,
+      "language": "python",
+      "line": 5,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 6,
+        "id_hash": "48de8742d6eb01eeecdaf3bf2e8d0a352f22f4203f2095097b171db7522b0979",
+        "original_id": "py:repo/pkg/file_1.py:helper_1:function"
+      }
+    },
+    {
+      "id": "sym:py:repo/pkg/file_2.py:func_2:function",
+      "type": "symbol",
+      "name": "func_2",
+      "file": null,
+      "language": "python",
+      "line": 2,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 3,
+        "id_hash": "d09f02df72b397efaa4a4fe30349def78808c0dc78f5516fcda7cfb00fe1b5b7",
+        "original_id": "py:repo/pkg/file_2.py:func_2:function"
+      }
+    },
+    {
+      "id": "sym:py:repo/pkg/file_2.py:helper_2:function",
+      "type": "symbol",
+      "name": "helper_2",
+      "file": null,
+      "language": "python",
+      "line": 5,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 6,
+        "id_hash": "f87c8f748f3ea3c467b037ed1f53bfc017f29777c58bed4e728440f43df770b5",
+        "original_id": "py:repo/pkg/file_2.py:helper_2:function"
+      }
+    },
+    {
+      "id": "entry:extracted/main.py",
+      "type": "entry_point",
+      "name": "main.py",
+      "file": "extracted/main.py",
+      "language": null,
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "source": "statistics.entry_points"
+      }
+    },
+    {
+      "id": "entry:repo/main.py",
+      "type": "entry_point",
+      "name": "main.py",
+      "file": "repo/main.py",
+      "language": null,
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "source": "statistics.entry_points"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:extracted/main.py",
+      "target": "module:extracted/main.py",
+      "relationship": "contains",
+      "confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "source": "file:extracted/pkg/file_0.py",
+      "target": "module:extracted/pkg/file_0.py",
+      "relationship": "contains",
+      "confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "source": "file:extracted/pkg/file_1.py",
+      "target": "module:extracted/pkg/file_1.py",
+      "relationship": "contains",
+      "confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "source": "file:extracted/pkg/file_2.py",
+      "target": "module:extracted/pkg/file_2.py",
+      "relationship": "contains",
+      "confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "source": "file:repo/main.py",
+      "target": "module:repo/main.py",
+      "relationship": "contains",
+      "confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "source": "file:repo/pkg/file_0.py",
+      "target": "module:repo/pkg/file_0.py",
+      "relationship": "contains",
+      "confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "source": "file:repo/pkg/file_1.py",
+      "target": "module:repo/pkg/file_1.py",
+      "relationship": "contains",
+      "confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "source": "file:repo/pkg/file_2.py",
+      "target": "module:repo/pkg/file_2.py",
+      "relationship": "contains",
+      "confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "source": "entry:extracted/main.py",
+      "target": "module:extracted/main.py",
+      "relationship": "entry_to",
+      "confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "source": "entry:repo/main.py",
+      "target": "module:repo/main.py",
+      "relationship": "entry_to",
+      "confidence": 1.0,
+      "metadata": {}
+    }
+  ]
+}

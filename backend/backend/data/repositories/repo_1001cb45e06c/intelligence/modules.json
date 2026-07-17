@@ -1,0 +1,66 @@
+[
+  {
+    "path": "extracted/main.py",
+    "extension": ".py",
+    "size_bytes": 77,
+    "last_modified": 1784282570.5908363,
+    "sha256": "66bd61116dc587c9cff6ea412b55466bbe50d5d908379d4014b8031cf01d7371",
+    "language": "python"
+  },
+  {
+    "path": "extracted/pkg/file_0.py",
+    "extension": ".py",
+    "size_bytes": 100,
+    "last_modified": 1784282570.5899968,
+    "sha256": "9fb4d374cf2a2e133a75f7e74bdcf310626efef7f638391f0847188c89e869db",
+    "language": "python"
+  },
+  {
+    "path": "extracted/pkg/file_1.py",
+    "extension": ".py",
+    "size_bytes": 100,
+    "last_modified": 1784282570.5899968,
+    "sha256": "cd9a8c1e85e6567a17b6babf654fc91cacf35acb9dbc19f12ea20d156c8e5f1f",
+    "language": "python"
+  },
+  {
+    "path": "extracted/pkg/file_2.py",
+    "extension": ".py",
+    "size_bytes": 100,
+    "last_modified": 1784282570.5899968,
+    "sha256": "e2500b9026cc7d7cc9f07b2ed21c4122e36bb5055d95781835b82dcede46ef47",
+    "language": "python"
+  },
+  {
+    "path": "repo/main.py",
+    "extension": ".py",
+    "size_bytes": 77,
+    "last_modified": 1784282570.5908363,
+    "sha256": "66bd61116dc587c9cff6ea412b55466bbe50d5d908379d4014b8031cf01d7371",
+    "language": "python"
+  },
+  {
+    "path": "repo/pkg/file_0.py",
+    "extension": ".py",
+    "size_bytes": 100,
+    "last_modified": 1784282570.5899968,
+    "sha256": "9fb4d374cf2a2e133a75f7e74bdcf310626efef7f638391f0847188c89e869db",
+    "language": "python"
+  },
+  {
+    "path": "repo/pkg/file_1.py",
+    "extension": ".py",
+    "size_bytes": 100,
+    "last_modified": 1784282570.5899968,
+    "sha256": "cd9a8c1e85e6567a17b6babf654fc91cacf35acb9dbc19f12ea20d156c8e5f1f",
+    "language": "python"
+  },
+  {
+    "path": "repo/pkg/file_2.py",
+    "extension": ".py",
+    "size_bytes": 100,
+    "last_modified": 1784282570.5899968,
+    "sha256": "e2500b9026cc7d7cc9f07b2ed21c4122e36bb5055d95781835b82dcede46ef47",
+    "language": "python"
+  }
+]

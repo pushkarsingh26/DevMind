@@ -1,13 +1,20 @@
 import os
 import time
 from typing import Callable, Optional, Dict, Any
+
 from app.core.config import settings
+from app.core.logger import logger
+from app.services.vector_store_service import vector_store_service
+from app.services.chunk_service import chunk_service
+from app.services.intelligence.intelligence_manager import intelligence_manager
+from app.services.intelligence.intelligence_service import intelligence_service
+from app.services.knowledge_graph import graph_manager  # Phase 8.2
 from app.services.repository_service import repository_service
 from app.services.scanner_service import scanner_service
-from app.services.chunk_service import chunk_service
-from app.core.logger import logger
+
 
 class PipelineService:
+
     def _get_git_commit_hash(self, local_path: str) -> str:
         try:
             import git
@@ -357,7 +364,6 @@ class PipelineService:
                     existing_repo.dependencies = metadata.dependencies
                     existing_repo.package_managers = metadata.package_managers
                     db.commit()
-                    from app.services.vector_store_service import vector_store_service
                     vector_store_service.invalidate_cache(repo_id)
                 else:
                     repo_id = f"repo_{uuid.uuid4().hex[:12]}"
@@ -406,6 +412,51 @@ class PipelineService:
 
                 from app.services.rag_service import rag_service
                 rag_service.index_repository(db, repo_id, job_id, chunks)
+
+            # 4b. Build Repository Intelligence
+            try:
+                intel_result = intelligence_service.build_intelligence(
+                    repo_path=local_path,
+                    repo_id=repo_id,
+                    repo_hash=repo_hash,
+                )
+                intelligence_manager.load(
+                    repo_id=repo_id,
+                    intelligence_path=intel_result["intelligence_path"],
+                    repo_hash=intel_result["repo_hash"],
+                )
+                # Persist intelligence_path in DB
+                with SessionLocal() as db:
+                    from app.models.repository import Repository
+                    repo_row = db.query(Repository).filter(Repository.id == repo_id).first()
+                    if repo_row is not None:
+                        repo_row.intelligence_path = intel_result["intelligence_path"]
+                        db.commit()
+                logger.info(
+                    f"[Pipeline] Intelligence built for {repo_id} "
+                    f"in {intel_result['build_time_ms']} ms"
+                )
+            except Exception as intel_exc:
+                logger.warning(f"[Pipeline] Intelligence build failed for {repo_id}: {intel_exc}")
+
+            # 4c. Build Knowledge Graph (delegated to GraphManager)
+            try:
+                intel_path = intel_result.get("intelligence_path", "") if 'intel_result' in dir() else ""
+                if intel_path:
+                    graph_manager.ensure_graph(repo_id, intel_path, repo_hash)
+                    logger.info(f"[Pipeline] Knowledge graph ensured for {repo_id}")
+            except Exception as graph_exc:
+                logger.warning(f"[Pipeline] Knowledge graph build failed for {repo_id}: {graph_exc}")
+
+            # 4d. Build Repository Analysis
+            try:
+                intel_path = intel_result.get("intelligence_path", "") if 'intel_result' in dir() else ""
+                if intel_path:
+                    from app.services.repository_analysis.analysis_engine import repository_analysis_engine
+                    repository_analysis_engine.ensure_analysis(repo_id, intel_path, repo_hash)
+                    logger.info(f"[Pipeline] Repository analysis ensured for {repo_id}")
+            except Exception as analysis_exc:
+                logger.warning(f"[Pipeline] Repository analysis build failed for {repo_id}: {analysis_exc}")
 
             # 5. Critic Report Formatting
             notify_progress(85)

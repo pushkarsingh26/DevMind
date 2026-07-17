@@ -1,0 +1,42 @@
+{
+  "languages": [
+    "javascript",
+    "python",
+    "typescript"
+  ],
+  "language_file_counts": {
+    "javascript": 2,
+    "python": 111,
+    "typescript": 66
+  },
+  "total_files": 417,
+  "source_files": 179,
+  "classes": 141,
+  "functions": 196,
+  "methods": 411,
+  "structs": 0,
+  "interfaces": 63,
+  "enums": 0,
+  "traits": 0,
+  "constants": 72,
+  "total_symbols": 890,
+  "total_imports": 1244,
+  "total_dependencies": 30,
+  "largest_files": [
+    "src/pages/AgentWorkspacePage.tsx",
+    "src/components/OutputPanel.tsx",
+    "backend/app/services/workflow_executor.py",
+    "backend/app/ai/ai_service.py",
+    "backend/app/core/console.py",
+    "backend/app/chat/conversation_service.py",
+    "backend/app/services/pipeline_service.py",
+    "backend/tests/test_rag.py",
+    "src/pages/SettingsPage.tsx",
+    "src/layouts/MainLayout.tsx"
+  ],
+  "entry_points": [
+    "backend/app/main.py",
+    "src/components/ui/index.ts",
+    "src/types/index.ts"
+  ]
+}

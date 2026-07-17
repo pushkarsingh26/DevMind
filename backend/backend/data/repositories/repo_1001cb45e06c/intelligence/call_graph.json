@@ -1,0 +1,8 @@
+{
+  "status": "not_built",
+  "version": "v0",
+  "generated_at": null,
+  "nodes": [],
+  "edges": [],
+  "message": "Call graph will be built in Phase 8.3. Symbols and imports are available for future analysis."
+}

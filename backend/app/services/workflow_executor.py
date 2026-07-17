@@ -1,9 +1,11 @@
+from datetime import timezone
 from app.services.retrieval_service import retrieval_service
 import os
 import json
 import time
 import shutil
 import asyncio
+import threading
 import traceback
 from datetime import datetime
 from typing import Dict, Any, List, Optional, Callable
@@ -20,6 +22,10 @@ from app.agents.tool_registry import ToolRegistry
 from app.agents.workflow_templates import WORKFLOW_TEMPLATES
 from app.agents.workflow_engine import WorkflowEngine
 from app.utils import workflow_storage
+
+# Phase 8.7 Memory Engine Integration
+from app.services.memory import learning_engine
+from app.services.memory.workflow_memory import build_workflow_memory
 
 # Detect asyncio.TaskGroup availability once at module load (Python 3.11+)
 _HAS_TASK_GROUP = hasattr(asyncio, "TaskGroup")
@@ -71,6 +77,8 @@ class WorkflowExecutor:
 
         self._status = "queued"
         self._progress = 0
+        self._lock = threading.RLock()
+        self._repository_hash = ""
 
     @property
     def status(self) -> str:
@@ -165,6 +173,81 @@ class WorkflowExecutor:
                             self.context.add_log(f"Successfully wrote modified code to '{file_path}'")
                         except Exception as e:
                             self.context.add_log(f"Failed to write changes to '{file_path}': {str(e)}", level="ERROR")
+
+    def _record_workflow_memory(self, success: bool, repo_hash: str):
+        """Compiles and registers WorkflowMemory to learning engine on completion/failure."""
+        try:
+            findings = []
+            for out in self.context.agent_outputs:
+                if isinstance(out, dict) and "result" in out:
+                    res = out["result"]
+                    if isinstance(res, dict):
+                        findings.extend(res.get("findings", []) or res.get("key_findings", []))
+
+            prov_used = list(set(self.context.providers_used))
+            exec_metrics = {
+                "retry_count": self.context.retry_count,
+                "cache_hits": self.context.cache_hits,
+                "cache_misses": self.context.cache_misses,
+                "tokens_used": self.context.tokens_used,
+            }
+
+            execution_plan_dict = {
+                "steps": [
+                    {
+                        "step_id": s.get("step"),
+                        "agent": s.get("agent"),
+                        "files": s.get("files", []),
+                    }
+                    for s in self.context.completed_steps
+                ]
+            }
+
+            wf_mem = build_workflow_memory(
+                workflow_id=self.workflow_id,
+                goal=self.goal,
+                intent=self.workflow_type,
+                execution_plan=execution_plan_dict,
+                execution_metrics=exec_metrics,
+                collaboration_summary={
+                    "overall_confidence": getattr(self.context, "collaboration_snapshot", {}).get("confidence", 0.8)
+                },
+                findings=findings,
+                duration=self.context.get_elapsed_time(),
+                provider_usage=prov_used,
+                success=success,
+            )
+
+            learning_engine.update_workflow_run(self.repository_id, repo_hash, wf_mem)
+            self.context.add_log(f"Successfully recorded workflow outcomes to Memory & Learning Engine.")
+
+            # Phase 8.9 — Record Decision History
+            try:
+                from app.services.decision.decision_storage import add_history_record
+                from app.services.decision.decision_models import DecisionHistoryRecord
+                from datetime import datetime, timezone
+                
+                score = 0.0
+                priority = "low"
+                if self.context.decision_summary:
+                    score = self.context.decision_summary.decision_score
+                    priority = self.context.decision_summary.priority_level
+
+                dec_record = DecisionHistoryRecord(
+                    workflow_id=self.workflow_id,
+                    goal=self.goal,
+                    intent=self.workflow_type,
+                    decision_score=score,
+                    priority_level=priority,
+                    success=success,
+                    completed_at=datetime.now(timezone.utc).isoformat(),
+                )
+                add_history_record(self.repository_id, dec_record)
+                self.context.add_log("Successfully recorded workflow outcomes to Decision History.")
+            except Exception as dec_exc:
+                logger.warning(f"Failed to record decision history: {dec_exc}")
+        except Exception as exc:
+            logger.error(f"Failed to record workflow memory for {self.workflow_id}: {exc}")
 
     def _print_execution_status(self, plan_steps: List[Dict[str, Any]]):
         from app.core.console import console
@@ -342,6 +425,7 @@ class WorkflowExecutor:
                 }
                 # Extract scalar values from repo ORM before we close the session
                 repo_repository_hash = repo.repository_hash
+                self._repository_hash = repo_repository_hash
             finally:
                 retrieval_db.close()
             
@@ -353,43 +437,90 @@ class WorkflowExecutor:
             self._update_status("planning", 20)
             self.on_event(self.workflow_id, "workflow_progress", {"progress": 20, "status": "planning"})
             
-            console.workflow("Starting Planning Phase...")
+            console.workflow("Starting Intelligent Planning Phase...")
             planning_started = time.time()
-            plan_steps: List[Dict[str, Any]] = []
-            rationale = "Custom execution"
+            
+            from app.services.planning.planning_engine import planning_engine
+            from app.services.planning.planning_storage import planning_storage
 
-            if self.workflow_type in WORKFLOW_TEMPLATES:
-                template_steps = WORKFLOW_TEMPLATES[self.workflow_type]
-                plan_steps = template_steps
-                rationale = f"Executing predefined '{self.workflow_type}' template agent chain."
-                console.workflow(f"Loaded preset workflow template: {self.workflow_type}")
+            # Check cache
+            plan = planning_storage.validate_cache(self.repository_id, self.goal, repo_repository_hash)
+            if plan:
+                console.success(f"Planning cache HIT. Reusing plan {plan.plan_id}")
+                self.context.add_log(f"Reused cached execution plan {plan.plan_id}")
             else:
-                try:
-                    from app.agents.agent_registry import agent_registry
-                    planner_cls = agent_registry.get_agent_class("Planner Agent")
-                    planner = planner_cls()
-                    plan_schema, telemetry = await planner.plan_goal(self.goal, repo_meta)
-                    plan_steps = [s.model_dump() for s in plan_schema.plan]
-                    rationale = plan_schema.rationale
-                    self.context.tokens_used += telemetry.get("total_tokens", 0)
-                    if telemetry.get("provider"):
-                        self.context.providers_used.append(telemetry["provider"])
-                except Exception as e:
-                    console.warning(f"Planner failed: {e}. Falling back to default Architecture Review.")
-                    plan_steps = WORKFLOW_TEMPLATES["Architecture Review"]
+                console.workflow("Planning cache MISS. Generating optimized execution plan...")
+                plan = planning_engine.generate_plan(self.repository_id, self.goal)
+                planning_storage.save_plan(self.repository_id, plan)
+                self.context.add_log(f"Generated new execution plan {plan.plan_id}")
 
+            plan_steps = []
+            for s in plan.steps:
+                plan_steps.append({
+                    "step_id": s.step_id,
+                    "name": s.title,  # map title to name for backward compatibility
+                    "agent": s.agent,
+                    "description": s.description,
+                    "execution_group": s.execution_group,
+                    "estimated_duration": s.estimated_duration,
+                    "estimated_token_cost": s.estimated_token_cost
+                })
+
+            rationale = plan.rationale
+            
             # Save plan to graph.json atomically on background thread
             dw_start = time.time()
             graph_path = await asyncio.to_thread(
-                workflow_storage.save_json, self.workflow_id, "graph.json", {
-                    "steps": plan_steps,
-                    "rationale": rationale
-                }
+                workflow_storage.save_json, self.workflow_id, "graph.json", plan.to_dict()
             )
             disk_write_time += time.time() - dw_start
             
             planning_time = time.time() - planning_started
             console.success(f"Planning complete in {planning_time:.2f}s")
+
+            # Phase 8.8 — Attach Reasoning Context to ExecutionContext (non-blocking)
+            try:
+                intel_path_for_reasoning = ""
+                with SessionLocal() as db:
+                    _repo_r = db.query(Repository).filter(Repository.id == self.repository_id).first()
+                    if _repo_r:
+                        intel_path_for_reasoning = _repo_r.intelligence_path or ""
+                from app.services.reasoning.reasoning_engine import reasoning_engine as _re
+                _summary = await asyncio.to_thread(
+                    _re.ensure,
+                    self.repository_id,
+                    self.goal,
+                    repo_repository_hash,
+                    intel_path_for_reasoning,
+                )
+                self.context.reasoning_summary = _summary
+                self.context.reasoning_metrics = _re.get_metrics(self.repository_id)
+                self.context.reasoning_context = _summary.reasoning_context if _summary else None
+                self.context.add_log(
+                    f"Reasoning Engine: score={getattr(_summary, 'reasoning_score', 0):.3f}, "
+                    f"confidence={getattr(_summary, 'confidence', 0):.3f}"
+                )
+            except Exception as _re_exc:
+                logger.warning(f"[WorkflowExecutor] Reasoning engine non-blocking failure: {_re_exc}")
+
+            # Phase 8.9 — Attach Decision Engine context to ExecutionContext (non-blocking)
+            try:
+                from app.services.decision.decision_engine import decision_engine as _de
+                _d_summary = await asyncio.to_thread(
+                    _de.ensure,
+                    self.repository_id,
+                    self.goal,
+                    repo_repository_hash,
+                    intel_path_for_reasoning,
+                )
+                self.context.decision_summary = _d_summary
+                self.context.add_log(
+                    f"Decision Engine: score={getattr(_d_summary, 'decision_score', 0):.3f}, "
+                    f"level={getattr(_d_summary, 'priority_level', 'low')}, "
+                    f"recommendation={getattr(_d_summary, 'execution_recommendation', 'PROCEED')}"
+                )
+            except Exception as _de_exc:
+                logger.warning(f"[WorkflowExecutor] Decision engine non-blocking failure: {_de_exc}")
 
             # Write initial paths metadata to DB
             with SessionLocal() as db:
@@ -399,60 +530,233 @@ class WorkflowExecutor:
                     db_wf.logs_path = os.path.join(workflow_storage.get_workflow_dir(self.workflow_id), "logs.jsonl")
                     db.commit()
 
-            self.on_event(self.workflow_id, "workflow_log", f"System: Execution Plan formulated. Rationale: {rationale}")
+            self.on_event(self.workflow_id, "workflow_log", f"System: Dynamic Execution Plan formulated. Rationale: {rationale}")
 
-            # 4. Executing phase with Concurrency Tiers
+            # 4. Executing phase with Concurrency Tiers derived from topological order levels
             self._update_status("executing", 25)
             self._print_execution_status(plan_steps)
             
-            # Map agents to Tiers
-            AGENT_TIERS = {
-                "Repository Agent": 1,
-                "Security Agent": 2,
-                "Performance Agent": 2,
-                "Testing Agent": 2,
-                "Review Agent": 2,
-                "Documentation Agent": 2,
-                "Refactor Agent": 3,
-                "Summary Agent": 4
-            }
-            
-            # Group steps
-            tier_groups = {1: [], 2: [], 3: [], 4: []}
-            for step in plan_steps:
-                agent_name = step.get("agent", "Review Agent")
-                tier = AGENT_TIERS.get(agent_name, 2)
-                tier_groups[tier].append(step)
+            # Group steps dynamically by parallel_groups metrics (topological sort levels)
+            tier_groups = {}
+            for level_idx, group_str in enumerate(plan.metrics.parallel_groups):
+                level_step_ids = group_str.split(",")
+                tier_steps = [s for s in plan_steps if s["step_id"] in level_step_ids]
+                if tier_steps:
+                    tier_groups[level_idx + 1] = tier_steps
 
-            completed_count = 0
+            # Initialize execution state, metrics, and budget
+            from app.services.execution.execution_manager import execution_manager
+            from app.services.execution.checkpoint_storage import checkpoint_storage
+            from app.services.execution.retry_policy import retry_policy
+            from app.services.execution.provider_selector import provider_selector
+            from app.services.execution.execution_models import ExecutionCheckpoint, ExecutionEvent
+
+            state, metrics, budget = execution_manager.initialize_run(self.workflow_id, self.repository_id, plan_steps)
+            state.status = "running"
+            checkpoint_storage.save_state(self.workflow_id, state, metrics, budget)
+
+            checkpoints = checkpoint_storage.load_checkpoints(self.workflow_id)
+            completed_ids = [cp.step_id for cp in checkpoints if cp.status == "completed"]
+            completed_count = len(completed_ids)
             total_steps = len(plan_steps)
             sem = asyncio.Semaphore(3)
 
             async def run_step_with_concurrency(step_obj):
                 async with sem:
                     await self._pause_event.wait()
+                    step_id = step_obj.get("step_id")
                     step_name = step_obj.get("name")
                     agent_name = step_obj.get("agent")
                     
                     self.context.current_step = step_name
                     self._print_execution_status(plan_steps)
-                    
-                    # If step is Repository Agent, check if memory is reusable to skip LLM calls
-                    if agent_name == "Repository Agent" and memory_reusable:
-                        self.context.add_log(f"Skipping duplicate scan for Repository Agent (Memory is Reusable).")
-                        self.context.record_step_complete(step_name, "completed", "Loaded from past Repository Memory.")
+
+                    # Check checkpoint recovery status
+                    if step_id in completed_ids:
+                        self.context.add_log(f"Skipping completed step '{step_name}' (restored from checkpoint).")
+                        self.context.record_step_complete(step_name, "completed", "Restored from checkpoint storage.")
                         self._print_execution_status(plan_steps)
                         return "completed", {"cached": True, "total_tokens": 0}
+
+                    # Determine active provider
+                    current_provider = metrics.active_provider
+                    status = "failed"
+                    telemetry = {}
                     
-                    # Run actual step with isolated db session and tool registry
-                    with SessionLocal() as step_db:
-                        step_tools = ToolRegistry(workspace_path, self.repository_id, step_db)
-                        status, telemetry = await self.engine.execute_step(step_obj, self.context, step_tools, step_db)
-                    self._print_execution_status(plan_steps)
+                    max_attempts = 3
+                    attempt = 0
                     
-                    if status == "failed":
-                        raise Exception(f"Step '{step_name}' failed.")
+                    while attempt < max_attempts:
+                        await self._pause_event.wait()
+                        start_time_sec = time.time()
                         
+                        # Log started event
+                        checkpoint_storage.log_event(self.workflow_id, ExecutionEvent(
+                            timestamp=datetime.now(timezone.utc).isoformat(),
+                            step_id=step_id,
+                            event="started",
+                            provider=current_provider,
+                            duration_ms=0,
+                            retry=attempt
+                        ))
+
+                        try:
+                            # If step is Repository Agent, check if memory is reusable to skip LLM calls
+                            if agent_name == "Repository Agent" and memory_reusable:
+                                self.context.add_log(f"Skipping duplicate scan for Repository Agent (Memory is Reusable).")
+                                self.context.record_step_complete(step_name, "completed", "Loaded from past Repository Memory.")
+                                status, telemetry = "completed", {"cached": True, "total_tokens": 0}
+                            else:
+                                old_provider = settings.AI_PROVIDER
+                                old_chain = settings.AI_PROVIDER_CHAIN
+                                settings.AI_PROVIDER = current_provider
+                                chain_list = [p.strip().lower() for p in old_chain.split(",")]
+                                if current_provider in chain_list:
+                                    chain_list.remove(current_provider)
+                                chain_list.insert(0, current_provider)
+                                settings.AI_PROVIDER_CHAIN = ",".join(chain_list)
+                                
+                                try:
+                                    with SessionLocal() as step_db:
+                                        step_tools = ToolRegistry(workspace_path, self.repository_id, step_db)
+                                        status, telemetry = await self.engine.execute_step(step_obj, self.context, step_tools, step_db)
+                                finally:
+                                    settings.AI_PROVIDER = old_provider
+                                    settings.AI_PROVIDER_CHAIN = old_chain
+                            
+                            if status == "failed":
+                                raise Exception("Agent returned failed execution status.")
+                            
+                            # Step completed successfully
+                            break
+                        except Exception as e:
+                            logger.warning(f"Step {step_id} execution failed (attempt {attempt + 1}): {e}")
+                            attempt += 1
+                            
+                            if attempt < max_attempts and retry_policy.should_retry(e):
+                                delay = retry_policy.get_delay(attempt)
+                                self.context.add_log(f"Retryable error encountered. Retrying step {step_id} in {delay:.2f}s...")
+                                checkpoint_storage.log_event(self.workflow_id, ExecutionEvent(
+                                    timestamp=datetime.now(timezone.utc).isoformat(),
+                                    step_id=step_id,
+                                    event="retry",
+                                    provider=current_provider,
+                                    duration_ms=int((time.time() - start_time_sec) * 1000),
+                                    retry=attempt
+                                ))
+                                metrics.retry_count += 1
+                                checkpoint_storage.save_state(self.workflow_id, state, metrics, budget)
+                                await asyncio.sleep(delay)
+                            else:
+                                # Failover to next provider
+                                new_provider = provider_selector.select_best_provider(agent_name, current_provider)
+                                if new_provider != current_provider:
+                                    self.context.add_log(f"Failover: switching provider from '{current_provider}' to '{new_provider}'...")
+                                    checkpoint_storage.log_event(self.workflow_id, ExecutionEvent(
+                                        timestamp=datetime.now(timezone.utc).isoformat(),
+                                        step_id=step_id,
+                                        event="failover",
+                                        provider=new_provider,
+                                        duration_ms=int((time.time() - start_time_sec) * 1000),
+                                        retry=attempt
+                                    ))
+                                    current_provider = new_provider
+                                    metrics.active_provider = new_provider
+                                    checkpoint_storage.save_state(self.workflow_id, state, metrics, budget)
+                                    attempt = 0  # reset attempt counter for failover provider
+                                else:
+                                    status = "failed"
+                                    break
+
+                    self._print_execution_status(plan_steps)
+
+                    if status == "failed":
+                        checkpoint_storage.log_event(self.workflow_id, ExecutionEvent(
+                            timestamp=datetime.now(timezone.utc).isoformat(),
+                            step_id=step_id,
+                            event="failed",
+                            provider=current_provider,
+                            duration_ms=int((time.time() - start_time_sec) * 1000),
+                            retry=attempt
+                        ))
+                        state.status = "failed"
+                        state.failed_step = step_id
+                        checkpoint_storage.save_state(self.workflow_id, state, metrics, budget)
+                        raise Exception(f"Step '{step_name}' failed after attempts and failovers.")
+
+                    step_duration = int(time.time() - start_time_sec)
+                    tokens_used = telemetry.get("total_tokens", 1000)
+                    cost_used = tokens_used * 0.000002
+
+                    budget.used_tokens += tokens_used
+                    budget.used_cost_usd += cost_used
+                    budget.remaining_tokens = max(0, budget.max_tokens - budget.used_tokens)
+                    budget.remaining_cost = max(0.0, budget.max_cost_usd - budget.used_cost_usd)
+
+                    state.last_completed_step = step_id
+                    state.current_step_id = None
+
+                    # Save Checkpoint
+                    checkpoint = ExecutionCheckpoint(
+                        step_id=step_id,
+                        status="completed",
+                        completed_at=datetime.now(timezone.utc).isoformat(),
+                        telemetry={"tokens": tokens_used, "cost": cost_used, "duration_sec": step_duration},
+                        outputs={}
+                    )
+                    checkpoint_storage.save_checkpoint(self.workflow_id, checkpoint)
+
+                    # Run collaboration pipeline after checkpoint saved
+                    if agent_name != "Summary Agent":
+                        from app.services.collaboration.collaboration_pipeline import run_collaboration_pipeline
+
+                        def _run_collab():
+                            with self._lock:
+                                snapshot, validated_text = run_collaboration_pipeline(
+                                    workflow_id=self.workflow_id,
+                                    repository_id=self.repository_id,
+                                    repository_hash=self._repository_hash,
+                                    step_obj=step_obj,
+                                    context=self.context,
+                                    agent_name=agent_name,
+                                )
+                                self.context.collaboration_snapshot = snapshot
+                                if validated_text:
+                                    if not hasattr(self.context, "collaboration_context"):
+                                        self.context.collaboration_context = {}
+                                    self.context.collaboration_context["validated_findings_text"] = validated_text
+
+                        await asyncio.to_thread(_run_collab)
+
+                        if self.context.collaboration_snapshot:
+                            self.on_event(self.workflow_id, "workflow_progress", {
+                                "progress": self._progress,
+                                "status": "executing",
+                                "completed_steps": self.context.completed_steps,
+                                "collaboration": self.context.collaboration_snapshot,
+                            })
+
+                    # Update metrics
+                    metrics.completed_steps += 1
+                    fresh_cps = checkpoint_storage.load_checkpoints(self.workflow_id)
+                    fresh_completed_ids = [cp.step_id for cp in fresh_cps if cp.status == "completed"]
+                    
+                    metrics.remaining_duration_sec_eta = execution_manager.calculate_eta(
+                        plan_steps, fresh_completed_ids, fresh_cps
+                    )
+                    metrics.total_duration_sec += step_duration
+
+                    checkpoint_storage.save_state(self.workflow_id, state, metrics, budget)
+
+                    checkpoint_storage.log_event(self.workflow_id, ExecutionEvent(
+                        timestamp=datetime.now(timezone.utc).isoformat(),
+                        step_id=step_id,
+                        event="completed",
+                        provider=current_provider,
+                        duration_ms=int(step_duration * 1000),
+                        retry=attempt
+                    ))
+
                     # Save intermediate telemetry to disk in background thread
                     nonlocal disk_write_time
                     telemetry_dict = {
@@ -468,7 +772,13 @@ class WorkflowExecutor:
                         "agent_durations": self.context.agent_durations,
                         "elapsed": self.context.get_elapsed_time(),
                         "cache_hit_ratio": (self.context.cache_hits / (self.context.cache_hits + self.context.cache_misses) * 100) if (self.context.cache_hits + self.context.cache_misses) > 0 else 0.0,
-                        "average_agent_duration": (sum(self.context.agent_durations.values()) / len(self.context.agent_durations)) if self.context.agent_durations else 0.0
+                        "average_agent_duration": (sum(self.context.agent_durations.values()) / len(self.context.agent_durations)) if self.context.agent_durations else 0.0,
+                        "graph_build_time_ms": getattr(self.context, "graph_build_time", 0.0),
+                        "graph_cache_hit": getattr(self.context, "graph_cache_hit", False),
+                        "graph_candidates_selected": getattr(self.context, "graph_candidates_selected", 0),
+                        "graph_nodes": getattr(self.context, "graph_nodes", 0),
+                        "graph_edges": getattr(self.context, "graph_edges", 0),
+                        "graph_traversal_time_ms": getattr(self.context, "graph_traversal_time", 0.0)
                     }
                     
                     dw_start = time.time()
@@ -542,7 +852,8 @@ class WorkflowExecutor:
                     self.on_event(self.workflow_id, "workflow_progress", {
                         "progress": progress_pct,
                         "status": "executing",
-                        "completed_steps": self.context.completed_steps
+                        "completed_steps": self.context.completed_steps,
+                        "collaboration": getattr(self.context, "collaboration_snapshot", {}),
                     })
 
             # 5. Completed Report Generation
@@ -605,6 +916,9 @@ class WorkflowExecutor:
             await asyncio.to_thread(write_repo_memory)
             self.context.add_log(f"Saved report findings to persistent Repository Memory under category '{self.workflow_type}'")
 
+            # Phase 8.7: Record successful workflow run to Memory Engine
+            await asyncio.to_thread(self._record_workflow_memory, True, _repo_hash_snapshot)
+
             self._update_status("completed", 100)
             self.on_event(self.workflow_id, "workflow_finished", {
                 "progress": 100,
@@ -647,6 +961,12 @@ class WorkflowExecutor:
                         "cache_hits": self.context.cache_hits,
                         "cache_misses": self.context.cache_misses,
                         "agent_durations": self.context.agent_durations,
+                        "graph_build_time_ms": getattr(self.context, "graph_build_time", 0.0),
+                        "graph_cache_hit": getattr(self.context, "graph_cache_hit", False),
+                        "graph_candidates_selected": getattr(self.context, "graph_candidates_selected", 0),
+                        "graph_nodes": getattr(self.context, "graph_nodes", 0),
+                        "graph_edges": getattr(self.context, "graph_edges", 0),
+                        "graph_traversal_time_ms": getattr(self.context, "graph_traversal_time", 0.0)
                     }
                 )
                 # Persist failure record to DB
@@ -659,6 +979,10 @@ class WorkflowExecutor:
                             db_wf.current_step = self.context.current_step
                             db.commit()
                 await asyncio.to_thread(write_failed_db)
+
+                # Phase 8.7: Record failed workflow run to Memory Engine
+                _repo_hash_snapshot = getattr(self, "_repository_hash", "") or "unknown_hash"
+                await asyncio.to_thread(self._record_workflow_memory, False, _repo_hash_snapshot)
             except Exception as persist_err:
                 logger.error(f"Failed to persist failure state for {self.workflow_id}: {persist_err}")
 

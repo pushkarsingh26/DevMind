@@ -16,6 +16,13 @@ const HistoryPage = React.lazy(() => import('./pages/HistoryPage'));
 const SettingsPage = React.lazy(() => import('./pages/SettingsPage'));
 const FuturePage = React.lazy(() => import('./pages/FuturePage'));
 const AgentWorkspacePage = React.lazy(() => import('./pages/AgentWorkspacePage'));
+const KnowledgeGraphPage = React.lazy(() => import('./pages/KnowledgeGraphPage'));
+const RepositoryAnalysisPage = React.lazy(() => import('./pages/RepositoryAnalysisPage'));
+const PlanningPage = React.lazy(() => import('./pages/PlanningPage'));
+const ExecutionPage = React.lazy(() => import('./pages/ExecutionPage'));
+const CollaborationPage = React.lazy(() => import('./pages/CollaborationPage'));
+const MemoryPage = React.lazy(() => import('./pages/MemoryPage').then(m => ({ default: m.MemoryPage })));
+const ReasoningPage = React.lazy(() => import('./pages/ReasoningPage').then(m => ({ default: m.ReasoningPage })));
 
 // Dynamic loading spinner fallback
 const LoadingFallback = () => (
@@ -40,8 +47,15 @@ function App() {
                     
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/repositories" element={<RepositoriesPage />} />
+                    <Route path="/analysis" element={<RepositoryAnalysisPage />} />
+                    <Route path="/planning" element={<PlanningPage />} />
+                    <Route path="/execution/:workflowId" element={<ExecutionPage />} />
+                    <Route path="/collaboration/:workflowId" element={<CollaborationPage />} />
+                    <Route path="/memory/:repositoryId" element={<MemoryPage />} />
+                    <Route path="/reasoning/:repositoryId" element={<ReasoningPage />} />
                     <Route path="/chat" element={<ChatPage />} />
                     <Route path="/agents" element={<AgentWorkspacePage />} />
+                    <Route path="/graph" element={<KnowledgeGraphPage />} />
                     <Route path="/reports" element={<ReportsPage />} />
                     <Route path="/history" element={<HistoryPage />} />
                     <Route path="/settings" element={<SettingsPage />} />

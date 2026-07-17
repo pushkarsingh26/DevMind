@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 from jinja2 import Template
 from app.core.logger import logger
 from app.ai.prompt_templates import (
@@ -11,6 +11,7 @@ from app.ai.prompt_templates import (
 class PromptBuilder:
     """
     Compiles system and user prompts, performing deduplication and merging of code context chunks.
+    Optionally injects structured knowledge-graph context before RAG chunks.
     """
     def __init__(self):
         self._templates = {
@@ -145,10 +146,14 @@ class PromptBuilder:
         self,
         task_type: str,
         repository_metadata: Dict[str, Any],
-        chunks: List[Dict[str, Any]]
+        chunks: List[Dict[str, Any]],
+        graph_context: Optional[str] = None,
+        goal: Optional[str] = None,
+        analysis_context: Optional[str] = None,
     ) -> Tuple[str, str]:
         """
         Optimizes chunks and renders system/user prompt templates using Jinja.
+        Injects graph_context before RAG chunks when available.
         """
         task_key = task_type.strip().lower()
         if task_key not in self._templates:
@@ -157,7 +162,7 @@ class PromptBuilder:
         system_tmpl_str, user_tmpl_str = self._templates[task_key]
 
         # Optimize (deduplicate and merge) chunks
-        optimized_chunks = self.optimize_chunks(chunks)
+        optimized_chunks = self.optimize_chunks(chunks, query=goal or "")
 
         # Prepare context variables for Jinja template rendering
         render_context = {
@@ -169,12 +174,24 @@ class PromptBuilder:
             "package_managers": repository_metadata.get("package_managers", []),
             "dependencies": repository_metadata.get("dependencies", {}),
             "entrypoints": repository_metadata.get("entrypoints", []),
-            "chunks": optimized_chunks
+            "chunks": optimized_chunks,
+            "graph_context": graph_context or "",
+            "analysis_context": analysis_context or "",
         }
 
         # Render prompts
         system_prompt = Template(system_tmpl_str).render(render_context)
         user_prompt = Template(user_tmpl_str).render(render_context)
+
+        # Prepend graph context and analysis context to user prompt when available
+        extra_ctx = []
+        if analysis_context:
+            extra_ctx.append(analysis_context)
+        if graph_context:
+            extra_ctx.append(graph_context)
+
+        if extra_ctx:
+            user_prompt = "\n\n---\n\n".join(extra_ctx) + "\n\n---\n\n" + user_prompt
 
         return system_prompt, user_prompt
 

@@ -22,6 +22,13 @@ export interface WorkflowState {
   approvalDiff: string | null;
   approvalFiles: string[];
   approvalReason: string;
+  collaboration?: {
+    findings_count: number;
+    validated_count: number;
+    conflicts_count: number;
+    confidence: number;
+    consensus_id: string | null;
+  };
 }
 
 export interface WorkflowContextType {

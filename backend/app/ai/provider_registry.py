@@ -276,5 +276,26 @@ class ProviderRegistry:
             return None
         return status_info["selected_model"]
 
+    def get_runtime_stats(self, provider: str) -> Dict[str, Any]:
+        """Exposes runtime stats for a provider from provider_health_monitor."""
+        provider = provider.strip().lower()
+        stats = provider_health_monitor.get_stats(provider)
+        is_healthy = provider_health_monitor.is_healthy(provider)
+        
+        successes = stats.get("success_count", 0)
+        failures = stats.get("failure_count", 0)
+        total = successes + failures
+        success_rate = (successes / total) if total > 0 else 1.0
+        
+        avg_latency = (stats.get("latency_sum", 0.0) / successes) if successes > 0 else 0.0
+        
+        return {
+            "success_rate": round(success_rate, 2),
+            "failure_rate": round(1.0 - success_rate, 2),
+            "average_latency_sec": round(avg_latency, 2),
+            "is_healthy": is_healthy,
+            "disabled_until": stats.get("disabled_until")
+        }
+
 provider_registry = ProviderRegistry()
 

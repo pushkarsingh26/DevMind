@@ -1,0 +1,34 @@
+{
+  "issues": [
+    {
+      "id": "hs_-6310630345486813918",
+      "type": "high_coupling",
+      "severity": "low",
+      "message": "Component has high coupling degree of 2 (In: 0, Out: 2)",
+      "affected_files": [
+        "hello.py"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "hs_-8006584189099522469",
+      "type": "high_coupling",
+      "severity": "low",
+      "message": "Component has high coupling degree of 2 (In: 1, Out: 1)",
+      "affected_files": [
+        "hello.py"
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "hs_-5541346812107258628",
+      "type": "high_coupling",
+      "severity": "low",
+      "message": "Component has high coupling degree of 2 (In: 2, Out: 0)",
+      "affected_files": [
+        "hello.py"
+      ],
+      "metadata": {}
+    }
+  ]
+}

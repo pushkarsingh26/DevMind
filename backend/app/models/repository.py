@@ -28,6 +28,7 @@ class Repository(Base):
     extensions = Column(JSON, nullable=True)
     largest_files = Column(JSON, nullable=True)
     dependencies = Column(JSON, nullable=True)
+    intelligence_path = Column(String, nullable=True)
     package_managers = Column(JSON, nullable=True)
 
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))

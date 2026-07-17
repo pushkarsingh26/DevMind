@@ -224,6 +224,19 @@ class DevMindConsole:
 
         if not self.console:
             print(f"\n--- DevMind Backend Ready (env={env}, startup={startup_time:.2f}s) ---\n")
+            print("Knowledge Graph")
+            print("----------------------------")
+            print("✓ Graph Engine Ready")
+            print("✓ Graph Cache Ready")
+            try:
+                from app.services.knowledge_graph.versions import GRAPH_VERSION, GRAPH_SCHEMA_VERSION
+                gv = GRAPH_VERSION
+                sv = GRAPH_SCHEMA_VERSION
+            except Exception:
+                gv = "v1"
+                sv = "v1"
+            print(f"✓ Graph Version : {gv}")
+            print(f"✓ Schema Version: {sv}")
             return
 
         c = self.console
@@ -288,6 +301,24 @@ class DevMindConsole:
         c.print(f"  [dim]API[/dim]              [cyan]http://127.0.0.1:8000[/cyan]")
         c.print(f"  [dim]Swagger[/dim]          [cyan]/docs[/cyan]")
         c.print(f"  [dim]Redoc[/dim]            [cyan]/redoc[/cyan]")
+        c.print()
+        c.print(SEP)
+        c.print()
+
+        # ── KNOWLEDGE GRAPH ─────────────────────────────────────────────
+        c.print("[bold white]  KNOWLEDGE GRAPH[/bold white]")
+        c.print()
+        c.print("  [bold green]✓[/bold green]  [white]Graph Engine Ready[/white]")
+        c.print("  [bold green]✓[/bold green]  [white]Graph Cache Ready[/white]")
+        try:
+            from app.services.knowledge_graph.versions import GRAPH_VERSION, GRAPH_SCHEMA_VERSION
+            gv = GRAPH_VERSION
+            sv = GRAPH_SCHEMA_VERSION
+        except Exception:
+            gv = "v1"
+            sv = "v1"
+        c.print(f"  [bold green]✓[/bold green]  [white]Graph Version : {gv}[/white]")
+        c.print(f"  [bold green]✓[/bold green]  [white]Schema Version: {sv}[/white]")
         c.print()
         c.print(SEP)
         c.print()

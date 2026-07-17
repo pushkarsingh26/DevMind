@@ -38,6 +38,26 @@ class ExecutionContext:
         self.cache_misses: int = 0
         self.agent_durations: Dict[str, float] = {}
 
+        # Graph Telemetry
+        self.graph_build_time: float = 0.0
+        self.graph_cache_hit: bool = False
+        self.graph_candidates_selected: int = 0
+        self.graph_nodes: int = 0
+        self.graph_edges: int = 0
+        self.graph_traversal_time: float = 0.0
+
+        # Multi-Agent Collaboration (Phase 8.6)
+        self.collaboration_snapshot: Dict[str, Any] = {}
+        self.collaboration_context: Dict[str, Any] = {}
+
+        # Autonomous Reasoning (Phase 8.8) — populated by WorkflowExecutor before run
+        self.reasoning_summary: Optional[Any] = None   # ReasoningSummary dataclass
+        self.reasoning_metrics: Optional[Any] = None   # ReasoningMetrics dataclass
+        self.reasoning_context: Optional[Any] = None   # ReasoningContext dataclass
+
+        # Decision Engine (Phase 8.9)
+        self.decision_summary: Optional[Any] = None    # DecisionSummary dataclass
+
         self.add_log("Workflow initialized")
 
     def add_log(self, message: str, level: str = "INFO"):

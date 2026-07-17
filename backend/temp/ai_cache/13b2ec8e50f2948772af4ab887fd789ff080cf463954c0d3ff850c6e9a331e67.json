@@ -1,0 +1,105 @@
+{
+  "is_fallback": false,
+  "traceability_refs": [
+    {
+      "path": "README.md",
+      "start_line": 40,
+      "end_line": 55,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-3",
+      "score": 0.9499669075012207
+    },
+    {
+      "path": "README.md",
+      "start_line": 141,
+      "end_line": 178,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-9",
+      "score": 0.9482815861701965
+    },
+    {
+      "path": "README.md",
+      "start_line": 341,
+      "end_line": 367,
+      "chunk_id": "repo_231ef14bce4d:README.md-chunk-20",
+      "score": 0.9508152604103088
+    },
+    {
+      "path": "docs\\architecture.md",
+      "start_line": 1,
+      "end_line": 18,
+      "chunk_id": "repo_231ef14bce4d:docs\\architecture.md-chunk-0",
+      "score": 0.9002962827682495
+    },
+    {
+      "path": "backend\\app\\ai\\ai_service.py",
+      "start_line": 35,
+      "end_line": 57,
+      "chunk_id": "repo_231ef14bce4d:backend\\app\\ai\\ai_service.py-chunk-1",
+      "score": 0.7998260259628296
+    },
+    {
+      "path": "backend\\app\\ai\\prompt_templates.py",
+      "start_line": 1,
+      "end_line": 61,
+      "chunk_id": "repo_231ef14bce4d:backend\\app\\ai\\prompt_templates.py-chunk-0",
+      "score": 0.7381327152252197
+    }
+  ],
+  "ai_metadata": {
+    "provider": "google",
+    "provider_used_after_failover": "openrouter",
+    "model": "google/gemini-2.5-flash",
+    "latency": 109.13204979896545,
+    "prompt_tokens": 2488,
+    "completion_tokens": 1007,
+    "total_tokens": 3495,
+    "retry_count": 0,
+    "cache_hit": false,
+    "fallback_flag": false,
+    "request_id": "ai_req_19a166a9f28e",
+    "started_timestamp": 1784282326.8317509,
+    "completed_timestamp": 1784282435.9638007,
+    "estimated_cost": 0.0
+  },
+  "high_level_architecture": [
+    "React Frontend (Vite, TypeScript, Tailwind CSS)",
+    "FastAPI Backend (Python ASGI)",
+    "PostgreSQL Database",
+    "FAISS Vector Store (local for embeddings)"
+  ],
+  "entry_points": [
+    "backend/app/main.py: This is the main ASGI application entry point for the FastAPI backend, handling all API requests.",
+    "backend/vector_store/repo_231ef14bce4d/index.faiss: These are local FAISS vector store index files, indicating where semantic embeddings for different repositories are stored and accessed by the RAG pipeline.",
+    "backend/vector_store/repo_274568688eff/index.faiss: These are local FAISS vector store index files, indicating where semantic embeddings for different repositories are stored and accessed by the RAG pipeline."
+  ],
+  "component_relationships": [
+    "React Frontend interacts with the FastAPI Backend via REST endpoints for user actions, data display, and initiating code analysis tasks.",
+    "FastAPI Backend utilizes SQLAlchemy ORM to interact with the PostgreSQL database for persistence of repository, chat, and embedding data.",
+    "FastAPI Backend integrates with AI providers (Google Gemini, HuggingFace) for generating semantic embeddings and LLM text generation.",
+    "FastAPI Backend uses local FAISS vector stores for efficient semantic search and Retrieval-Augmented Generation (RAG).",
+    "Pydantic is used extensively in the backend for schema validation of API requests/responses and AI model outputs.",
+    "Alembic manages database migrations for the PostgreSQL database.",
+    "GitPython is used by the backend for cloning and managing remote Git repositories."
+  ],
+  "important_modules": [
+    "backend/app/main.py: The core FastAPI application setup and routing.",
+    "backend/app/services/: Contains the main business logic for pipeline, scanning, chunking, and RAG services.",
+    "backend/app/ai/: Manages AI provider clients, prompt registry, and defines AI task schemas (e.g., review, explain, tests, bugs).",
+    "backend/app/chat/: Implements the grounded chat service, including schemas, prompts, and parsing logic.",
+    "backend/app/models/: Defines the SQLAlchemy ORM models for database entities like Repository, Chat, and Embeddings.",
+    "backend/app/db/: Handles database engine, session building, and registry base for ORM.",
+    "backend/app/core/: Contains configurations, logging, and security handlers for the backend."
+  ],
+  "execution_flow": [
+    "1. User interacts with the React Frontend to initiate actions like repository ingestion or starting a chat session.",
+    "2. Frontend sends requests to the FastAPI Backend's REST endpoints.",
+    "3. Backend receives the request via `backend/app/main.py` and routes it to the appropriate service.",
+    "4. For repository ingestion, `services/` modules handle cloning (using GitPython), static analysis, chunking, and generating vector embeddings (via `ai/` and external models).",
+    "5. Embeddings are indexed into local FAISS vector stores.",
+    "6. For chat requests, the `chat/` service retrieves relevant code context from the FAISS vector store (RAG).",
+    "7. The `ai/` service constructs prompts using `prompt_templates.py` and sends them to LLMs (Google Gemini/HuggingFace).",
+    "8. LLM responses are processed, potentially repaired using `utils/json_repair_helpers.py`, and validated against Pydantic schemas.",
+    "9. The backend streams markdown answers, code previews, and citations back to the React Frontend.",
+    "10. Frontend displays the information, including interactive elements and follow-up suggestions."
+  ],
+  "data_flow": "The data flow begins with user input from the React Frontend, which sends requests to the FastAPI Backend. For repository ingestion, the backend clones repositories, performs static analysis, chunks code, and generates vector embeddings using AI models. These embeddings are stored in local FAISS vector stores. During a chat session, user queries trigger a semantic search in the FAISS store to retrieve relevant code snippets. This context, along with the user's query and predefined prompts, is sent to an LLM via the AI service. The LLM's response, often in JSON format, is then validated and potentially repaired by the backend before being streamed back to the React Frontend for display. Database interactions occur for persisting repository metadata, chat history, and embedding information."
+}

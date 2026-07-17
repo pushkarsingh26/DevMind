@@ -1,0 +1,68 @@
+{
+  "metadata": {
+    "graph_version": "v1",
+    "schema_version": "v1",
+    "generator_version": "0.1.0",
+    "generator": "devmind-knowledge-graph",
+    "repository_id": "repo_c60e659ca8c3",
+    "repository_hash": "8918d41cf332ed4945b332455dec8d8d",
+    "generated_at": "2026-07-17T10:00:39.437341+00:00",
+    "build_time_ms": 0,
+    "node_count": 2,
+    "edge_count": 1,
+    "node_types": {
+      "file": 1,
+      "module": 1
+    },
+    "edge_relationships": {
+      "contains": 1
+    },
+    "validation": {
+      "node_count": 2,
+      "edge_count": 1,
+      "self_loops_removed": 0,
+      "orphan_edges_removed": 0,
+      "duplicate_edges_removed": 0,
+      "is_valid": true
+    }
+  },
+  "nodes": [
+    {
+      "id": "file:hello.py",
+      "type": "file",
+      "name": "hello.py",
+      "file": "hello.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "size_bytes": 14,
+        "sha256": "96f43d529af3430cb6b0e2c02f6b38ef1a121e8a31d2d09a3ebb716f2f35c9de",
+        "last_modified": 1784282436.3527203,
+        "extension": ".py"
+      }
+    },
+    {
+      "id": "module:hello.py",
+      "type": "module",
+      "name": "hello.py",
+      "file": "hello.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "symbol_count": 0,
+        "import_count": 0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:hello.py",
+      "target": "module:hello.py",
+      "relationship": "contains",
+      "confidence": 1.0,
+      "metadata": {}
+    }
+  ]
+}

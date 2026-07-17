@@ -1,0 +1,84 @@
+{
+  "metadata": {
+    "graph_version": "v1",
+    "schema_version": "v1",
+    "generator_version": "0.1.0",
+    "generator": "devmind-knowledge-graph",
+    "repository_id": "repo_efecf494c3e1",
+    "repository_hash": "1b4ae71ef1f5d01ef51e5cb5ae86aa8a",
+    "generated_at": "2026-07-17T10:00:47.762064+00:00",
+    "build_time_ms": 1,
+    "node_count": 3,
+    "edge_count": 1,
+    "node_types": {
+      "file": 1,
+      "module": 1,
+      "symbol": 1
+    },
+    "edge_relationships": {
+      "contains": 1
+    },
+    "validation": {
+      "node_count": 3,
+      "edge_count": 1,
+      "self_loops_removed": 0,
+      "orphan_edges_removed": 0,
+      "duplicate_edges_removed": 0,
+      "is_valid": true
+    }
+  },
+  "nodes": [
+    {
+      "id": "file:hello.py",
+      "type": "file",
+      "name": "hello.py",
+      "file": "hello.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "size_bytes": 40,
+        "sha256": "aece1f0d60d9528a7a7a5a103441b068b28a16cea7b28cb45843f4167c163a74",
+        "last_modified": 1784282444.6711195,
+        "extension": ".py"
+      }
+    },
+    {
+      "id": "module:hello.py",
+      "type": "module",
+      "name": "hello.py",
+      "file": "hello.py",
+      "language": "python",
+      "line": 0,
+      "visibility": "unknown",
+      "metadata": {
+        "symbol_count": 0,
+        "import_count": 0
+      }
+    },
+    {
+      "id": "sym:py:hello.py:hello:function",
+      "type": "symbol",
+      "name": "hello",
+      "file": null,
+      "language": "python",
+      "line": 1,
+      "visibility": "public",
+      "metadata": {
+        "symbol_type": "function",
+        "line_end": 2,
+        "id_hash": "2022ecfec78425f1ceed0d44c02f1df3dac920d6f3a0ed4b3c088bd114a26a82",
+        "original_id": "py:hello.py:hello:function"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:hello.py",
+      "target": "module:hello.py",
+      "relationship": "contains",
+      "confidence": 1.0,
+      "metadata": {}
+    }
+  ]
+}

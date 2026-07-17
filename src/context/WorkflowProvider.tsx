@@ -120,6 +120,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         let durationVal = current.duration;
         let tokensVal = current.tokensUsed;
         let reportVal = current.executionReport;
+        let collaborationVal = current.collaboration;
 
         if (type === 'workflow_started') {
           statusVal = data.status || 'starting';
@@ -137,6 +138,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           if (data.diff !== undefined) approvalDiffVal = data.diff;
           if (data.affected_files !== undefined) approvalFilesVal = data.affected_files;
           if (data.approval_reason !== undefined) approvalReasonVal = data.approval_reason;
+          if (data.collaboration !== undefined) collaborationVal = data.collaboration;
         } else if (type === 'workflow_log') {
           const timeOffset = current.duration || 0;
           updatedLogs.push({
@@ -194,7 +196,8 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           approvalReason: approvalReasonVal,
           duration: durationVal,
           tokensUsed: tokensVal,
-          executionReport: reportVal
+          executionReport: reportVal,
+          collaboration: collaborationVal,
         };
       }
       

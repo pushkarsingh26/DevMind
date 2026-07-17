@@ -1,0 +1,37 @@
+{
+  "languages": [
+    "python"
+  ],
+  "language_file_counts": {
+    "python": 162
+  },
+  "total_files": 162,
+  "source_files": 162,
+  "classes": 0,
+  "functions": 322,
+  "methods": 0,
+  "structs": 0,
+  "interfaces": 0,
+  "enums": 0,
+  "traits": 0,
+  "constants": 0,
+  "total_symbols": 322,
+  "total_imports": 2,
+  "total_dependencies": 0,
+  "largest_files": [
+    "extracted/pkg/file_10.py",
+    "extracted/pkg/file_11.py",
+    "extracted/pkg/file_12.py",
+    "extracted/pkg/file_13.py",
+    "extracted/pkg/file_14.py",
+    "extracted/pkg/file_15.py",
+    "extracted/pkg/file_16.py",
+    "extracted/pkg/file_17.py",
+    "extracted/pkg/file_18.py",
+    "extracted/pkg/file_19.py"
+  ],
+  "entry_points": [
+    "extracted/main.py",
+    "repo/main.py"
+  ]
+}

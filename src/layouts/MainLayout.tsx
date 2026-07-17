@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback, useMemo, useContext, memo, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useContext, memo, useRef } from 'react';
 import { Navbar } from '../components/Navbar';
 import { ToastContainer } from '../components/ToastContainer';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { SVGRefractionFilter } from '../components/ui';
 import {
   LayoutDashboard, Code2, MessageSquare, ScrollText,
-  History, Settings, Boxes, ChevronLeft, ChevronRight,
+  History, Settings, Boxes, ChevronLeft, ChevronRight, GitBranch,
+  BarChart3, Cpu, Activity, Network, Database, Brain,
 } from 'lucide-react';
 import { AnalysisUIContext } from '../context/AnalysisContext';
 
@@ -34,9 +35,16 @@ export const DevMindLogo: React.FC<{ className?: string }> = memo(({ className =
 // -----------------------------------------------------------------------------
 const NAV_ITEMS = [
   { label: 'Dashboard',           icon: LayoutDashboard, path: '/dashboard' },
-  { label: 'Repository Analysis', icon: Code2,           path: '/repositories' },
+  { label: 'Repository Ingestion',icon: Code2,           path: '/repositories' },
+  { label: 'Repository Analysis', icon: BarChart3,       path: '/analysis' },
+  { label: 'Intelligent Planner', icon: Cpu,             path: '/planning' },
+  { label: 'Execution Dashboard', icon: Activity,        path: '/execution/active' },
+  { label: 'Multi-Agent Collab',  icon: Network,         path: '/collaboration/active' },
+  { label: 'Repository Memory',   icon: Database,        path: '/memory/active' },
+  { label: 'Autonomous Reasoning',icon: Brain,           path: '/reasoning/active' },
   { label: 'Grounded Chat',       icon: MessageSquare,   path: '/chat' },
   { label: 'Agent Workspace',     icon: Boxes,           path: '/agents' },
+  { label: 'Knowledge Graph',     icon: GitBranch,       path: '/graph' },
   { label: 'Reports',             icon: ScrollText,      path: '/reports' },
   { label: 'History',             icon: History,         path: '/history' },
   { label: 'Settings',            icon: Settings,        path: '/settings' },

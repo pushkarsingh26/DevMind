@@ -1,0 +1,25 @@
+{
+  "repository_id": "repo_e38e0b727b13",
+  "repository_hash": "a2f8043549904865741cafc21c4b3e7e",
+  "intelligence_version": "v2",
+  "parser_version": "py=v1,ts=v1,js=v1,go=v1,rs=v1",
+  "schema_version": "v1",
+  "format_version": "v1",
+  "generator": "devmind-intelligence",
+  "generator_version": "0.2.0",
+  "generated_at": "2026-07-17T10:02:02.082858+00:00",
+  "build_time_ms": 52,
+  "supported_languages": [
+    "python",
+    "typescript",
+    "javascript",
+    "go",
+    "rust"
+  ],
+  "total_files": 8,
+  "parsed_files": 8,
+  "failed_files": 0,
+  "total_symbols": 14,
+  "total_imports": 2,
+  "total_dependencies": 0
+}

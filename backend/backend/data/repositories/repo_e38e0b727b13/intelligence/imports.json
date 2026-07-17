@@ -1,0 +1,18 @@
+[
+  {
+    "module": "pkg.file_0",
+    "name": "func_0",
+    "alias": null,
+    "file": "extracted/main.py",
+    "language": "python",
+    "line": 2
+  },
+  {
+    "module": "pkg.file_0",
+    "name": "func_0",
+    "alias": null,
+    "file": "repo/main.py",
+    "language": "python",
+    "line": 2
+  }
+]

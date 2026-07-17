@@ -1,0 +1,15 @@
+[
+  {
+    "id": "py:hello.py:hello:function",
+    "id_hash": "2022ecfec78425f1ceed0d44c02f1df3dac920d6f3a0ed4b3c088bd114a26a82",
+    "name": "hello",
+    "type": "function",
+    "module": "hello.py",
+    "file": "hello.py",
+    "language": "python",
+    "line_start": 1,
+    "line_end": 2,
+    "parent": null,
+    "visibility": "public"
+  }
+]

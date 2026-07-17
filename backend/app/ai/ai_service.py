@@ -143,8 +143,59 @@ class AIService:
             "entrypoints": [f.path for f in repository_metadata.largest_files[:3]]
         }
 
+        # Retrieve and build Graph Context block if available
+        graph_ctx = ""
+        try:
+            from app.services.knowledge_graph import graph_manager
+            if graph_manager.exists(repository_id):
+                graph_ctx = graph_manager.build_graph_context(repository_id, query)
+        except Exception as _ge:
+            logger.debug(f"AIService: Failed to build graph context: {_ge}")
+
+        # Retrieve and build Repository Analysis context block if available
+        analysis_ctx = ""
+        try:
+            from app.services.repository_analysis.analysis_storage import analysis_storage
+            from app.db.session import SessionLocal
+            
+            with SessionLocal() as db:
+                repo_row = db.query(Repository).filter(Repository.id == repository_id).first()
+                intel_path = repo_row.intelligence_path if repo_row else None
+            
+            if intel_path and analysis_storage.is_valid_cache(intel_path, None):
+                summary_data = analysis_storage.load_summary(intel_path)
+                dead_code_data = analysis_storage.load_dead_code(intel_path) or {}
+                hotspots_data = analysis_storage.load_hotspots(intel_path) or {}
+                architecture_data = analysis_storage.load_architecture(intel_path) or {}
+                
+                lines = ["[Repository Analysis]"]
+                if summary_data:
+                    lines.append(f"Health Score: {summary_data.get('health_score')}%")
+                
+                issues = architecture_data.get("issues", [])
+                if issues:
+                    lines.append("\nArchitecture Issues:")
+                    for issue in issues[:3]:
+                        lines.append(f"- [{issue.get('severity').upper()}] {issue.get('message')}")
+                        
+                unused = dead_code_data.get("unused_symbols", [])
+                if unused:
+                    lines.append("\nUnused Symbols (Potential Dead Code):")
+                    for sym in unused[:5]:
+                        lines.append(f"- {sym.get('name')} in {sym.get('file')}")
+                        
+                hotspots = hotspots_data.get("hotspots", [])
+                if hotspots:
+                    lines.append("\nHigh Coupling Hotspots:")
+                    for hs in hotspots[:3]:
+                        lines.append(f"- {hs.get('name')} ({hs.get('type')}) degree: {hs.get('coupling_degree')}")
+                        
+                analysis_ctx = "\n".join(lines)
+        except Exception as _ae:
+            logger.debug(f"AIService: Failed to build analysis context: {_ae}")
+
         # Render empty chunks prompt to count base prompt overhead tokens
-        base_sys_p, base_usr_p = prompt_builder.build_prompts(task_key, metadata_dict, [])
+        base_sys_p, base_usr_p = prompt_builder.build_prompts(task_key, metadata_dict, [], graph_context=graph_ctx, analysis_context=analysis_ctx)
         base_tokens = token_manager.estimate_tokens(base_sys_p) + token_manager.estimate_tokens(base_usr_p)
         
         # Select and truncate chunks to fit configured MAX_TOKENS limit
@@ -193,7 +244,7 @@ class AIService:
                 logger.warning(f"AIService: Failed to validate cached JSON schema: {parse_err}. Re-analyzing.")
 
         # 6. Resolve Prompt Messages
-        system_prompt, user_prompt = prompt_builder.build_prompts(task_key, metadata_dict, budgeted_chunks)
+        system_prompt, user_prompt = prompt_builder.build_prompts(task_key, metadata_dict, budgeted_chunks, graph_context=graph_ctx, analysis_context=analysis_ctx)
 
         # 7. Multi-Provider Failover Loop & Retries
         provider_chain = [p.strip().lower() for p in settings.AI_PROVIDER_CHAIN.split(",")]

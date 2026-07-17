@@ -1,0 +1,32 @@
+{
+  "hotspots": [
+    {
+      "id": "file:hello.py",
+      "name": "hello.py",
+      "type": "file",
+      "file": "hello.py",
+      "coupling_degree": 2,
+      "in_degree": 0,
+      "out_degree": 2
+    },
+    {
+      "id": "module:hello.py",
+      "name": "hello.py",
+      "type": "module",
+      "file": "hello.py",
+      "coupling_degree": 2,
+      "in_degree": 1,
+      "out_degree": 1
+    },
+    {
+      "id": "sym:py:hello.py:hello:function",
+      "name": "hello",
+      "type": "symbol",
+      "file": "hello.py",
+      "coupling_degree": 2,
+      "in_degree": 2,
+      "out_degree": 0
+    }
+  ],
+  "max_coupling_degree": 2
+}

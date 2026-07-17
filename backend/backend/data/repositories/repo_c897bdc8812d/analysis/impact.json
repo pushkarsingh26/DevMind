@@ -1,0 +1,7 @@
+{
+  "impacts": {
+    "sym:py:hello.py:hello:function": [
+      "hello.py"
+    ]
+  }
+}

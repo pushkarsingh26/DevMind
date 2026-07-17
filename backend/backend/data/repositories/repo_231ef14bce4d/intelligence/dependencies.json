@@ -1,0 +1,182 @@
+[
+  {
+    "name": "fastapi",
+    "version": ">=0.110.0",
+    "ecosystem": "python",
+    "file": "backend/app/requirements.txt"
+  },
+  {
+    "name": "uvicorn",
+    "version": ">=0.28.0",
+    "ecosystem": "python",
+    "file": "backend/app/requirements.txt"
+  },
+  {
+    "name": "pydantic",
+    "version": ">=2.6.0",
+    "ecosystem": "python",
+    "file": "backend/app/requirements.txt"
+  },
+  {
+    "name": "pydantic-settings",
+    "version": ">=2.2.0",
+    "ecosystem": "python",
+    "file": "backend/app/requirements.txt"
+  },
+  {
+    "name": "python-multipart",
+    "version": ">=0.0.9",
+    "ecosystem": "python",
+    "file": "backend/app/requirements.txt"
+  },
+  {
+    "name": "pytest",
+    "version": ">=8.0.0",
+    "ecosystem": "python",
+    "file": "backend/app/requirements.txt"
+  },
+  {
+    "name": "httpx",
+    "version": ">=0.27.0",
+    "ecosystem": "python",
+    "file": "backend/app/requirements.txt"
+  },
+  {
+    "name": "gitpython",
+    "version": ">=3.1.40",
+    "ecosystem": "python",
+    "file": "backend/app/requirements.txt"
+  },
+  {
+    "name": "sqlalchemy",
+    "version": ">=2.0.0",
+    "ecosystem": "python",
+    "file": "backend/app/requirements.txt"
+  },
+  {
+    "name": "psycopg2-binary",
+    "version": ">=2.9.0",
+    "ecosystem": "python",
+    "file": "backend/app/requirements.txt"
+  },
+  {
+    "name": "axios",
+    "version": "^1.18.1",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "framer-motion",
+    "version": "^12.42.2",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "lucide-react",
+    "version": "^1.23.0",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "react",
+    "version": "^19.2.7",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "react-dom",
+    "version": "^19.2.7",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "react-markdown",
+    "version": "^10.1.0",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "react-router-dom",
+    "version": "^7.18.1",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "rehype-highlight",
+    "version": "^7.0.2",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "@tailwindcss/postcss",
+    "version": "^4.3.2",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "@types/node",
+    "version": "^24.13.2",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "@types/react",
+    "version": "^19.2.17",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "@types/react-dom",
+    "version": "^19.2.3",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "@vitejs/plugin-react",
+    "version": "^6.0.3",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "autoprefixer",
+    "version": "^10.5.2",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "concurrently",
+    "version": "^10.0.3",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "oxlint",
+    "version": "^1.71.0",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "postcss",
+    "version": "^8.5.16",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "tailwindcss",
+    "version": "^4.3.2",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "typescript",
+    "version": "~6.0.2",
+    "ecosystem": "npm",
+    "file": "package.json"
+  },
+  {
+    "name": "vite",
+    "version": "^8.1.1",
+    "ecosystem": "npm",
+    "file": "package.json"
+  }
+]

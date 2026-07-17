@@ -28,8 +28,16 @@ from app.api.routes import router as api_router
 from app.api.provider_routes import router as provider_router
 from app.chat.routes import chat_router          # Phase 5
 from app.api.workflows import router as workflows_router
-from app.db.database import engine
+from app.api.knowledge_graph import router as knowledge_graph_router  # Phase 8.2
+from app.api.repository_analysis import router as repository_analysis_router
+from app.api.planning import router as planning_router
+from app.api.execution import router as execution_router
+from app.api.collaboration import router as collaboration_router  # Phase 8.6
+from app.api.memory import router as memory_router  # Phase 8.7 Memory Engine
+from app.api.reasoning import router as reasoning_router  # Phase 8.8 Reasoning Engine
+from app.api.decision import router as decision_router  # Phase 8.9 Decision Engine
 from app.db.base import Base
+from app.db.database import engine
 
 # ── 3. Database initialisation ────────────────────────────────────────────────
 Base.metadata.create_all(bind=engine)
@@ -58,7 +66,18 @@ try:
                     logger.info(f"Dynamically added column '{col_name}' to 'workflow_executions'")
 except Exception as e:
     logger.error(f"Failed to check/run database dynamic column updates: {e}")
-
+# Dynamic column addition for repositories.intelligence_path
+try:
+    from sqlalchemy import inspect, text
+    inspector = inspect(engine)
+    if inspector.has_table("repositories"):
+        columns = [col["name"] for col in inspector.get_columns("repositories")]
+        if "intelligence_path" not in columns:
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE repositories ADD COLUMN intelligence_path VARCHAR(512)"))
+                logger.info("Added column 'intelligence_path' to 'repositories'")
+except Exception as e:
+    logger.error(f"Failed to add intelligence_path column: {e}")
 
 
 def safe_print(text: str):
@@ -176,6 +195,14 @@ app.include_router(api_router)
 app.include_router(provider_router)   # Phase 7.5.2 — Provider diagnostics
 app.include_router(chat_router)       # Phase 5
 app.include_router(workflows_router)
+app.include_router(knowledge_graph_router)  # Phase 8.2 — Knowledge Graph
+app.include_router(repository_analysis_router)
+app.include_router(planning_router)
+app.include_router(execution_router)
+app.include_router(collaboration_router)  # Phase 8.6 — Multi-Agent Collaboration
+app.include_router(memory_router)     # Phase 8.7 — Memory & Learning Engine
+app.include_router(reasoning_router)  # Phase 8.8 — Autonomous Reasoning Engine
+app.include_router(decision_router)   # Phase 8.9 — Decision Engine
 
 
 # ── 8. Health check ───────────────────────────────────────────────────────────

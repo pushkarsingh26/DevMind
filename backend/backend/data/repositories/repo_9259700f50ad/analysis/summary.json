@@ -1,0 +1,12 @@
+{
+  "repository_id": "repo_9259700f50ad",
+  "repository_hash": "1b4ae71ef1f5d01ef51e5cb5ae86aa8a",
+  "health_score": 98,
+  "total_nodes": 3,
+  "total_edges": 3,
+  "issues_count": 3,
+  "build_time_ms": 0,
+  "analysis_date": "2026-07-17T10:34:49.390173+00:00",
+  "analysis_version": "v1",
+  "graph_version": "v1"
+}

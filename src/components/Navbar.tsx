@@ -17,6 +17,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/repositories': 'Repository Analysis',
   '/chat':         'Grounded Assistant',
   '/agents':       'Agent Workspace',
+  '/graph':        'Knowledge Graph',
   '/reports':      'Interactive Audit Reports',
   '/history':      'Platform History Logs',
   '/settings':     'Intelligence Settings',

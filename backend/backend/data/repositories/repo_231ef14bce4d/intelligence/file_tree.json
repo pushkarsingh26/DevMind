@@ -1,0 +1,3338 @@
+[
+  {
+    "path": ".gitignore",
+    "extension": "",
+    "size_bytes": 291,
+    "last_modified": 1784282109.5108333,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": ".oxlintrc.json",
+    "extension": ".json",
+    "size_bytes": 253,
+    "last_modified": 1784282109.5118275,
+    "sha256": "b4d344818a1e1bf43997e4744a9153c8eef770c98b58229cd86363dabb85ded4",
+    "language": "other"
+  },
+  {
+    "path": "LICENSE",
+    "extension": "",
+    "size_bytes": 1638,
+    "last_modified": 1784282109.5118275,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "README.md",
+    "extension": ".md",
+    "size_bytes": 21721,
+    "last_modified": 1784282109.512832,
+    "sha256": "d26a43e0c9ea45787ee62e1999805b393088c6a289a084e8d35c1b68d1040005",
+    "language": "other"
+  },
+  {
+    "path": "index.html",
+    "extension": ".html",
+    "size_bytes": 899,
+    "last_modified": 1784282109.70553,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "package-lock.json",
+    "extension": ".json",
+    "size_bytes": 140701,
+    "last_modified": 1784282109.711074,
+    "sha256": "4ae8f186996cf7f5880f40b0800f897f7833d65c78b33c96b4d3db06e58bdab9",
+    "language": "other"
+  },
+  {
+    "path": "package.json",
+    "extension": ".json",
+    "size_bytes": 908,
+    "last_modified": 1784282109.711074,
+    "sha256": "bed7874ff1c171268bd2541c73361e99e3a987cb62df0e1197f77b05a0ca6a45",
+    "language": "other"
+  },
+  {
+    "path": "postcss.config.js",
+    "extension": ".js",
+    "size_bytes": 97,
+    "last_modified": 1784282109.712066,
+    "sha256": "47f2dff3208826bf663a9ca490b376a130a8153e0e8e713aed09b9f42289a3bd",
+    "language": "javascript"
+  },
+  {
+    "path": "tailwind.config.js",
+    "extension": ".js",
+    "size_bytes": 875,
+    "last_modified": 1784282109.743971,
+    "sha256": "2de8edf6fc0ad55560bf053e74c5d310c0dd9bd776a40dc34a93fc0127f17522",
+    "language": "javascript"
+  },
+  {
+    "path": "test.py",
+    "extension": ".py",
+    "size_bytes": 123,
+    "last_modified": 1784282109.7449713,
+    "sha256": "f01d67de05f6cfe67fffc9a0c9e8f095bca5ef581a73fc2c18d2c992b2bce563",
+    "language": "python"
+  },
+  {
+    "path": "tsconfig.app.json",
+    "extension": ".json",
+    "size_bytes": 681,
+    "last_modified": 1784282109.7449713,
+    "sha256": "8e5d12ba330e7d86409edec74b95451e0db22ee09b9426c94b5bf817571eddb0",
+    "language": "other"
+  },
+  {
+    "path": "tsconfig.json",
+    "extension": ".json",
+    "size_bytes": 126,
+    "last_modified": 1784282109.7449713,
+    "sha256": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808",
+    "language": "other"
+  },
+  {
+    "path": "tsconfig.node.json",
+    "extension": ".json",
+    "size_bytes": 581,
+    "last_modified": 1784282109.7449713,
+    "sha256": "d366cc0827139db39c61815f22491bbfda56c654354a42ad7795143d314e45e8",
+    "language": "other"
+  },
+  {
+    "path": "vite.config.ts",
+    "extension": ".ts",
+    "size_bytes": 1682,
+    "last_modified": 1784282109.7459707,
+    "sha256": "7cd57638d50ad8fc6c08e1899b9f2eae777a33fe9cd26947088b3c237b37b902",
+    "language": "typescript"
+  },
+  {
+    "path": "backend/.env.example",
+    "extension": ".example",
+    "size_bytes": 3061,
+    "last_modified": 1784282109.512832,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/alembic.ini",
+    "extension": ".ini",
+    "size_bytes": 5122,
+    "last_modified": 1784282109.5148287,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/test_connection.py",
+    "extension": ".py",
+    "size_bytes": 1656,
+    "last_modified": 1784282109.6049054,
+    "sha256": "d9a6d1699952d0c347050a22872ed4f30a91f4884fc7b10e9e90345b755fdcff",
+    "language": "python"
+  },
+  {
+    "path": "backend/alembic/README",
+    "extension": "",
+    "size_bytes": 38,
+    "last_modified": 1784282109.5148287,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/alembic/env.py",
+    "extension": ".py",
+    "size_bytes": 1603,
+    "last_modified": 1784282109.515831,
+    "sha256": "1d16bdb01671b65f777594bcc65bcc896417ddba8588245b34dd5c124d55353d",
+    "language": "python"
+  },
+  {
+    "path": "backend/alembic/script.py.mako",
+    "extension": ".mako",
+    "size_bytes": 732,
+    "last_modified": 1784282109.515831,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/alembic/versions/84d182212858_add_repository_stats.py",
+    "extension": ".py",
+    "size_bytes": 1630,
+    "last_modified": 1784282109.515831,
+    "sha256": "f47efb8c9144bff5d8311b2b99f04413a5de490b12d7f3da9e43d09cb7bd5b59",
+    "language": "python"
+  },
+  {
+    "path": "backend/alembic/versions/96808f1a8912_add_chat_tables.py",
+    "extension": ".py",
+    "size_bytes": 3269,
+    "last_modified": 1784282109.515831,
+    "sha256": "6b127942c4e7903bb28adf1dea053ed1a5b3b2b0b55852a4226e4da61c80431d",
+    "language": "python"
+  },
+  {
+    "path": "backend/alembic/versions/c91b4d203704_add_repository_more_stats.py",
+    "extension": ".py",
+    "size_bytes": 1778,
+    "last_modified": 1784282109.516831,
+    "sha256": "9c18048c78fc392ee0eb3ec94fcfa4605754067c861cafa00eb0a21060f017b3",
+    "language": "python"
+  },
+  {
+    "path": "backend/alembic/versions/d74a64e30e1f_add_rag_schema.py",
+    "extension": ".py",
+    "size_bytes": 4800,
+    "last_modified": 1784282109.516831,
+    "sha256": "0cbb4da4014e02191c09f64650705910f95e08ffcfcf093cad4debd020f61d53",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/main.py",
+    "extension": ".py",
+    "size_bytes": 8322,
+    "last_modified": 1784282109.5651536,
+    "sha256": "86b2f74ca41f20a9d24b1920915ee779a5733f121d0f198125fb580802e34803",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/requirements.txt",
+    "extension": ".txt",
+    "size_bytes": 195,
+    "last_modified": 1784282109.5789301,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/agents/__init__.py",
+    "extension": ".py",
+    "size_bytes": 317,
+    "last_modified": 1784282109.5193472,
+    "sha256": "ea395d933f6b8345ecc759318d4ae836985d2fbf68b54dfcc381948342c68680",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/agent_registry.py",
+    "extension": ".py",
+    "size_bytes": 2872,
+    "last_modified": 1784282109.5265105,
+    "sha256": "74d94805fff769a18e3544b90d5dbe7602f1ecbd1aecc1ce883ffc6686374012",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/base_agent.py",
+    "extension": ".py",
+    "size_bytes": 16403,
+    "last_modified": 1784282109.5265105,
+    "sha256": "982f52f00f9dbefbe07d069a51a8f34544940a69bdac2eff0c3ceab275d48c65",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/base_tool.py",
+    "extension": ".py",
+    "size_bytes": 336,
+    "last_modified": 1784282109.5265105,
+    "sha256": "e8d5803b443d91fc83ef42d047d2e97d7728d43ea9669abf701fb5223ef1cd45",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/documentation_agent.py",
+    "extension": ".py",
+    "size_bytes": 1647,
+    "last_modified": 1784282109.5265105,
+    "sha256": "bd5c2a85c1c2c553763f9c795abe109885181aa55fd11713be98c71c82a4220b",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/execution_context.py",
+    "extension": ".py",
+    "size_bytes": 5303,
+    "last_modified": 1784282109.5280175,
+    "sha256": "1d4e25b036b62c1f02d941b761b43fba6c86857bd01e105d83162c074a2d1559",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/execution_report.py",
+    "extension": ".py",
+    "size_bytes": 3243,
+    "last_modified": 1784282109.5280175,
+    "sha256": "8722fd15973d8522dd9784d387df125fc822b893593849d6fbc28b02b9f569dd",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/performance_agent.py",
+    "extension": ".py",
+    "size_bytes": 1632,
+    "last_modified": 1784282109.5280175,
+    "sha256": "accf6f41ab79b212527f71f8854e15c497090857530bad0c8d07fb87c5d0e800",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/planner_agent.py",
+    "extension": ".py",
+    "size_bytes": 2207,
+    "last_modified": 1784282109.5280175,
+    "sha256": "9596f9f669190e7f9089b52ab46b66d1a9f4fe33a5a67d3f84fb7553f9e1da1e",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/refactor_agent.py",
+    "extension": ".py",
+    "size_bytes": 2029,
+    "last_modified": 1784282109.5290241,
+    "sha256": "12457372a44f9cbff0fa3af9b4a54b1c1e5fc3bf4afbd9ead5b33c504e710373",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/repository_agent.py",
+    "extension": ".py",
+    "size_bytes": 1352,
+    "last_modified": 1784282109.5290241,
+    "sha256": "238c66e3e715d1fa80947173a874ce3171bc4b0bdcd2eee392d01acad7799e37",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/review_agent.py",
+    "extension": ".py",
+    "size_bytes": 1460,
+    "last_modified": 1784282109.5290241,
+    "sha256": "a35ef46fde4b8a642c7b3b00e2bba68c137a2c3d3ca5819a3d78f75c325a3295",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/security_agent.py",
+    "extension": ".py",
+    "size_bytes": 1819,
+    "last_modified": 1784282109.5290241,
+    "sha256": "30d4877745e587f441da27ae301ec92246016d3f78c00b06550c9bc3c3010036",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/summary_agent.py",
+    "extension": ".py",
+    "size_bytes": 1424,
+    "last_modified": 1784282109.5290241,
+    "sha256": "01554b2552fc8fbea1785f95ecdd88eaee9311152312fa5589b77dabce228203",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/testing_agent.py",
+    "extension": ".py",
+    "size_bytes": 1669,
+    "last_modified": 1784282109.530023,
+    "sha256": "5a4b95332ea8245561010c87e4bc12ac920bc3ffa704a682568d3832b46a5fb9",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/tool_registry.py",
+    "extension": ".py",
+    "size_bytes": 17686,
+    "last_modified": 1784282109.530023,
+    "sha256": "01e75c899e77b7f1044d6a64d9bf6b2fd5b4f282f98b266256c1a70a69149e75",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/workflow_engine.py",
+    "extension": ".py",
+    "size_bytes": 11026,
+    "last_modified": 1784282109.5310247,
+    "sha256": "8ca8afe84faae876321523d9945c91c59050461c1ee4c093d0e7002e27e6faab",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/agents/workflow_templates.json",
+    "extension": ".json",
+    "size_bytes": 5325,
+    "last_modified": 1784282109.5310247,
+    "sha256": "61d92d2c82ff3aade2c84263f4676196078a9226e1603801e8166c29d4ba0cb3",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/agents/workflow_templates.py",
+    "extension": ".py",
+    "size_bytes": 445,
+    "last_modified": 1784282109.5320272,
+    "sha256": "1578ca7ee2b7019e0f9fef25a179fd016f143afa6bc49f4d40578acb31e6105d",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/__init__.py",
+    "extension": ".py",
+    "size_bytes": 70,
+    "last_modified": 1784282109.5320272,
+    "sha256": "de592863e9fe4360fadc3bc08c0e04f2072768d42ee8b6bcd2bf8fa2eb685a78",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/ai_service.py",
+    "extension": ".py",
+    "size_bytes": 29106,
+    "last_modified": 1784282109.5372074,
+    "sha256": "06a63021ef26453a49575b16f2adcb2c9cf17c1e4920217cd84f1d64d5c76df4",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/cache.py",
+    "extension": ".py",
+    "size_bytes": 5945,
+    "last_modified": 1784282109.5372074,
+    "sha256": "ac594e1ed39aeb07d6b3e0a9fb6199c5364cbea1a2f35a6b268b38324d40663e",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/client.py",
+    "extension": ".py",
+    "size_bytes": 17895,
+    "last_modified": 1784282109.5387144,
+    "sha256": "dae4d1da6b3216fa53dd7cddeaca2de65d30eb0b3bca0d93dedb6e28521df665",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/prompt_builder.py",
+    "extension": ".py",
+    "size_bytes": 8057,
+    "last_modified": 1784282109.5387144,
+    "sha256": "18badfef488e3695f99cb880d97782ab07f70836de2f4063934a71bfc46a26d7",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/prompt_loader.py",
+    "extension": ".py",
+    "size_bytes": 10851,
+    "last_modified": 1784282109.5387144,
+    "sha256": "2979a83b9796f46fe8831ff0ad509d1404ad380dd5b9676727b3ad42958a9e65",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/prompt_templates.py",
+    "extension": ".py",
+    "size_bytes": 6821,
+    "last_modified": 1784282109.5397203,
+    "sha256": "52fa795ac4bbdaee4df38dd6105203abbd4170ff3849b5d26dd453e32a4e68c5",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/provider_factory.py",
+    "extension": ".py",
+    "size_bytes": 1465,
+    "last_modified": 1784282109.5447202,
+    "sha256": "7371ff1e6f67e6c92a5abdb6ad98e699c0948cc3be62949a2b0edb6e13338ad1",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/provider_registry.py",
+    "extension": ".py",
+    "size_bytes": 12715,
+    "last_modified": 1784282109.5447202,
+    "sha256": "44937eac89cdeabdc4d308ab0970e4dc5ffd6c6cce566ebc0def0e2c5bfb3978",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/response_parser.py",
+    "extension": ".py",
+    "size_bytes": 4402,
+    "last_modified": 1784282109.5457199,
+    "sha256": "7d6fda4d84d0d75f0c95209e0dc5d9a556112c14db41330640fdc3fa50ac91d9",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/token_manager.py",
+    "extension": ".py",
+    "size_bytes": 3643,
+    "last_modified": 1784282109.5492332,
+    "sha256": "4fbf39086f677dc12aa898c9c6178d524a8c0574f663fd8383b13ecb402d8515",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/prompts/planner/v1_0_0/metadata.json",
+    "extension": ".json",
+    "size_bytes": 90,
+    "last_modified": 1784282109.5397203,
+    "sha256": "d6bc25e46b2d9a647f05f9d6cbdfa8a6befca4b5a2c6f05156d4e68bb6595cb5",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/planner/v1_0_0/system.md",
+    "extension": ".md",
+    "size_bytes": 850,
+    "last_modified": 1784282109.5397203,
+    "sha256": "51d0254a820f414559173d6f67c364907ffcf3c2eb2965810e86221938ceb202",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/planner/v1_0_0/user.md",
+    "extension": ".md",
+    "size_bytes": 230,
+    "last_modified": 1784282109.5407195,
+    "sha256": "051956c0a3ef55c4d5d3faa4ef490187bbacaab43c0f5ba9e9cf16f9f489262a",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/refactor/v1_0_0/metadata.json",
+    "extension": ".json",
+    "size_bytes": 96,
+    "last_modified": 1784282109.5407195,
+    "sha256": "f003cab9ff42e861faca697a4cbef631ef7163dc5058eaac4efe69bdea136c29",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/refactor/v1_0_0/system.md",
+    "extension": ".md",
+    "size_bytes": 549,
+    "last_modified": 1784282109.5407195,
+    "sha256": "15cb9ff5fcd6d5a91f1968b587ebcc75ccda4d3e0692e3fdcd22a370f4296aa6",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/refactor/v1_0_0/user.md",
+    "extension": ".md",
+    "size_bytes": 70,
+    "last_modified": 1784282109.5417185,
+    "sha256": "afc9a82f0556ded00fb79638f0f773f2247c8fdd4ebb185c3a348f1f11d770ce",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/repository/v1_0_0/metadata.json",
+    "extension": ".json",
+    "size_bytes": 98,
+    "last_modified": 1784282109.5417185,
+    "sha256": "fc30b94d1a008250d136b2ae3a16dd4c1b1c97ec610c07fefb186b0bd775f5bf",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/repository/v1_0_0/system.md",
+    "extension": ".md",
+    "size_bytes": 338,
+    "last_modified": 1784282109.5417185,
+    "sha256": "3896e9e21e0c0dcb712ecfb56938e56103bfdbb27596b00b3ff01a9403311d4c",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/repository/v1_0_0/user.md",
+    "extension": ".md",
+    "size_bytes": 71,
+    "last_modified": 1784282109.542722,
+    "sha256": "f75d1c7820ae44b1ca95949c27b70d62deaa3484ef8ec6e935e74ef0f0ec3395",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/security/v1_0_0/metadata.json",
+    "extension": ".json",
+    "size_bytes": 96,
+    "last_modified": 1784282109.542722,
+    "sha256": "28fb921cab5869f8e67e51efb002b68d187282c421670164ab01a704e254ebf3",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/security/v1_0_0/system.md",
+    "extension": ".md",
+    "size_bytes": 487,
+    "last_modified": 1784282109.5437217,
+    "sha256": "6e0dae8da4113b0d278b92633970d952ac35fd6f89bd8b554748fd3c24e0cb54",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/security/v1_0_0/user.md",
+    "extension": ".md",
+    "size_bytes": 70,
+    "last_modified": 1784282109.5437217,
+    "sha256": "afc9a82f0556ded00fb79638f0f773f2247c8fdd4ebb185c3a348f1f11d770ce",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/summary/v1_0_0/metadata.json",
+    "extension": ".json",
+    "size_bytes": 95,
+    "last_modified": 1784282109.5437217,
+    "sha256": "2250038401ddf11ad38898bef8851f70bb30f217f803d291ab7e48a92104f4f3",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/summary/v1_0_0/system.md",
+    "extension": ".md",
+    "size_bytes": 430,
+    "last_modified": 1784282109.5447202,
+    "sha256": "9d61bb357c08bb2944b94fc4997848947f03b61c670fc64cb707ccabf3efae04",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/prompts/summary/v1_0_0/user.md",
+    "extension": ".md",
+    "size_bytes": 77,
+    "last_modified": 1784282109.5447202,
+    "sha256": "a75806e4d44f755f57ded9992685dd8a5328b2be6fbbeb90608f8ded68727f22",
+    "language": "other"
+  },
+  {
+    "path": "backend/app/ai/schemas/__init__.py",
+    "extension": ".py",
+    "size_bytes": 426,
+    "last_modified": 1784282109.5457199,
+    "sha256": "09a26bcac5d3993af60600e4b65dc5a19d91fb01d211e996cbbc7ff13b1a3bc8",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/schemas/base.py",
+    "extension": ".py",
+    "size_bytes": 2510,
+    "last_modified": 1784282109.548223,
+    "sha256": "b0820a3ce019481faeedc748a4c0bfbee0baac3efc48dd4159e2fa980df70136",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/schemas/bugs.py",
+    "extension": ".py",
+    "size_bytes": 1709,
+    "last_modified": 1784282109.548223,
+    "sha256": "fde406a5c8887f637d6293aecf9954cd549cec0952028195280f742c74a326e4",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/schemas/explain.py",
+    "extension": ".py",
+    "size_bytes": 1369,
+    "last_modified": 1784282109.548223,
+    "sha256": "a76ee7f2b8bb5a432161bceb0ea645a255ddfffc03b874c07ae3a716abcd523c",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/schemas/review.py",
+    "extension": ".py",
+    "size_bytes": 1575,
+    "last_modified": 1784282109.5492332,
+    "sha256": "df1ffb6c25dd95b56c941b0d3fb61ca97220cfdf9979c66c703d98b70b2619d7",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/ai/schemas/tests.py",
+    "extension": ".py",
+    "size_bytes": 1223,
+    "last_modified": 1784282109.5492332,
+    "sha256": "fa29b82b35657b5a3b75b8f4f9cfb743784793c290fef9275e521ab3a072de91",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/api/dependencies.py",
+    "extension": ".py",
+    "size_bytes": 582,
+    "last_modified": 1784282109.552228,
+    "sha256": "ca806dd1a91fcdccec6d2fbb863e84f9120f77390c6de747f1ec79f3e6c2f74b",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/api/provider_routes.py",
+    "extension": ".py",
+    "size_bytes": 1171,
+    "last_modified": 1784282109.552228,
+    "sha256": "9451b56ea0234b5718aefca68642356d1f09496a26ac5ee0f257f1efbe070267",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/api/routes.py",
+    "extension": ".py",
+    "size_bytes": 10428,
+    "last_modified": 1784282109.552228,
+    "sha256": "bbf5609dd00a4f661bd4b7f68566b46c58a06cbe02a0f28df0db4461bd4f8aec",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/api/workflows.py",
+    "extension": ".py",
+    "size_bytes": 12846,
+    "last_modified": 1784282109.552228,
+    "sha256": "bf488a704fc6f7db9d4b3cb18518537cd1cc671a60be9220d98c6ab9b7803714",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/chat/__init__.py",
+    "extension": ".py",
+    "size_bytes": 32,
+    "last_modified": 1784282109.553399,
+    "sha256": "e55138f7b23c594a99ec0bd981f5d731839ad43d7b2c0e6c60ac2f2e3c7671d6",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/chat/conversation_service.py",
+    "extension": ".py",
+    "size_bytes": 25566,
+    "last_modified": 1784282109.556401,
+    "sha256": "3b2eb4d700ea5717b8fb1553a5c9a838157a31ae5cefc47e7f147d274aeaaf58",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/chat/prompt_builder.py",
+    "extension": ".py",
+    "size_bytes": 7756,
+    "last_modified": 1784282109.556401,
+    "sha256": "43ad2414d3f31912d66066d019a32ccf9e4419838cbdf9fb7cd1dd4eba10a244",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/chat/response_parser.py",
+    "extension": ".py",
+    "size_bytes": 10205,
+    "last_modified": 1784282109.556401,
+    "sha256": "1c57cc6028954d0df46add11ba2f38f7bf159e4b01a8852e47605fb083d4e90b",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/chat/routes.py",
+    "extension": ".py",
+    "size_bytes": 7381,
+    "last_modified": 1784282109.556401,
+    "sha256": "6c46f2de819e3ae7d003bbb09cc4b3b2ecad3b49e98b9bbcfb00b2397183af5e",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/chat/schemas.py",
+    "extension": ".py",
+    "size_bytes": 4776,
+    "last_modified": 1784282109.556401,
+    "sha256": "95b276c8b62484b2eb1464212b0ad6b27853e1e56d42f966bdfd953ff44ca662",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/core/config.py",
+    "extension": ".py",
+    "size_bytes": 3641,
+    "last_modified": 1784282109.5599098,
+    "sha256": "3ba77602037d45d3fe48adbb42187f039d68c815b9800d000794bd46ddfa4dfc",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/core/console.py",
+    "extension": ".py",
+    "size_bytes": 27355,
+    "last_modified": 1784282109.5599098,
+    "sha256": "b61440c313c9f3751cca47c3ca2f7368eff890aa4b18fdfbe031af62a901a14d",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/core/constants.py",
+    "extension": ".py",
+    "size_bytes": 417,
+    "last_modified": 1784282109.5599098,
+    "sha256": "78882c1706d8942d469d648deb7976f0cfa6052c3448b5cf5b3ccf30a0ac6d09",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/core/logger.py",
+    "extension": ".py",
+    "size_bytes": 1458,
+    "last_modified": 1784282109.5609179,
+    "sha256": "89e487b1fc47669625c917db7fede2f94e43ed4ec8fee39ee2e1e4d5e06d642e",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/core/logging_config.py",
+    "extension": ".py",
+    "size_bytes": 10788,
+    "last_modified": 1784282109.5609179,
+    "sha256": "d35af67f2e0a7d9ed6ce9699ef5e41ee9d094774ac537ed38b6fa63a5618cf7e",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/db/__init__.py",
+    "extension": ".py",
+    "size_bytes": 0,
+    "last_modified": 1784282109.561928,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/db/base.py",
+    "extension": ".py",
+    "size_bytes": 1155,
+    "last_modified": 1784282109.564155,
+    "sha256": "0bf9e0f805074731ce27e7308930695ef2847013e48622e782ecfa5ec168f1e0",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/db/database.py",
+    "extension": ".py",
+    "size_bytes": 799,
+    "last_modified": 1784282109.564155,
+    "sha256": "fc04bd1284852c5081ffcd6316806767000564fa6c719c7526bc71cff068149a",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/db/session.py",
+    "extension": ".py",
+    "size_bytes": 803,
+    "last_modified": 1784282109.5651536,
+    "sha256": "4f4eab22f311e907603e5e5ae7e72eec73bcf8b47f2cca2847c1be1935aa5c8c",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/models/chat.py",
+    "extension": ".py",
+    "size_bytes": 4796,
+    "last_modified": 1784282109.5681565,
+    "sha256": "628ba02b2fd821012feda91661c12b05b68469ece53de01c61211c245d785dbf",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/models/chunk.py",
+    "extension": ".py",
+    "size_bytes": 1239,
+    "last_modified": 1784282109.5692255,
+    "sha256": "dd1f5fdcdbd35f3fa757ac28ae7efaeb3f73dca75a99765a669e1cc3f933d0be",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/models/embedding.py",
+    "extension": ".py",
+    "size_bytes": 1060,
+    "last_modified": 1784282109.5692255,
+    "sha256": "8aa1444016f48575566154b37a3888892de1b43f8a437d2ec5df813cfb44e1ce",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/models/job.py",
+    "extension": ".py",
+    "size_bytes": 2795,
+    "last_modified": 1784282109.5692255,
+    "sha256": "c5f8a397e48805a0f30919f6b0c4a5a7e80ce264281796d915c6937649adf674",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/models/memory.py",
+    "extension": ".py",
+    "size_bytes": 1291,
+    "last_modified": 1784282109.5702279,
+    "sha256": "4ecf0b84edff8e11ec2974245c52c1e2adbb71aa97d68edcadce2f3ee45805c8",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/models/repository.py",
+    "extension": ".py",
+    "size_bytes": 2472,
+    "last_modified": 1784282109.5702279,
+    "sha256": "fcd3c3a98abdb2758e721d08720e7c6dbd3b8c3660b07c7babf74e5c40f6be33",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/models/request.py",
+    "extension": ".py",
+    "size_bytes": 285,
+    "last_modified": 1784282109.5702279,
+    "sha256": "e5fc26e29f231e177416e377e060b42646370b7695ed8ffbef28f7d372477a4e",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/models/response.py",
+    "extension": ".py",
+    "size_bytes": 1223,
+    "last_modified": 1784282109.5702279,
+    "sha256": "a427bcda0bd53b56c87bce72e3114deec582b76705abd6ff9bd04497bdfdbbf5",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/models/workflow.py",
+    "extension": ".py",
+    "size_bytes": 2593,
+    "last_modified": 1784282109.5702279,
+    "sha256": "3705aadfc18e58f5ebc2910f1a3f1a37655721e192487ca55ae1af0ebeef167b",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/rag/embedding_model.py",
+    "extension": ".py",
+    "size_bytes": 2408,
+    "last_modified": 1784282109.573417,
+    "sha256": "28c1ce1b9a0783b60490083bade39360636833c0e35370dc8889276420406fca",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/rag/faiss_store.py",
+    "extension": ".py",
+    "size_bytes": 1813,
+    "last_modified": 1784282109.573417,
+    "sha256": "e9341f5d59e34a5dd9c4b0a8495f9cc92f98f15ed0f48f520e20983b9e12ff02",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/rag/similarity.py",
+    "extension": ".py",
+    "size_bytes": 422,
+    "last_modified": 1784282109.5744176,
+    "sha256": "8eb7b2c58d0c9c9aabde5c0c3d8ce6a949bb00772cec43e88eda9268d7c6f9c5",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/rag/utils.py",
+    "extension": ".py",
+    "size_bytes": 366,
+    "last_modified": 1784282109.5744176,
+    "sha256": "a4a628a2c2e563446f0fcf2c6c50ef33c0f03dd52c36ff631f808f70fc50472b",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/report_builders/base_builder.py",
+    "extension": ".py",
+    "size_bytes": 3756,
+    "last_modified": 1784282109.576413,
+    "sha256": "f646f79517519177191cb3e2ab791c21ce96c7e832032ea48165c0fb81f4c7fd",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/report_builders/bugs_report.py",
+    "extension": ".py",
+    "size_bytes": 3159,
+    "last_modified": 1784282109.576413,
+    "sha256": "0e07b8d91f8eb1c91c729e12d2d98fc844928e851d7ea60626dbece42cb52d10",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/report_builders/explain_report.py",
+    "extension": ".py",
+    "size_bytes": 3180,
+    "last_modified": 1784282109.577921,
+    "sha256": "aa0f35f050c6be1feac5a0b711349c2e68ca15e3c6f536de36fab701728b4fa5",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/report_builders/review_report.py",
+    "extension": ".py",
+    "size_bytes": 4518,
+    "last_modified": 1784282109.577921,
+    "sha256": "0a2c50033ac5ab8a3f4752ca53f3916fe3594a2c377be4f62ef62b4ae40423c0",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/report_builders/tests_report.py",
+    "extension": ".py",
+    "size_bytes": 2708,
+    "last_modified": 1784282109.577921,
+    "sha256": "facea692b132bde7876680baa07ce815bdf712e57d8fc58e7b4fd94fae0f5fc4",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/chunk_service.py",
+    "extension": ".py",
+    "size_bytes": 6755,
+    "last_modified": 1784282109.5856006,
+    "sha256": "28cf04342700de4140ae431b867d2e9479e2f6c2575bd6f25ffb851f17cef465",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/context_builder.py",
+    "extension": ".py",
+    "size_bytes": 709,
+    "last_modified": 1784282109.5856006,
+    "sha256": "a7c40f99521c8760196155beca99e02845b45dc119ff14734ef0c1cf1db3ff96",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/embedding_service.py",
+    "extension": ".py",
+    "size_bytes": 739,
+    "last_modified": 1784282109.5866048,
+    "sha256": "cc7a48a494de570702772ed22d85459e9316244fa5757a9e2e2df6cdaacbed4b",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/job_service.py",
+    "extension": ".py",
+    "size_bytes": 10981,
+    "last_modified": 1784282109.5866048,
+    "sha256": "3f17a5862806dd5ccea5d5428c7fa61ed077df363cd9e2dab03185154071a036",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/pipeline_service.py",
+    "extension": ".py",
+    "size_bytes": 22341,
+    "last_modified": 1784282109.5866048,
+    "sha256": "f38a54aca7a5d303933e8b1b1fa890de7b1475d8e5f4e0d2222d0e5020073d92",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/provider_health.py",
+    "extension": ".py",
+    "size_bytes": 2153,
+    "last_modified": 1784282109.5866048,
+    "sha256": "70196ac233ef18c768e1373547d5e6120879e04619f319873f8f036c48e3cc2f",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/rag_service.py",
+    "extension": ".py",
+    "size_bytes": 4544,
+    "last_modified": 1784282109.5881143,
+    "sha256": "096a1c264a6eb5fcbb54905c4809f13990918e6fff431511a74efbf8f2ccd403",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/repository_service.py",
+    "extension": ".py",
+    "size_bytes": 7866,
+    "last_modified": 1784282109.5881143,
+    "sha256": "59ba6c7e1bd6c96d6678b22e6cc08a8eb93752b6b3b39efec7d55ffd8e0438e8",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/retrieval_service.py",
+    "extension": ".py",
+    "size_bytes": 6673,
+    "last_modified": 1784282109.5881143,
+    "sha256": "5d5e85c106708a2d188364becc7892f0b182767048ca0bc175b28c15a5204edc",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/scanner_service.py",
+    "extension": ".py",
+    "size_bytes": 11571,
+    "last_modified": 1784282109.5881143,
+    "sha256": "badc72ef07cf7176732aab0471e60f50e300689214c6a3e93c7ad13111b10272",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/vector_store_service.py",
+    "extension": ".py",
+    "size_bytes": 7336,
+    "last_modified": 1784282109.5881143,
+    "sha256": "57da5a4c5bc93bb21459c4289111f4a0adbb08d64e3abfe87df60b1cc3691103",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/workflow_executor.py",
+    "extension": ".py",
+    "size_bytes": 33724,
+    "last_modified": 1784282109.58965,
+    "sha256": "52e18f41277671faf0486bd17794e0f6428bcbd082133ff52f93310e32561e07",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/services/workflow_manager.py",
+    "extension": ".py",
+    "size_bytes": 6862,
+    "last_modified": 1784282109.58965,
+    "sha256": "690bfd549bdb3eb3406f41efad84c7d0a90d930ae91c7784ec2a99765279ab41",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/utils/__init__.py",
+    "extension": ".py",
+    "size_bytes": 21,
+    "last_modified": 1784282109.5906575,
+    "sha256": "da5221ba408f0ff6e49b27ffaab538fcb35c25b9a1f0f1d6cc498ed281225e0e",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/utils/file.py",
+    "extension": ".py",
+    "size_bytes": 1341,
+    "last_modified": 1784282109.5926638,
+    "sha256": "ffa9405e2041fc4985750bff4ca8ad8d279fca1d9098e6d44e94580fb0fabe18",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/utils/git.py",
+    "extension": ".py",
+    "size_bytes": 1110,
+    "last_modified": 1784282109.5926638,
+    "sha256": "ee2c83dd4a7816653a0b8a6926d91cf8dde62f17ca320ddefc0641df7749c319",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/utils/helpers.py",
+    "extension": ".py",
+    "size_bytes": 900,
+    "last_modified": 1784282109.5926638,
+    "sha256": "df2a34dd46228720bb908a2d008b929959556a0922765f1d161ae4213bd30315",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/utils/json_repair.py",
+    "extension": ".py",
+    "size_bytes": 3335,
+    "last_modified": 1784282109.5938299,
+    "sha256": "fa74f39aa0c270823c86f66ccd94c6a8fe62b3b2a4bf06018db8c91db035de87",
+    "language": "python"
+  },
+  {
+    "path": "backend/app/utils/workflow_storage.py",
+    "extension": ".py",
+    "size_bytes": 2852,
+    "last_modified": 1784282109.5938299,
+    "sha256": "b4ff99d354263d7f8867851c90e4b647ae26af20b03902b842ce279b1b5f5add",
+    "language": "python"
+  },
+  {
+    "path": "backend/data/workflows/wf_1e9813e27336/graph.json",
+    "extension": ".json",
+    "size_bytes": 873,
+    "last_modified": 1784282109.5948286,
+    "sha256": "86342c178499748a505b173cc148e0ef2bf0b6078224d5addde9b98b8ddafa61",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_1e9813e27336/logs.jsonl",
+    "extension": ".jsonl",
+    "size_bytes": 899,
+    "last_modified": 1784282109.5948286,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_563bdc7ba24c/graph.json",
+    "extension": ".json",
+    "size_bytes": 873,
+    "last_modified": 1784282109.5948286,
+    "sha256": "86342c178499748a505b173cc148e0ef2bf0b6078224d5addde9b98b8ddafa61",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_563bdc7ba24c/logs.jsonl",
+    "extension": ".jsonl",
+    "size_bytes": 902,
+    "last_modified": 1784282109.5958283,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_6a0eddacbb35/graph.json",
+    "extension": ".json",
+    "size_bytes": 873,
+    "last_modified": 1784282109.5958283,
+    "sha256": "86342c178499748a505b173cc148e0ef2bf0b6078224d5addde9b98b8ddafa61",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_6a0eddacbb35/logs.jsonl",
+    "extension": ".jsonl",
+    "size_bytes": 900,
+    "last_modified": 1784282109.596372,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_6d18b9feade4/graph.json",
+    "extension": ".json",
+    "size_bytes": 873,
+    "last_modified": 1784282109.596372,
+    "sha256": "86342c178499748a505b173cc148e0ef2bf0b6078224d5addde9b98b8ddafa61",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_6d18b9feade4/logs.jsonl",
+    "extension": ".jsonl",
+    "size_bytes": 898,
+    "last_modified": 1784282109.596372,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_89890e22cd76/graph.json",
+    "extension": ".json",
+    "size_bytes": 654,
+    "last_modified": 1784282109.596372,
+    "sha256": "5db2a7533593db3f81b3d6ffb7a73632c2223747efedef6e93d248e69a449887",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_89890e22cd76/logs.jsonl",
+    "extension": ".jsonl",
+    "size_bytes": 906,
+    "last_modified": 1784282109.5978947,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_9831690bd781/graph.json",
+    "extension": ".json",
+    "size_bytes": 873,
+    "last_modified": 1784282109.5978947,
+    "sha256": "86342c178499748a505b173cc148e0ef2bf0b6078224d5addde9b98b8ddafa61",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_9831690bd781/logs.jsonl",
+    "extension": ".jsonl",
+    "size_bytes": 2844,
+    "last_modified": 1784282109.5978947,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_9831690bd781/report.json",
+    "extension": ".json",
+    "size_bytes": 11879,
+    "last_modified": 1784282109.598908,
+    "sha256": "f3c97c59a8ec69c892b3ffd4603d7a1963203c91f33747cb4eee53a0935ebbea",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_9831690bd781/report.md",
+    "extension": ".md",
+    "size_bytes": 31,
+    "last_modified": 1784282109.598908,
+    "sha256": "14100a6d31898404db7ca042100dc24bcc6e94549fe7dac79ad8d254ece0faed",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_9831690bd781/telemetry.json",
+    "extension": ".json",
+    "size_bytes": 620,
+    "last_modified": 1784282109.598908,
+    "sha256": "ea3478c3e426caf3da77f53736a5bb4b816e8ad9e942cd6b6f6c837ea796cf0e",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_d774a22e5a8d/graph.json",
+    "extension": ".json",
+    "size_bytes": 873,
+    "last_modified": 1784282109.599909,
+    "sha256": "86342c178499748a505b173cc148e0ef2bf0b6078224d5addde9b98b8ddafa61",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_d774a22e5a8d/logs.jsonl",
+    "extension": ".jsonl",
+    "size_bytes": 899,
+    "last_modified": 1784282109.599909,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_e9f184ce3a90/graph.json",
+    "extension": ".json",
+    "size_bytes": 873,
+    "last_modified": 1784282109.599909,
+    "sha256": "86342c178499748a505b173cc148e0ef2bf0b6078224d5addde9b98b8ddafa61",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_e9f184ce3a90/logs.jsonl",
+    "extension": ".jsonl",
+    "size_bytes": 898,
+    "last_modified": 1784282109.599909,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_ee9543caa064/graph.json",
+    "extension": ".json",
+    "size_bytes": 654,
+    "last_modified": 1784282109.6009061,
+    "sha256": "5db2a7533593db3f81b3d6ffb7a73632c2223747efedef6e93d248e69a449887",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_ee9543caa064/logs.jsonl",
+    "extension": ".jsonl",
+    "size_bytes": 908,
+    "last_modified": 1784282109.6009061,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/data/workflows/wf_test_approval/logs.jsonl",
+    "extension": ".jsonl",
+    "size_bytes": 307,
+    "last_modified": 1784282109.6009061,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/temp/.gitkeep",
+    "extension": "",
+    "size_bytes": 71,
+    "last_modified": 1784282109.6019049,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/temp/DevMind/.devmind_meta",
+    "extension": "",
+    "size_bytes": 55,
+    "last_modified": 1784282109.6019049,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/temp/ai_cache/12cf0e639c984161c615b65597827d102051a5daf88e6518736b5877bf9f05ec.json",
+    "extension": ".json",
+    "size_bytes": 7590,
+    "last_modified": 1784282109.6019049,
+    "sha256": "91f76eb1939b0f05448fcddf632435f137ada0910f07f5f2a742a56a78f66fb6",
+    "language": "other"
+  },
+  {
+    "path": "backend/temp/ai_cache/581ae5cccca105305e455128b7b0d61396b8751acbf32f306bc412adf2d32ea2.json",
+    "extension": ".json",
+    "size_bytes": 2851,
+    "last_modified": 1784282109.6029046,
+    "sha256": "8af5f519b9fe4a982ca68ed56ad6615c9ade9c14da68a63e51cbde4559b5fe6e",
+    "language": "other"
+  },
+  {
+    "path": "backend/temp/ai_cache/8825b12149336c35998e2fa2293b4931c3b7dd06d7b6882941b8fcb577917182.json",
+    "extension": ".json",
+    "size_bytes": 2820,
+    "last_modified": 1784282109.6039042,
+    "sha256": "5d4aceb35aaf495eb4f7bbce663b87f3f5dd4d6f4b49fb3d8d2dfae08b1d4d13",
+    "language": "other"
+  },
+  {
+    "path": "backend/temp/ai_cache/d57cc236ca958c9a136c569bc3dc7c6822f1fcda6eb06057b4e3c084ab2bb8b7.json",
+    "extension": ".json",
+    "size_bytes": 6547,
+    "last_modified": 1784282109.6039042,
+    "sha256": "4b74142a9edba6355df0bc6e320f7e7b2beed46c80d2a1c1b9079437e763dd90",
+    "language": "other"
+  },
+  {
+    "path": "backend/temp/ai_cache/fbd943ab61347f5b66ab59c9605b1f8b099d28d58acba9d9bfaba387a125c983.json",
+    "extension": ".json",
+    "size_bytes": 8413,
+    "last_modified": 1784282109.6049054,
+    "sha256": "c29d01f781b1f5aef623b37fd23106de29003080b47f583afbc5bcc08f181557",
+    "language": "other"
+  },
+  {
+    "path": "backend/tests/conftest.py",
+    "extension": ".py",
+    "size_bytes": 233,
+    "last_modified": 1784282109.6162484,
+    "sha256": "49f2868e9ace24c5aad19f4e534f4f7f1c60de0df3cb2b368fec710fec16a39a",
+    "language": "python"
+  },
+  {
+    "path": "backend/tests/test_agents.py",
+    "extension": ".py",
+    "size_bytes": 8920,
+    "last_modified": 1784282109.6172545,
+    "sha256": "6cd1acdc01cc4afdbeb5db7c1486a3a9b416d1de2da86be04d6ce3c2c87c6b12",
+    "language": "python"
+  },
+  {
+    "path": "backend/tests/test_ai_intelligence.py",
+    "extension": ".py",
+    "size_bytes": 8117,
+    "last_modified": 1784282109.6172545,
+    "sha256": "7ea0cb3dbe70fec6fe0973b7b2aaabc512bd67ea6eab17189ad7bed9a75cd56d",
+    "language": "python"
+  },
+  {
+    "path": "backend/tests/test_chat_models.py",
+    "extension": ".py",
+    "size_bytes": 3628,
+    "last_modified": 1784282109.6172545,
+    "sha256": "9897bdab1e8ec31221734a6b9a898e7bcbb8c7e30f853323996585e3f435df56",
+    "language": "python"
+  },
+  {
+    "path": "backend/tests/test_chat_prompt_builder.py",
+    "extension": ".py",
+    "size_bytes": 3191,
+    "last_modified": 1784282109.618248,
+    "sha256": "9aae99bd3d1b106fea774280ada8b08ce26ee8221fab12f8f277fae56a355c9a",
+    "language": "python"
+  },
+  {
+    "path": "backend/tests/test_chat_response_parser.py",
+    "extension": ".py",
+    "size_bytes": 1967,
+    "last_modified": 1784282109.618248,
+    "sha256": "05ac13caa3bd26e0f4d53846f22475319a76b7cb6fdab588b4390a95c8e47701",
+    "language": "python"
+  },
+  {
+    "path": "backend/tests/test_chat_routes.py",
+    "extension": ".py",
+    "size_bytes": 4040,
+    "last_modified": 1784282109.618248,
+    "sha256": "5abb7e8ab552ce037d908fe925a3abaa2537889cebc388e5e56ac664e162d766",
+    "language": "python"
+  },
+  {
+    "path": "backend/tests/test_chat_schemas.py",
+    "extension": ".py",
+    "size_bytes": 2316,
+    "last_modified": 1784282109.618248,
+    "sha256": "0db48e63af8aa0547dc05106668c5163b78a2262efc904b4250d02fb6383cfb9",
+    "language": "python"
+  },
+  {
+    "path": "backend/tests/test_conversation_service.py",
+    "extension": ".py",
+    "size_bytes": 4379,
+    "last_modified": 1784282109.618248,
+    "sha256": "af3910ad14040762ac6b8955631dccb91cbc8e91f00b6242ae50fe8c7f6dc4e7",
+    "language": "python"
+  },
+  {
+    "path": "backend/tests/test_main.py",
+    "extension": ".py",
+    "size_bytes": 2972,
+    "last_modified": 1784282109.6193595,
+    "sha256": "cefa654ed1cde4913b067cbcf34c2662fb1b7b9f10828beedd20130fccb3e71b",
+    "language": "python"
+  },
+  {
+    "path": "backend/tests/test_rag.py",
+    "extension": ".py",
+    "size_bytes": 21764,
+    "last_modified": 1784282109.6193595,
+    "sha256": "a2d30f79460c5536ba963bfd6a320891dcc4a6291245f446e76727b04e546153",
+    "language": "python"
+  },
+  {
+    "path": "backend/tests/test_refactored_architecture.py",
+    "extension": ".py",
+    "size_bytes": 5073,
+    "last_modified": 1784282109.6193595,
+    "sha256": "1f996cbe2d8e97c002dda9b20f9c12816f4a8c8a284f23715492655a5e393fda",
+    "language": "python"
+  },
+  {
+    "path": "backend/vector_store/repo_035d54488f47/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6203594,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_035d54488f47/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6203594,
+    "sha256": "9ed404d70ba034f3984fc49811e90a142f70c8e3aa832896a2a283362f4a8355",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0554f0d8fa52/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6213634,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0554f0d8fa52/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6213634,
+    "sha256": "448d12884dd0340fa2096f2b88b8b71a28a97b00641e4018b80b634d2d334375",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_06bd9b38c216/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6223612,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_06bd9b38c216/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6223612,
+    "sha256": "1aeef9dc14a6f0f2c17ce48f59dcaf3d0cbcc865e5fc5d714d490bc85b21b42b",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0a9cab36468f/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6223612,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0a9cab36468f/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6234913,
+    "sha256": "4ab9130700db0c09a66a2b268b7e74dd4f3c529ec4e2616e91866e3ab94cebfe",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0b1693a467a8/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6234913,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0b1693a467a8/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6234913,
+    "sha256": "ff8014a110590a90ef4ccbe3240584710e2d6d406b212153be71c43b20090701",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0b92e4514bfe/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6234913,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0b92e4514bfe/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6244907,
+    "sha256": "4cd72be7b4e7f75ff908229a50e5322d34ea2b00dbad41fe493f94d5a7f200c4",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0e76c547481f/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6244907,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0e76c547481f/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6244907,
+    "sha256": "52fdae13fe5a7b01eb52a15f12773e9fe4625d2eb2ee187a34bdcae6d3ffb24b",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0ee3ae3be5dd/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.62549,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_0ee3ae3be5dd/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.62549,
+    "sha256": "db71cf6d88bb4eea6892b0f0bc0a98e026ad006f1a727569f715fce82e36a5b2",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_103cdf82a61a/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.62549,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_103cdf82a61a/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.62549,
+    "sha256": "5d7059ca2db75d1e74962b1a0c99198cdc9fe28b1e9d5e21ffd09acaa846539d",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_1cc9373d4bb3/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6264894,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_1cc9373d4bb3/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6264894,
+    "sha256": "46b07411fbea0128429c1298405a5b0dd2f4b112422ddd56d753b5646f9df904",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_1e7dbcd5a22f/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6264894,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_1e7dbcd5a22f/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6264894,
+    "sha256": "4cd5306f8d52cfcca566fecdceaef9e793cd296a7f8dc152a05ddb627af42b68",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_231a9e05fd3b/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6279979,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_231a9e05fd3b/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6279979,
+    "sha256": "fcca54064529ec2b785721f6b055041e06bdf9430080058c7085a9b45180f6f7",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_231ef14bce4d/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 2065965,
+    "last_modified": 1784282109.6426437,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_231ef14bce4d/mapping.json",
+    "extension": ".json",
+    "size_bytes": 40588,
+    "last_modified": 1784282109.6426437,
+    "sha256": "6268e4dc7f6ca115e140d65c64d1bd6f194a96936b3fa3a506837b84e799154d",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_267dcc3d0f19/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6438212,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_267dcc3d0f19/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6438212,
+    "sha256": "c5eb78432eda5e50213355b21e6930025ca8235a8d65052bd67b6e539a62306e",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_274568688eff/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 279597,
+    "last_modified": 1784282109.6468222,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_274568688eff/mapping.json",
+    "extension": ".json",
+    "size_bytes": 5353,
+    "last_modified": 1784282109.6468222,
+    "sha256": "3f3c00ecc04aad9b332142e57b19339198fd38bb3ec50433ac70a01356014a98",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_2dd80b3ec12b/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6468222,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_2dd80b3ec12b/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6468222,
+    "sha256": "c516f226045850df74b05699f1d71187141e80e76b05727145c4d4b9904c5d24",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_2df997f8a627/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6483297,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_2df997f8a627/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6483297,
+    "sha256": "0fac8dc4ce9ee496d2f470b940d38725793c5af625e9f1d1bdb4b88b879fc955",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_2ed0fda5f8fc/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6493402,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_2ed0fda5f8fc/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6493402,
+    "sha256": "02bca20467bf9c85cd287922e2a8311a26ba49e4ac4d896759cc5e4a2f15f787",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_2f0245743b09/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6493402,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_2f0245743b09/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6503406,
+    "sha256": "a12387a36adb6d7bf9542b73940f4b3f9b91d52fe4025ff40cf3fe51f3843194",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_2fd6fa67411f/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6503406,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_2fd6fa67411f/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6503406,
+    "sha256": "13071c2b737101525f411efdbb43c19dd7e55fd085cd1bb0cf862d3742948899",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_30320d2828a8/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6513624,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_30320d2828a8/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6513624,
+    "sha256": "3f86fbbded58000c16880b5a334a6691fc18ef42169952ef508aa4ae7512e7d2",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_31f55d1881b7/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.652341,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_31f55d1881b7/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.652341,
+    "sha256": "3f0e46eb5f540bbbf35ef7d840fdf67f4963adf025f81611dd0e3b750765bb79",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_378eecf3aaab/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.652341,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_378eecf3aaab/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.653342,
+    "sha256": "2d94f22eead57e1c8ac59e031eeb8e7fc2080cdcd7dcef6db4256494c7959b78",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_3bb140b7774a/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.653342,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_3bb140b7774a/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.653342,
+    "sha256": "54efdc0c535d16a6fd3fdd2aa2a89de2119efd8acd84bccf220d1455d605710d",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_3be158766833/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.653342,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_3be158766833/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6545115,
+    "sha256": "b314900428fa7d4b037e70aa29e1f0c77ec47040f843704853cb53f52eaa3afc",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_4de7bf0ddc45/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6545115,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_4de7bf0ddc45/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6545115,
+    "sha256": "6ae05603b9bce0a8de09eb4cac2fe2d0e938db89c8555cb9dff843dcbec9b3df",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_4ef5cda4684a/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6555104,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_4ef5cda4684a/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6555104,
+    "sha256": "2aad66a060a129c8058295067421d741faa1f2a459896ec3dbe92842ee4c7a05",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_4ef86e15516c/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6555104,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_4ef86e15516c/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6555104,
+    "sha256": "1f47b78f5c636194d7f0fdc6cd3cf91eb1a2dfbcedc1ce6b9324eca4fdde0b7e",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_514a9bff800d/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6565104,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_514a9bff800d/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6565104,
+    "sha256": "089f42f637d64d22a8a6cc52bc95bc21aded9912944bc10e8c88d083a9360adb",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_533624d8d41a/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6580167,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_533624d8d41a/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6580167,
+    "sha256": "5f0a5ccda73a3ba4c56eabeb7359978ac0bc05aabf1772f0bf650b5062e57c98",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_535ddcad403f/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6590254,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_535ddcad403f/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6590254,
+    "sha256": "35dd7b714aa6e9eb4ed10c6d9c23cf8346163ec81f46a26c576dbf3b71a0c2c0",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_53de5bb5de56/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6590254,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_53de5bb5de56/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6600268,
+    "sha256": "3b47715a01add093b166b27b593d7d4137ac3f31e11cd7c9ba2c13107349256d",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_5672cb6e01bd/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6600268,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_5672cb6e01bd/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6600268,
+    "sha256": "87f920874b904417ebed474e3ed66fd46a94e3b171b980f822209fae07183049",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_56b616326660/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.661037,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_56b616326660/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.661037,
+    "sha256": "908d0a25aaffd80464d2f7260f7f2f80c6fd3f60932c9d0c5381eb7c76342b7b",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_596fdc43fa1b/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.661037,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_596fdc43fa1b/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6620278,
+    "sha256": "6722311b4a7fdcbd03eda4ea3c2995cfd029eba72ce527da6fb1dadf1ceff0c5",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_5c50e0bbbe01/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6620278,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_5c50e0bbbe01/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6620278,
+    "sha256": "4af854ebc624a562d51fe5b67d6e235ddb86abd8bbde1a260f33c4a9b0a2824e",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_5c6023474a5d/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6630273,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_5c6023474a5d/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6630273,
+    "sha256": "502ec75990ae6f1cf73d025ff3667e9f2b289ec60943c16a073772953eec3947",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_631b7dff7454/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6630273,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_631b7dff7454/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6642356,
+    "sha256": "4b6b3fdb0c7c8e9f455a6c94d70c5142f414ea0f8deb0f7eb981f6b0069aaf09",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_659a83a4d916/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6642356,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_659a83a4d916/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6642356,
+    "sha256": "d46ba3e6e52f420c3648019400d7b55ee984f55f6c3b6423442a24b860598fb3",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_6c5fab26810f/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6652374,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_6c5fab26810f/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6652374,
+    "sha256": "f178a5161d1fb4fc11e1af88c829ccbe47ee3936e0df894fcdbe90492de91cd5",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_6f1053062d58/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6662354,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_6f1053062d58/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6662354,
+    "sha256": "7163bdc6e091f9e7ce63ddc27abc6fb2b5fb4e0eaf2a78cded937c8603f0b0c5",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_76d39da31e9f/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.667233,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_76d39da31e9f/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.667233,
+    "sha256": "a1b3ded673a5129af1835d96ae1d328be6022b8cd7c84585387d3a73bb4e0aae",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_7eb91c38ac1c/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.667233,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_7eb91c38ac1c/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.668233,
+    "sha256": "95cb7f992f54f06db67253681bd305946eacbe8a2b299a11b5f26d681a7ca3f1",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_801fe4dc64d1/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.668233,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_801fe4dc64d1/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.668233,
+    "sha256": "27b68182d090aec90b09d7600440f9267a3660a228f1dd22a4e092a40b6a3ec9",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8474db81e5e0/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6693406,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8474db81e5e0/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6693406,
+    "sha256": "9c54184326c6d5698ee9e8b3825716b9fed19094b1bd2ea1361e7fa6304c865f",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_84fc820bab67/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6703444,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_84fc820bab67/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6703444,
+    "sha256": "3090830addb9a78810b52eb6931bdf5731c6b368657ce6eda93923cf7d0da307",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8545c0e6ca98/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6713426,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8545c0e6ca98/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6713426,
+    "sha256": "3ef52b94e6e17ab043afb0ed4e33af3bc284a437bc187a518375887539e461d8",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_88d380a923da/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6723406,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_88d380a923da/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6723406,
+    "sha256": "00c2c99458a32a25a389ed0183c02ec000a40e649ae2c50db11297ffa0ea46e7",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8a4acbcf3fc3/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6723406,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8a4acbcf3fc3/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6723406,
+    "sha256": "1e34f9a2deeb40636049a421df4fa2af3caa4dae9e82e2eb5858e9c49cc1662e",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8ae184db5ec5/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6745105,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8ae184db5ec5/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6745105,
+    "sha256": "cd831c8f191db61d3126f2b1c5e2763c69d2b946b9ce47019fba48e2ad6c5a76",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8cfb69388df7/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6755085,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8cfb69388df7/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6765087,
+    "sha256": "c08ed037e5091ebb7257fda636b1933519d49bf167f00f16f778c699cec31f98",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8f9446654d7f/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6765087,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_8f9446654d7f/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6780143,
+    "sha256": "666767294cc7627ab2d2afcdde33eb54a98c8076284770b6e34c63890939b741",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_974a793fed64/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6780143,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_974a793fed64/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6780143,
+    "sha256": "4bfa2084d458c0acb68aaea91c5b668cd493ff41629e1f4ee77d9af60b6e1ee2",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_9c5d049ef1ab/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6790185,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_9c5d049ef1ab/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6790185,
+    "sha256": "ca1c7b0c378fc3a66d7593b2b636dc2d03d3310ea8dac74a10443a130680abb8",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_9f90b666e2f0/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6790185,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_9f90b666e2f0/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6800194,
+    "sha256": "c82aaf7b2dea9d3f956b823a10d27fb79a636c0cae5601497f30414ff58d51ed",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_a1c62c78cf08/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6800194,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_a1c62c78cf08/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6800194,
+    "sha256": "6288204d0864c320f8c6fede92dc5b4ef4994823752bc240067c324c01529c04",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_a2f17aff4e43/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6810195,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_a2f17aff4e43/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6810195,
+    "sha256": "8ad408ea24aedb1bb6443643b2488c9a15cddcc323d7d5ad2ed04b5ee6adf0a2",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_a30ffbb08613/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6810195,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_a30ffbb08613/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6820226,
+    "sha256": "6324ccd87f7519252827e966f624d2ee46d0df67f0d3510c0c04eee1b51ea9c6",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_a599411cc94e/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6820226,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_a599411cc94e/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6820226,
+    "sha256": "52262882558a6683bc1af40c05ca1beba145e9d3c69a5a3ae06a9cffb0803113",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_a9b9df831cdf/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6830225,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_a9b9df831cdf/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6830225,
+    "sha256": "f0e1e58f97247ddcc9f963bfe2f24129b0cfaa8eb82e1ec22c74811fb27a2854",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_b0f0e872d56a/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6830225,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_b0f0e872d56a/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6841736,
+    "sha256": "75ff41202857d0f03eab3c871c52e8f2afa23cbbabfad2e5ebc45284d70a4d33",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_b3e87c112210/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6841736,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_b3e87c112210/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6841736,
+    "sha256": "708082ef7d37f4c5f9fdaa11ff187b1425573a1ce9ec52463494d58d4b4d5ccf",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_b473d1353229/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.685172,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_b473d1353229/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.685172,
+    "sha256": "92a2c649314bef538305338ee03d2d50782efefe6a1eb417db941951f493c9e9",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_b8c2938828cb/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.685172,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_b8c2938828cb/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.685172,
+    "sha256": "203305a043f2535131e89fdf1454723f0a450cd173e8e2973fcca19c9fffe2e2",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_bd6fdb668743/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6861746,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_bd6fdb668743/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6861746,
+    "sha256": "01ada8e9c7fc2e6f462335140c51b453bb364170a596c8de2d16b44a9bc1bb9e",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_bf644f92f8bd/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6861746,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_bf644f92f8bd/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6871724,
+    "sha256": "b88730776d51b54a5a0151a593ee3aa8e09bfcb9e9965329691502662ece773d",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_c10bc0d162ee/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6871724,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_c10bc0d162ee/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6881754,
+    "sha256": "c585397cb9e73238fddc0170fe218259c9296463af7bc2cb0238fbf18bf9d39a",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_c39315974a2b/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6886814,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_c39315974a2b/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.689688,
+    "sha256": "9faacbceda746e382058881662b63c42270e8045be710ed122c015ff3a972be3",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_c91e4930b39e/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.689688,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_c91e4930b39e/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.689688,
+    "sha256": "81e0c032b5cf37d2d56364b17a0005ee6f50e798a89e1c1fbf737ff2135823d6",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_cc0b78ada675/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6906931,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_cc0b78ada675/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6906931,
+    "sha256": "85cf8a49634045ab580488f0b0eb17d3f898a2b2a5f3e2680049f723d8e3431c",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_cf718563bdf1/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6906931,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_cf718563bdf1/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.691692,
+    "sha256": "3e56f212dfd07a7ed239997371ef7f5e764a0e3a61afcf051c9fa6a8ec9f72c9",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_db9f023a6c88/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.691692,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_db9f023a6c88/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.691692,
+    "sha256": "227f232858408e0e5f437a8f62111b3d3340e4f843795fc3e14dfb57d859da8b",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_dc95592a7523/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6926923,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_dc95592a7523/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6926923,
+    "sha256": "ee4ae35ab2fc0b1e51b5cfccbe7f83f7c80dba8a16beb00015bc2a8fe51f3e1a",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_de1ac940e5c6/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6926923,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_de1ac940e5c6/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.69385,
+    "sha256": "d9a3f7fff0d6dd55bf556a99e429ac620b38b891b5862f80315785f60ef4852f",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_e1d52cf1d4ce/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.69485,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_e1d52cf1d4ce/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.69485,
+    "sha256": "015d1e033349cf0e2375c6a2b692edb4958a81e5532782d607225e016f25c31d",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_e32d6052226e/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.695847,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_e32d6052226e/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.695847,
+    "sha256": "ee04b263f9be53aa47a685f8e847f90b07ce92e0f25f5702c7421b1ea881d6f8",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_ed493428c0dc/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6968496,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_ed493428c0dc/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6968496,
+    "sha256": "58cead3d9682537f1bf47efe376f145a40d2363d84e5a680271306668ffec4b3",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_f2c92c345a3f/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6968496,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_f2c92c345a3f/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6968496,
+    "sha256": "d1b77524461c18ad10dd3879917a1983daab7c6098918aeefad1a645ce2682d5",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_f5b8fad60d36/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6968496,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_f5b8fad60d36/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6983545,
+    "sha256": "acf17f49336cb1709583ea8cdec021386907865d82692b2e72da46973261afb5",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_f60703c07371/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.6983545,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_f60703c07371/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.6983545,
+    "sha256": "d8a6664e02775c609c4502808bd7c89eb3dd1356a59d85a491b041b8e5a6d201",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_f91ee7f95cbb/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.699363,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_f91ee7f95cbb/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.699363,
+    "sha256": "6d72020926fb780f9260055812e0df333e53dee16bc059a7b03fe5d9a257233a",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_f99a2c9e3122/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.7003605,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_f99a2c9e3122/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.7013628,
+    "sha256": "82e9c6c17ae20700d2fb5f84d80327d15821d075eb5646432ece067a15e41d9b",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_fc1a730a5e89/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.7023618,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_fc1a730a5e89/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.7023618,
+    "sha256": "c33e6143cef99ba583c5804d318e8c6b74306a3c4bfe93f797152a343294c781",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_fcfbbbedf922/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.7023618,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_fcfbbbedf922/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.7033596,
+    "sha256": "f3d9bada149a063d2e65f9e91963880112509bfbabc25ee3b3a4f4d4ddbbceaf",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_fdd107c701a2/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.7033596,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/repo_fdd107c701a2/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.7033596,
+    "sha256": "2511b2e725e86b771fb4ea44704df13ee063a056a11a55d070b4194c436de283",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/test_repo_92a3e7/index.faiss",
+    "extension": ".faiss",
+    "size_bytes": 1581,
+    "last_modified": 1784282109.7033596,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "backend/vector_store/test_repo_92a3e7/mapping.json",
+    "extension": ".json",
+    "size_bytes": 31,
+    "last_modified": 1784282109.7045305,
+    "sha256": "a660b4d6c8065cdd503735fb1529aff20ccf432707315010ca3b1a854bb19332",
+    "language": "other"
+  },
+  {
+    "path": "docs/architecture.md",
+    "extension": ".md",
+    "size_bytes": 13209,
+    "last_modified": 1784282109.7045305,
+    "sha256": "563c50962391b8b5bd4aac7cd0ab835faf2993c785afc670185999997b46813b",
+    "language": "other"
+  },
+  {
+    "path": "src/App.css",
+    "extension": ".css",
+    "size_bytes": 108,
+    "last_modified": 1784282109.7130673,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "src/App.tsx",
+    "extension": ".tsx",
+    "size_bytes": 2897,
+    "last_modified": 1784282109.7130673,
+    "sha256": "dff90aeb7e70608fa31748ce6308b3cbcb3536f3c31ab6c271e2af668f097f62",
+    "language": "typescript"
+  },
+  {
+    "path": "src/index.css",
+    "extension": ".css",
+    "size_bytes": 14415,
+    "last_modified": 1784282109.73543,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "src/main.tsx",
+    "extension": ".tsx",
+    "size_bytes": 240,
+    "last_modified": 1784282109.7364538,
+    "sha256": "6e9e5807fcbd48b75a96db5cbef36c996262196be42e6d4760dc86babbe61ad2",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/ChatContext.tsx",
+    "extension": ".tsx",
+    "size_bytes": 659,
+    "last_modified": 1784282109.715062,
+    "sha256": "6201f88b67a05bd21af7717be1b8f5d5ea4a6be7dd31718198ff8c62399bf41b",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/ChatProvider.tsx",
+    "extension": ".tsx",
+    "size_bytes": 13008,
+    "last_modified": 1784282109.715062,
+    "sha256": "18b176da68457922e0711b4c5dd473091176d6a83269350b5322c9e1dfd4bcd8",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/api.ts",
+    "extension": ".ts",
+    "size_bytes": 7571,
+    "last_modified": 1784282109.715062,
+    "sha256": "33cf8709a179574cf606dae07c9f3f9592aee933d1a075217d2f6b9f7f737fd8",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/chat.css",
+    "extension": ".css",
+    "size_bytes": 16212,
+    "last_modified": 1784282109.7160618,
+    "sha256": "",
+    "language": "other"
+  },
+  {
+    "path": "src/chat/types.ts",
+    "extension": ".ts",
+    "size_bytes": 4072,
+    "last_modified": 1784282109.7205956,
+    "sha256": "48221b0ff1c060d722f5a3d154a2150bb7b56adb19b067b8a16a2f91be042c54",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/components/ChatExportMenu.tsx",
+    "extension": ".tsx",
+    "size_bytes": 3016,
+    "last_modified": 1784282109.7160618,
+    "sha256": "b93d14548061749eda3bc56082b9a866d9e61e1363d7620dadb8357ef2da5a13",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/components/ChatMessage.tsx",
+    "extension": ".tsx",
+    "size_bytes": 6436,
+    "last_modified": 1784282109.7170625,
+    "sha256": "9a9d68f18b3ddd77e82d69839fef1a005bb7c3e81f1dc03b793daf20d46ffba9",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/components/ChatSidebar.tsx",
+    "extension": ".tsx",
+    "size_bytes": 6547,
+    "last_modified": 1784282109.7170625,
+    "sha256": "d7eb0445487d6907094a23098d95e685bf589e1ea3fe090feaa1bf7c2e508b65",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/components/ChatWindow.tsx",
+    "extension": ".tsx",
+    "size_bytes": 11845,
+    "last_modified": 1784282109.7180705,
+    "sha256": "aac8a307d9f7d66f9b224d1cf4be837a2237310524b9e9b4b259ff564c001b4b",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/components/ChatWorkspace.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1095,
+    "last_modified": 1784282109.718578,
+    "sha256": "9c1b324b91ee0a7529b9be043a5d9292df3fbe9b4056a89bd3f8f11c2bc04351",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/components/CitationCard.tsx",
+    "extension": ".tsx",
+    "size_bytes": 3263,
+    "last_modified": 1784282109.7195988,
+    "sha256": "d50baa827201d9408148a756057a4d8e83c51c774df0f9916ef02bd0bc69da77",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/components/FollowUpSuggestions.tsx",
+    "extension": ".tsx",
+    "size_bytes": 960,
+    "last_modified": 1784282109.7195988,
+    "sha256": "b671852dbd2ceaba687aaee30a816c387774e4a9405f14917d4982c8e863964a",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/components/RepositorySelector.tsx",
+    "extension": ".tsx",
+    "size_bytes": 13563,
+    "last_modified": 1784282109.7195988,
+    "sha256": "fa411037ccf1fce5a3685c9ac025f2e9aa65734b2a98030e2e34ca009b78cfe7",
+    "language": "typescript"
+  },
+  {
+    "path": "src/chat/components/TypingIndicator.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1020,
+    "last_modified": 1784282109.7205956,
+    "sha256": "323e0a436607c68a62e546734dbf58c0771f87dcdd72dd18f06b2b62d4e75f77",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/AIConfiguration.tsx",
+    "extension": ".tsx",
+    "size_bytes": 3607,
+    "last_modified": 1784282109.7216005,
+    "sha256": "b08c10c6481ec99ab7dbbc11b2ae86aa339835ba459f848de68729f2a0657766",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/AISessionPanel.tsx",
+    "extension": ".tsx",
+    "size_bytes": 6065,
+    "last_modified": 1784282109.7216005,
+    "sha256": "2ec8cd5116ba7a6186c61d3413a434eb44c11c6c1a7bbbd8ad4f67920373873b",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ContextDrawer.tsx",
+    "extension": ".tsx",
+    "size_bytes": 16127,
+    "last_modified": 1784282109.722601,
+    "sha256": "98674b96c10bf93584c4f8fa685d526138f5b47fc1f68f0c5cd27a7423aa48ca",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ContextViewer.tsx",
+    "extension": ".tsx",
+    "size_bytes": 5817,
+    "last_modified": 1784282109.722601,
+    "sha256": "2a7c5d999371c01122ba3dc90c94502fec3e9d6427d0422295a9ce397e093105",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ErrorBoundary.tsx",
+    "extension": ".tsx",
+    "size_bytes": 3838,
+    "last_modified": 1784282109.722601,
+    "sha256": "bf04bcd75396519be8bd5405d6d28e09e17636506e73de48bf63a56aee5accda",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/HistorySidebar.tsx",
+    "extension": ".tsx",
+    "size_bytes": 7502,
+    "last_modified": 1784282109.722601,
+    "sha256": "8bdc5dc7691434be24b3036c99837a710b6d89c422463bf4f8a6bb6a81e58565",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/IntelligenceDashboard.tsx",
+    "extension": ".tsx",
+    "size_bytes": 8993,
+    "last_modified": 1784282109.7237868,
+    "sha256": "f2c9c9ba7607e1e05b2590f83f251e4f41b327382afe9dffc489a481054aa810",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/Navbar.tsx",
+    "extension": ".tsx",
+    "size_bytes": 13008,
+    "last_modified": 1784282109.7247825,
+    "sha256": "1c5393786906414fa55ece534d6c9e506c98498d86ce8a7b40152c38cc3e0ccd",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/OutputPanel.tsx",
+    "extension": ".tsx",
+    "size_bytes": 34421,
+    "last_modified": 1784282109.7247825,
+    "sha256": "0a4df7a4c48c329a469b6486e1cbb183615b79066c75e528415f36498071da50",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/PrimaryButton.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1121,
+    "last_modified": 1784282109.7257829,
+    "sha256": "08538b1ef3d36e03b81b23e8e23953990aca8aa640a0a082f66a63a0928b158a",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/RepositoryCard.tsx",
+    "extension": ".tsx",
+    "size_bytes": 9388,
+    "last_modified": 1784282109.7257829,
+    "sha256": "8e11bd5aa17e924085acf8ec0cd08b3999a6d61b3293add53b7ae73d6b748a08",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/StatusCard.tsx",
+    "extension": ".tsx",
+    "size_bytes": 3257,
+    "last_modified": 1784282109.7257829,
+    "sha256": "fb0bacc8bf3c0e87c4da06542d31648895ec60cda51d2893a68f1b3fce5d8085",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/TaskSelector.tsx",
+    "extension": ".tsx",
+    "size_bytes": 6322,
+    "last_modified": 1784282109.7267785,
+    "sha256": "6d1229dc832ae7cf65d5bc07ff7af6d25a6293ee2e45cd7578440ecb4787f4a1",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/Timeline.tsx",
+    "extension": ".tsx",
+    "size_bytes": 5636,
+    "last_modified": 1784282109.7267785,
+    "sha256": "6fc2e7d476976c31581977e156e5bbcbceb05c6fbdade725c439569f6b889725",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ToastContainer.tsx",
+    "extension": ".tsx",
+    "size_bytes": 2852,
+    "last_modified": 1784282109.7267785,
+    "sha256": "fdf612e72094eb7072c10762500cb8d78f51662e472bb031a5643dc3785cf09d",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Avatar.tsx",
+    "extension": ".tsx",
+    "size_bytes": 908,
+    "last_modified": 1784282109.7267785,
+    "sha256": "cb174caf794c1baf0cc8fd7f64dc4db157056fc74db606dc3d64051ae06a1a15",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Badge.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1264,
+    "last_modified": 1784282109.7267785,
+    "sha256": "b8cc0182adb7a7152f053b7487b98dc11c33acf47d2b5a1a5c414b108094a1d1",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Button.tsx",
+    "extension": ".tsx",
+    "size_bytes": 2695,
+    "last_modified": 1784282109.7282822,
+    "sha256": "b58c45434ca6762937fe345f757592735abb2bec942fb75af4f417432a226b35",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Card.tsx",
+    "extension": ".tsx",
+    "size_bytes": 2067,
+    "last_modified": 1784282109.7282822,
+    "sha256": "cde1d3cd797d8631eea409573bf26123e0d24eabffe8c505b5b7529e58516bd2",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Dialog.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1466,
+    "last_modified": 1784282109.7282822,
+    "sha256": "a38dfb8aba504eec98e8ff97ad7d6df46258823aeea66054685d2d6cfd1b3e8a",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Dropdown.tsx",
+    "extension": ".tsx",
+    "size_bytes": 2557,
+    "last_modified": 1784282109.7282822,
+    "sha256": "e6cf93a52922ba7201fc30ee0455ad79b066064870d3520fbc421ea7e916c213",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/EmptyState.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1174,
+    "last_modified": 1784282109.7292895,
+    "sha256": "51504f41d1d5f7c853b14a79f2220ebacc0f75bdaad50f8e514e6a538da782b6",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/ErrorState.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1349,
+    "last_modified": 1784282109.7292895,
+    "sha256": "6abf07eb605d67b723aa68c24a6fe74e210afa49f6857261c4635c28bc9fd959",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/GlassPanel.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1840,
+    "last_modified": 1784282109.730289,
+    "sha256": "aaec952f42563908d6b910b657848e72d66a90a6b42144e5d37d604e069a5d64",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Input.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1272,
+    "last_modified": 1784282109.730289,
+    "sha256": "549ab64398f0b9bba932b2d4542dd60c405370bf10194ffd9cac48ba1a322c86",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Modal.tsx",
+    "extension": ".tsx",
+    "size_bytes": 2508,
+    "last_modified": 1784282109.731287,
+    "sha256": "ff0c3f16642b9609f56b8dad0d7ea689344bf5f17449ea071a6592cc548be761",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Progress.tsx",
+    "extension": ".tsx",
+    "size_bytes": 2707,
+    "last_modified": 1784282109.731287,
+    "sha256": "47f51500a4e6008ea7f098cb4fe8d1d3076931182440fb551ab5b9306f680aef",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Select.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1778,
+    "last_modified": 1784282109.731287,
+    "sha256": "c10bd0ced7075a4593ea4a79396f3102305452a34b4d93c290f1be104a52c166",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Skeleton.tsx",
+    "extension": ".tsx",
+    "size_bytes": 736,
+    "last_modified": 1784282109.7322886,
+    "sha256": "1c343696215797bf0818138589cc264af59c5d138d147b6c24a0a7d708ba5a41",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Spinner.tsx",
+    "extension": ".tsx",
+    "size_bytes": 880,
+    "last_modified": 1784282109.7322886,
+    "sha256": "1b76f2124ffb715dc90c02c95e79de7b3c6f96ac9b3246f0abe4ea56b83fb479",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Textarea.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1287,
+    "last_modified": 1784282109.7322886,
+    "sha256": "81c7f85fb7ef8086fb855990a67618f2737478f24b034c7f7a6a338a49b36c00",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/Tooltip.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1816,
+    "last_modified": 1784282109.7322886,
+    "sha256": "54a1cb00f8c7861cc286b2274f1e5c8844277e48cd40574a451e0f4289084f4d",
+    "language": "typescript"
+  },
+  {
+    "path": "src/components/ui/index.ts",
+    "extension": ".ts",
+    "size_bytes": 476,
+    "last_modified": 1784282109.733286,
+    "sha256": "6d95a65b39e69e8f30950ecaeed1ac46688214db638ee194e1685bc8e19e0373",
+    "language": "typescript"
+  },
+  {
+    "path": "src/context/AnalysisContext.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1944,
+    "last_modified": 1784282109.733286,
+    "sha256": "b4c8df46ff624edac4aa27024b1598a52d1289fc370a4488added29e1a4b7ed7",
+    "language": "typescript"
+  },
+  {
+    "path": "src/context/AnalysisProvider.tsx",
+    "extension": ".tsx",
+    "size_bytes": 10785,
+    "last_modified": 1784282109.733286,
+    "sha256": "79a57d9be73dad95630f2f0f0b2879f6572574c70fe4e46a2490ccbe2e0c0813",
+    "language": "typescript"
+  },
+  {
+    "path": "src/context/WorkflowContext.tsx",
+    "extension": ".tsx",
+    "size_bytes": 1958,
+    "last_modified": 1784282109.7344296,
+    "sha256": "b95dbf105547fb011ee4bcfe2137e6a73eb294815877cef82b3b99c195c055c5",
+    "language": "typescript"
+  },
+  {
+    "path": "src/context/WorkflowProvider.tsx",
+    "extension": ".tsx",
+    "size_bytes": 17964,
+    "last_modified": 1784282109.7344296,
+    "sha256": "6c6550c457c605eca374cff82ee6a5fb05b8bcb893bb5b1aa5afd145cae3d34e",
+    "language": "typescript"
+  },
+  {
+    "path": "src/hooks/useAnalysis.ts",
+    "extension": ".ts",
+    "size_bytes": 411,
+    "last_modified": 1784282109.73543,
+    "sha256": "dd2597ce00771c591e85acb0b882d1e1e0df9b71e0123cf9ac2f390995b14ac7",
+    "language": "typescript"
+  },
+  {
+    "path": "src/layouts/MainLayout.tsx",
+    "extension": ".tsx",
+    "size_bytes": 18314,
+    "last_modified": 1784282109.7364538,
+    "sha256": "ecfe182d79567f1f42ead28fe760a43c8c3717725ea5cb30e785d750ad126bab",
+    "language": "typescript"
+  },
+  {
+    "path": "src/pages/AgentWorkspacePage.tsx",
+    "extension": ".tsx",
+    "size_bytes": 61910,
+    "last_modified": 1784282109.7389722,
+    "sha256": "cbe1bd7c2dbdc8309de120157834bebcd8712edce7faa48471cebc58f111efd1",
+    "language": "typescript"
+  },
+  {
+    "path": "src/pages/ChatPage.tsx",
+    "extension": ".tsx",
+    "size_bytes": 173,
+    "last_modified": 1784282109.7389722,
+    "sha256": "07e6dae34a57238bf8ec877a6b0e4ebb012695b71cc70a9bf0a1ff0a08505a8c",
+    "language": "typescript"
+  },
+  {
+    "path": "src/pages/DashboardPage.tsx",
+    "extension": ".tsx",
+    "size_bytes": 17604,
+    "last_modified": 1784282109.7389722,
+    "sha256": "b648ea1fc2c0875a259199119a927485a362eaf3b58c150fbaa133e9e8300fc3",
+    "language": "typescript"
+  },
+  {
+    "path": "src/pages/FuturePage.tsx",
+    "extension": ".tsx",
+    "size_bytes": 4627,
+    "last_modified": 1784282109.7399733,
+    "sha256": "93e4244cc8e165ce25cde1ac0c231f4fe9166c5e26175ee1b777d34bc04975b6",
+    "language": "typescript"
+  },
+  {
+    "path": "src/pages/HistoryPage.tsx",
+    "extension": ".tsx",
+    "size_bytes": 18140,
+    "last_modified": 1784282109.7399733,
+    "sha256": "5983fbe737fff4ff965b08a118f1679eae572ea680d7a75f9328707c1a7e9b31",
+    "language": "typescript"
+  },
+  {
+    "path": "src/pages/ReportsPage.tsx",
+    "extension": ".tsx",
+    "size_bytes": 7151,
+    "last_modified": 1784282109.740971,
+    "sha256": "9b6d54cbd7b08a844b6fc8775f15e7b9584dc79258c4f2f17d12cf08fe95c2f2",
+    "language": "typescript"
+  },
+  {
+    "path": "src/pages/RepositoriesPage.tsx",
+    "extension": ".tsx",
+    "size_bytes": 7124,
+    "last_modified": 1784282109.740971,
+    "sha256": "6847a1f0cf6c291f59ed40e86a9e6b3ed5b90dae5493f56c1c9374a299cc8832",
+    "language": "typescript"
+  },
+  {
+    "path": "src/pages/SettingsPage.tsx",
+    "extension": ".tsx",
+    "size_bytes": 20975,
+    "last_modified": 1784282109.740971,
+    "sha256": "f6c33040db993183f87c5fbce05a66d6518c1c3ec9da8bb95f2c05ac40fe2d5a",
+    "language": "typescript"
+  },
+  {
+    "path": "src/services/agentService.ts",
+    "extension": ".ts",
+    "size_bytes": 5891,
+    "last_modified": 1784282109.7419713,
+    "sha256": "3c99073f71e4f4eae190c25afc66c68c7de6013063d62413246007521d9a5df6",
+    "language": "typescript"
+  },
+  {
+    "path": "src/services/api.ts",
+    "extension": ".ts",
+    "size_bytes": 5203,
+    "last_modified": 1784282109.7429707,
+    "sha256": "c190e4787fede2f5f08465df7bc0763444b9e4994c0b95a7e32ad5f10f939198",
+    "language": "typescript"
+  },
+  {
+    "path": "src/types/index.ts",
+    "extension": ".ts",
+    "size_bytes": 4119,
+    "last_modified": 1784282109.7429707,
+    "sha256": "6f80e24289be5c53814a4bf42d3b52e837de495ee8f57b6d5dea9594183ca6aa",
+    "language": "typescript"
+  },
+  {
+    "path": "temp/ai_cache/35f0e7f593b2b873c48ee074101ae4e954fcc8d63b41e8afae463bb462823da6.json",
+    "extension": ".json",
+    "size_bytes": 5153,
+    "last_modified": 1784282109.743971,
+    "sha256": "a5654638ac43570c1296cd31264578e79f4796c92e527ab606574653900ebb81",
+    "language": "other"
+  },
+  {
+    "path": "temp/ai_cache/6cd45b8b8810dbd241be8d9d8c857ba23dea241eac1a14f3f87e0630b0b9811b.json",
+    "extension": ".json",
+    "size_bytes": 2066,
+    "last_modified": 1784282109.743971,
+    "sha256": "5d026e0b6347b22afc17b52edc7fe4e1a490ac07fa4af70b54d5b8ba8a0f21fe",
+    "language": "other"
+  }
+]
